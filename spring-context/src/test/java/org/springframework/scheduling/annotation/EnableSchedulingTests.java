@@ -467,4 +467,31 @@ public class EnableSchedulingTests {
 		}
 	}
 
+	@Configuration
+	@EnableScheduling
+	static class MyTaskConfig {
+		@Bean
+		public AtomicInteger counter() {
+			return new AtomicInteger();
+		}
+
+		@Scheduled(cron = "0 0 0/3 * * ?")
+		public void task1() {
+			System.out.println(new Date(System.currentTimeMillis()));
+		}
+
+		@Scheduled(cron = "0 30 1/3 * * ?")
+		public void task2() {
+			System.out.println(new Date(System.currentTimeMillis()));
+		}
+	}
+
+	@Test
+	public void testMyTask() throws Exception {
+		ctx = new AnnotationConfigApplicationContext(MyTaskConfig.class);
+		System.in.read();
+//		assertThat(ctx.getBean(AtomicInteger.class).get(), greaterThanOrEqualTo(10));
+	}
+
+
 }

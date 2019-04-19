@@ -16,6 +16,7 @@
 
 package org.springframework.beans.factory.parsing;
 
+import java.util.LinkedList;
 import java.util.Stack;
 
 /**
@@ -26,6 +27,12 @@ import java.util.Stack;
  * <p>Calling {@link #toString()} will render a tree-style view of the current logical
  * position in the parse phase. This representation is intended for use in
  * error messages.
+ *
+ * <br><br>
+ * <p>基于 {@link Stack} 简单的结构，用于在解析过程中追踪逻辑位置。在具体的读取方式中，
+ * {@link Entry entries} 在解析阶段的中的每一点会被添加到LinkedList。
+ *
+ * <p>调用 {@link #toString()} 方法将呈现分析阶段中当前逻辑位置的树形视图。这个呈现是为了在展示错误信息。
  *
  * @author Rob Harrop
  * @since 2.0
@@ -93,10 +100,17 @@ public final class ParseState {
 
 	/**
 	 * Returns a tree-style representation of the current {@code ParseState}.
+	 *
+	 * <br><br>
+	 * 例如：<br>
+	 * <p>Mock name is three
+	 * <p>&emsp;-> Mock name is two
+	 * <p>&emsp;&emsp;-> Mock name is one
 	 */
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
+		// ?? for (int x = 0, size = this.state.size(); x < size; x++) {
 		for (int x = 0; x < this.state.size(); x++) {
 			if (x > 0) {
 				sb.append('\n');

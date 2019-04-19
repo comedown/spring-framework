@@ -32,12 +32,19 @@ import org.springframework.util.StringValueResolver;
  * {@link org.springframework.beans.factory.support.BeanDefinitionRegistry}
  * implementations.
  *
+ * <br><br>
+ * {@link AliasRegistry} 接口的简单实现类。充当 {@link org.springframework.beans.factory.support.BeanDefinitionRegistry}
+ * 的基础类。
+ *
  * @author Juergen Hoeller
  * @since 2.5.2
  */
 public class SimpleAliasRegistry implements AliasRegistry {
 
-	/** Map from alias to canonical name */
+	/**
+	 * Map from alias to canonical name.
+	 * <br>key=alias, value=name
+	 */
 	private final Map<String, String> aliasMap = new ConcurrentHashMap<String, String>(16);
 
 
@@ -61,6 +68,7 @@ public class SimpleAliasRegistry implements AliasRegistry {
 								name + "': It is already registered for name '" + registeredName + "'.");
 					}
 				}
+				// 循环别名
 				checkForAliasCircle(name, alias);
 				this.aliasMap.put(alias, name);
 			}

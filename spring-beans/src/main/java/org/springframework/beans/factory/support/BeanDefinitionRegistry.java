@@ -33,6 +33,16 @@ import org.springframework.core.AliasRegistry;
  * <p>Spring's bean definition readers expect to work on an implementation of this
  * interface. Known implementors within the Spring core are DefaultListableBeanFactory
  * and GenericApplicationContext.
+ * 
+ * <br><br>
+ * 用于保存bean定义信息的注册表接口，比如 RootBeanDefinition 和 ChildBeanDefinition实例。
+ * 通常由内部使用AbstractBeanDefinition层次结构的BeanFactory实现。
+ *
+ * <p>这是Spring bean工厂包中封装bean定义的<i>注册</i>的唯一接口。标准BeanFactory接口只包括
+ * 对<i>完全配置的工厂实例</i>的访问。
+ *
+ * <p>Spring的bean定义读取期望致力于这个接口的实现。Spring core中已知的实现是 DefaultListableBeanFactory
+ *  和 GenericApplicationContext。
  *
  * @author Juergen Hoeller
  * @since 26.11.2003

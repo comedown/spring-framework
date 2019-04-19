@@ -34,6 +34,13 @@ import org.springframework.util.StringUtils;
  * resource resides in the file system, but not for resources in a JAR.
  * Always supports resolution as URL.
  *
+ * <br><br>
+ * {@link Resource} 的实现类，为了解析类路径下的资源。要么使用给定的 {@link ClassLoader}
+ * 要么使用给定的 {@link Class} 来加载资源。
+ *
+ * <p>如果类路径资源属于文件系统，则支持解析为 {@code java.io.File}，但不支持JAR里面的资源。
+ * 也支持解析为URL。
+ *
  * @author Juergen Hoeller
  * @author Sam Brannen
  * @since 28.12.2003

@@ -39,6 +39,11 @@ import org.springframework.util.Assert;
  * <p>Provides common properties like the bean factory to work on
  * and the class loader to use for loading bean classes.
  *
+ * <br><br>
+ * <p>实现了 {@link BeanDefinitionReader} 接口的基础抽象类。
+ *
+ * <p>提供了像处理bean工厂和用于加载bean类型的类加载器等公共属性。
+ *
  * @author Juergen Hoeller
  * @author Chris Beams
  * @since 11.12.2003

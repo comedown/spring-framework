@@ -52,6 +52,16 @@ import org.springframework.util.StringUtils;
  * <p>For a full-fledged factory based on bean definitions, have a look
  * at {@link DefaultListableBeanFactory}.
  *
+ * <br><br>
+ * <p>静态 {@link org.springframework.beans.factory.BeanFactory} 的实现类，允许
+ * 以编程方式注册现有的单例实例。不支持原型bean和别名。
+ *
+ * <p>例如，{@link org.springframework.beans.factory.ListableBeanFactory} 接口
+ * 的简单实现类，管理现有的bean实例，而不是基于bean定义创建新的实例，并且不实现任何扩展
+ * 的SPI接口（比如 {@link org.springframework.beans.factory.config.ConfigurableBeanFactory}）。
+ *
+ * <p>对于基于bean定义的成熟bean工厂，请看 {@link DefaultListableBeanFactory}。
+ *
  * @author Rod Johnson
  * @author Juergen Hoeller
  * @since 06.01.2003

@@ -99,6 +99,21 @@ import org.springframework.util.StringUtils;
  * have a look at {@link StaticListableBeanFactory}, which manages existing
  * bean instances rather than creating new ones based on bean definitions.
  *
+ * <br><br>
+ * <p>{@link ConfigurableListableBeanFactory} 和 {@link BeanDefinitionRegistry}
+ * 接口的Spring默认实现类：一个基于bean定义元素据的成熟bean工厂，可通过后处理器进行扩展。
+ *
+ * <p>典型的用法是在访问bean之前首先注册所有bean定义（可能从bean定义文件读取）。因此，在
+ * 本地bean定义表中，按照名称查找bean是一种廉价的操作，对预解析的bean定义元素据对象进行
+ * 操作。
+ *
+ * <p>注意，对于特定的bean定义格式的读取通常是单独实现的，而不是作为bean工厂的子类：
+ * 参考示例：{@link PropertiesBeanDefinitionReader} 和 {@link org.springframework.beans.factory.xml.XmlBeanDefinitionReader}
+ *
+ * <p>对于 {@link org.springframework.beans.factory.ListableBeanFactory} 接口的
+ * 可选的实现类，请看 {@link StaticListableBeanFactory}，它管理现有的bean实例，而不
+ * 是基于bean定义创建新的实例。
+ *
  * @author Rod Johnson
  * @author Juergen Hoeller
  * @author Sam Brannen

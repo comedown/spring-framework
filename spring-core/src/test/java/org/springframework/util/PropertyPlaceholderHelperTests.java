@@ -30,6 +30,21 @@ public class PropertyPlaceholderHelperTests {
 	private final PropertyPlaceholderHelper helper = new PropertyPlaceholderHelper("${", "}");
 
 	@Test
+	public void test1() {
+		PropertyPlaceholderHelper hu = new PropertyPlaceholderHelper("${", "$}", ":", true);
+
+		String text = "foo=${foo:haha$}";
+		Properties props = new Properties();
+		assertEquals("foo=haha", hu.replacePlaceholders(text, props));
+
+		text = "foo=${fo$o$}";
+		props = new Properties();
+		props.setProperty("fo$o", "bar");
+		assertEquals("foo=bar", hu.replacePlaceholders(text, props));
+
+	}
+
+	@Test
 	public void testWithProperties() {
 		String text = "foo=${foo}";
 		Properties props = new Properties();

@@ -23,6 +23,10 @@ import org.springframework.core.AttributeAccessorSupport;
  * holding attributes as {@link BeanMetadataAttribute} objects in order
  * to keep track of the definition source.
  *
+ * <br><br>
+ * <p>{@link org.springframework.core.AttributeAccessorSupport} 的扩展类，将属性保存为
+ *  {@link BeanMetadataAttribute} 对象以便于跟踪定义源。
+ *
  * @author Juergen Hoeller
  * @since 2.5
  */

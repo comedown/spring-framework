@@ -23,6 +23,9 @@ import org.springframework.util.ClassUtils;
  * {@link PropertyResolver} implementation that resolves property values against
  * an underlying set of {@link PropertySources}.
  *
+ * <br><br>
+ * {@link PropertyResolver} 的实现类，根据 {@link PropertySources} 的基础集解析属性值。
+ *
  * @author Chris Beams
  * @author Juergen Hoeller
  * @since 3.1

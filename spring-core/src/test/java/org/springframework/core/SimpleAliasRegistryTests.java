@@ -58,6 +58,9 @@ public class SimpleAliasRegistryTests {
 		assertTrue(registry.hasAlias("real_name", "alias_a"));
 		assertTrue(registry.hasAlias("real_name", "alias_b"));
 		assertTrue(registry.hasAlias("real_name", "alias_c"));
+
+		// 循环别名
+		registry.registerAlias("alias_c", "real_name");
 	}
 
 }

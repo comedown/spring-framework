@@ -29,6 +29,10 @@ import java.util.Properties;
  * accessing only {@code String}-based keys and values, in the same fashion as
  * {@link Properties#getProperty} and {@link Properties#setProperty}.
  *
+ * <br><br>
+ * <p>{@link PropertySource} 的实现类，它从 {@link java.util.Properties} 对象中提取属性。</p>
+ * <p></p>
+ *
  * @author Chris Beams
  * @author Juergen Hoeller
  * @since 3.1

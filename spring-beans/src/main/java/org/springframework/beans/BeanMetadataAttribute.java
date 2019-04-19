@@ -23,6 +23,9 @@ import org.springframework.util.ObjectUtils;
  * Holder for a key-value style attribute that is part of a bean definition.
  * Keeps track of the definition source in addition to the key-value pair.
  *
+ * <br><br>
+ * <p>一个键值对形式的作为bean定义一部分的属性持有类。除此之外，还会跟踪定义源。
+ *
  * @author Juergen Hoeller
  * @since 2.5
  */

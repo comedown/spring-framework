@@ -26,6 +26,11 @@ import org.springframework.util.ObjectUtils;
  *
  * <p>Methods eligible for lookup override must not have arguments.
  *
+ * <br><br>
+ * <p>表示在同一IoC上下文中查找对象的方法的重写。
+ *
+ * <p>符合查找重写条件的方法不能有参数。
+ *
  * @author Rod Johnson
  * @author Juergen Hoeller
  * @since 1.1

@@ -40,6 +40,15 @@ import org.springframework.util.xml.XmlValidationModeDetector;
  *
  * <pre code="class">java -Djavax.xml.parsers.DocumentBuilderFactory=oracle.xml.jaxp.JXDocumentBuilderFactory MyMainClass</pre>
  *
+ *
+ * <br><br>
+ * <p>Spring中 {@link DocumentLoader} 的默认实现类。
+ *
+ * <p>仅仅使用标准的JAXP配置的XML解析器加载 {@link Document documents}。如果你想改变用于加载文档的
+ * {@link DocumentBuilder}，一种策略是在启动JVM的时候定义一个相关的java系统属性。比如，你可以在启动你的应用时使用如下
+ * <pre code="class">java -Djavax.xml.parsers.DocumentBuilderFactory=oracle.xml.jaxp.JXDocumentBuilderFactory MyMainClass</pre>
+ * 属性，来使用Oracle的 {@link DocumentBuilder}。
+ *
  * @author Rob Harrop
  * @author Juergen Hoeller
  * @since 2.0

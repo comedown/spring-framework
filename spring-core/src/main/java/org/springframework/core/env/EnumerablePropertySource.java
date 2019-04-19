@@ -37,6 +37,9 @@ import org.springframework.util.ObjectUtils;
  * (via {@link #getProperty(String)}) in order to evaluate whether it is present
  * or not.
  *
+ * <br><br>
+ * <p>{@link PropertySource} 的实现类，能够查询所包含的源对象，以枚举的形式列出属性名/值对。
+ *
  * @author Chris Beams
  * @author Juergen Hoeller
  * @since 3.1

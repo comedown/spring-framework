@@ -23,6 +23,9 @@ import org.springframework.util.StringUtils;
 /**
  * {@link PropertySource} that reads keys and values from a {@code Map} object.
  *
+ * <br><br>
+ * {@link PropertySource} 从 {@code Map} 对象中读取key和value。
+ *
  * @author Chris Beams
  * @author Juergen Hoeller
  * @since 3.1

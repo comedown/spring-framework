@@ -126,6 +126,13 @@ public class PropertyPlaceholderHelper {
 		return parseStringValue(value, placeholderResolver, new HashSet<String>());
 	}
 
+	/**
+	 * 递归调用
+	 * @param value
+	 * @param placeholderResolver
+	 * @param visitedPlaceholders
+	 * @return
+	 */
 	protected String parseStringValue(
 			String value, PlaceholderResolver placeholderResolver, Set<String> visitedPlaceholders) {
 
@@ -135,16 +142,20 @@ public class PropertyPlaceholderHelper {
 		while (startIndex != -1) {
 			int endIndex = findPlaceholderEndIndex(result, startIndex);
 			if (endIndex != -1) {
+				// 占位符名称
 				String placeholder = result.substring(startIndex + this.placeholderPrefix.length(), endIndex);
 				String originalPlaceholder = placeholder;
+				// 校验是否循环引用
 				if (!visitedPlaceholders.add(originalPlaceholder)) {
 					throw new IllegalArgumentException(
 							"Circular placeholder reference '" + originalPlaceholder + "' in property definitions");
 				}
 				// Recursive invocation, parsing placeholders contained in the placeholder key.
+				// 递归调用，解析占位符中包含的占位符
 				placeholder = parseStringValue(placeholder, placeholderResolver, visitedPlaceholders);
 				// Now obtain the value for the fully resolved key...
 				String propVal = placeholderResolver.resolvePlaceholder(placeholder);
+				// 使用占位符中的值，比如valueSeparator 为：，对于foo=${foo:haha}这种情况，返回foo=haha
 				if (propVal == null && this.valueSeparator != null) {
 					int separatorIndex = placeholder.indexOf(this.valueSeparator);
 					if (separatorIndex != -1) {
@@ -159,13 +170,18 @@ public class PropertyPlaceholderHelper {
 				if (propVal != null) {
 					// Recursive invocation, parsing placeholders contained in the
 					// previously resolved placeholder value.
+					// 递归调用，解析包含当前占位符中的其他占位符
+					// 对于${top}，top=${a}and${b}这种情况
 					propVal = parseStringValue(propVal, placeholderResolver, visitedPlaceholders);
+					// 替换占位符
 					result.replace(startIndex, endIndex + this.placeholderSuffix.length(), propVal);
 					if (logger.isTraceEnabled()) {
 						logger.trace("Resolved placeholder '" + placeholder + "'");
 					}
+					// 对于${a}and${b}，继续解析
 					startIndex = result.indexOf(this.placeholderPrefix, startIndex + propVal.length());
 				}
+				// 是否忽略解析失败的场景
 				else if (this.ignoreUnresolvablePlaceholders) {
 					// Proceed with unprocessed value.
 					startIndex = result.indexOf(this.placeholderPrefix, endIndex + this.placeholderSuffix.length());
@@ -184,8 +200,15 @@ public class PropertyPlaceholderHelper {
 		return result.toString();
 	}
 
+	/**
+	 * 定位占位符的结束下表
+	 * @param buf
+	 * @param startIndex
+	 * @return
+	 */
 	private int findPlaceholderEndIndex(CharSequence buf, int startIndex) {
 		int index = startIndex + this.placeholderPrefix.length();
+		// 内部占位符个数
 		int withinNestedPlaceholder = 0;
 		while (index < buf.length()) {
 			if (StringUtils.substringMatch(buf, index, this.placeholderSuffix)) {
@@ -211,6 +234,19 @@ public class PropertyPlaceholderHelper {
 
 	/**
 	 * Strategy interface used to resolve replacement values for placeholders contained in Strings.
+	 *
+	 * <br><br>
+	 * 策略接口，用于解析字符串中包含的占位符的替换值
+	 *
+	 * <br><br>
+	 * {@link FunctionalInterface} 注解：
+	 * <ul>
+	 * <li> 该注解只能标记在"有且仅有一个抽象方法"的接口上。
+	 * <li> JDK8接口中的静态方法和默认方法，都不算是抽象方法。
+	 * <li> 接口默认继承java.lang.Object，所以如果接口显示声明覆盖了Object中方法，那么也不算抽象方法。
+	 * <li> 该注解不是必须的，如果一个接口符合"函数式接口"定义，那么加不加该注解都没有影响。
+	 * 		加上该注解能够更好地让编译器进行检查。如果编写的不是函数式接口，但是加上了@FunctionInterface，那么编译器会报错。
+	 * </ul>
 	 */
 	public interface PlaceholderResolver {
 

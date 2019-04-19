@@ -31,12 +31,19 @@ import org.springframework.util.StringUtils;
  * Provides registry capabilities only, with no factory capabilities built in.
  * Can for example be used for testing bean definition readers.
  *
+ * <br><br>
+ * {@link BeanDefinitionRegistry} 接口的简单实现。仅提供注册表功能，没有内置工厂功能。
+ * 例如，可以用于测试bean定义读取
+ *
  * @author Juergen Hoeller
  * @since 2.5.2
  */
 public class SimpleBeanDefinitionRegistry extends SimpleAliasRegistry implements BeanDefinitionRegistry {
 
-	/** Map of bean definition objects, keyed by bean name */
+	/**
+	 * Map of bean definition objects, keyed by bean name.
+	 * <br>用于存放bean定义实例的map，继承了别名功能
+	 */
 	private final Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<String, BeanDefinition>(64);
 
 

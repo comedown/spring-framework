@@ -337,6 +337,9 @@ public abstract class StringUtils {
 	/**
 	 * Test whether the given string matches the given substring
 	 * at the given index.
+	 *
+	 * 判断从index开始，str中是否有符合substring的子串
+	 *
 	 * @param str the original string (or StringBuilder)
 	 * @param index the index in the original string to start matching against
 	 * @param substring the substring to match at the given index
@@ -994,6 +997,15 @@ public abstract class StringUtils {
 	 * delimiter characters. Each of those characters can be used to separate
 	 * tokens. A delimiter is always a single character; for multi-character
 	 * delimiters, consider using {@link #delimitedListToStringArray}.
+	 *
+	 * <br><br>
+	 * 通过 @link StringTokenizer} 把给定的 {@code String} 拆分成 {@code String} 数组。
+	 *
+	 * <p>修剪字符并且忽略空字符。
+	 *
+	 * <p> 给定的 {@code delimiters} 字符串可以包括任意数量的分隔符。这些分隔符中的任何一个
+	 * 都可以用来分隔字符。一个分隔符总是一个单独的字符；多字符分隔符，请使用{@link #delimitedListToStringArray}。
+	 *
 	 * @param str the {@code String} to tokenize
 	 * @param delimiters the delimiter characters, assembled as a {@code String}
 	 * (each of the characters is individually considered as a delimiter)

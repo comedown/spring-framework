@@ -44,6 +44,13 @@ import org.springframework.util.StringUtils;
  * {@link org.springframework.beans.factory.config.AutowireCapableBeanFactory}
  * interface.
  *
+ * <br><br>
+ * <p>一个具体的成熟的 {@link BeanDefinition} 类的基本类，分离出 {@link GenericBeanDefinition}，
+ * {@link RootBeanDefinition}，和 {@link ChildBeanDefinition} 类的通用特性。
+ *
+ * <p>autowire常量和定义在 {@link org.springframework.beans.factory.config.AutowireCapableBeanFactory} 接口
+ * 定义的常量匹配。
+ *
  * @author Rod Johnson
  * @author Juergen Hoeller
  * @author Rob Harrop
@@ -779,6 +786,12 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	 * Return information about methods to be overridden by the IoC
 	 * container. This will be empty if there are no method overrides.
 	 * Never returns {@code null}.
+	 *
+	 * <br><br>
+	 * <p>返回被IoC容器覆盖的方法的信息。没有方法被覆盖的话，methodOverrides为空。
+	 *
+	 * <p>从不返回{@code null}。
+	 *
 	 */
 	public MethodOverrides getMethodOverrides() {
 		return this.methodOverrides;

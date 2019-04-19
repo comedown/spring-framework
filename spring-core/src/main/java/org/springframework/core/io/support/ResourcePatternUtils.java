@@ -26,6 +26,11 @@ import org.springframework.util.ResourceUtils;
  * <p>Callers will usually assume that a location is a relative path
  * if the {@link #isUrl(String)} method returns {@code false}.
  *
+ * <br><br>
+ * <p>一个工具类，用于判断给定URL是否是一个可以通过 {@link ResourcePatternResolver} 加载的资源路径。
+ *
+ * <p>如果 {@link #isUrl(String)} 方法返回 {@code false}，那么调用者通常可以假设路径是相对路径。
+ *
  * @author Juergen Hoeller
  * @since 1.2.3
  */
@@ -34,6 +39,11 @@ public abstract class ResourcePatternUtils {
 	/**
 	 * Return whether the given resource location is a URL: either a
 	 * special "classpath" or "classpath*" pseudo URL or a standard URL.
+	 *
+	 * <br><br>
+	 * 返回给定资源位置是否是一个URL：要么是一个特殊的"classpath" 或者 "classpath*"的伪URL，
+	 * 要么是一个标准的URL。
+	 *
 	 * @param resourceLocation the location String to check
 	 * @return whether the location qualifies as a URL
 	 * @see ResourcePatternResolver#CLASSPATH_ALL_URL_PREFIX

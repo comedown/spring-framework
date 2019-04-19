@@ -34,6 +34,12 @@ import org.springframework.util.ObjectUtils;
  * <p>Used as an argument for operations that support reading content with
  * a specific encoding, typically via a {@code java.io.Reader}.
  *
+ * <br><br>
+ * 装饰者模式
+ * 一个包含 {@link Resource} 描述符和一个用于读取资源的指定的编码或者 {@code Charset}的Resource装饰者。
+ *
+ * <p>用一个可选的参数来支持在读取内容时指定编码，通常通过 {@code java.io.Reader}。
+ *
  * @author Juergen Hoeller
  * @author Sam Brannen
  * @since 1.2.6
@@ -164,6 +170,7 @@ public class EncodedResource implements InputStreamSource {
 			return false;
 		}
 		EncodedResource otherResource = (EncodedResource) other;
+		// resource相等，charset相等，encoding相等
 		return (this.resource.equals(otherResource.resource) &&
 				ObjectUtils.nullSafeEquals(this.charset, otherResource.charset) &&
 				ObjectUtils.nullSafeEquals(this.encoding, otherResource.encoding));

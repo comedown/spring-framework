@@ -28,6 +28,26 @@ import static org.junit.Assert.*;
 public class ParseStateTests {
 
 	@Test
+	public void testToString() {
+		MyMockEntry one = new MyMockEntry("one");
+		MyMockEntry two = new MyMockEntry("two");
+		MyMockEntry three = new MyMockEntry("three");
+
+		ParseState parseState = new ParseState();
+		parseState.push(one);
+		System.out.println(parseState.toString());
+		parseState.push(two);
+		System.out.println(parseState.toString());
+		parseState.push(three);
+		System.out.println(parseState.toString());
+
+		parseState.pop();
+		System.out.println(parseState.toString());
+		parseState.pop();
+		System.out.println(parseState.toString());
+	}
+
+	@Test
 	public void testSimple() throws Exception {
 		MockEntry entry = new MockEntry();
 
@@ -73,6 +93,19 @@ public class ParseStateTests {
 
 	private static class MockEntry implements ParseState.Entry {
 
+	}
+
+	private static class MyMockEntry implements ParseState.Entry {
+		private String name;
+
+		public MyMockEntry(String name) {
+			this.name = name;
+		}
+
+		@Override
+		public String toString() {
+			return "Mock name is " + name;
+		}
 	}
 
 }

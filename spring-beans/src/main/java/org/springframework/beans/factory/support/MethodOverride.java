@@ -29,6 +29,11 @@ import org.springframework.util.ObjectUtils;
  * <p>Note that the override mechanism is <em>not</em> intended as a generic
  * means of inserting crosscutting code: use AOP for that.
  *
+ * <br><br>
+ * <p>一个对象，表示被IoC容器管理的对象上的被重写的方法。
+ *
+ * <p>注意，覆盖机制<em>不是</em>用来插入切面代码的一般方法：一般使用AOP。
+ *
  * @author Rod Johnson
  * @author Juergen Hoeller
  * @author Sam Brannen

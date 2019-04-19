@@ -20,6 +20,9 @@ package org.springframework.core;
  * Interface defining a generic contract for attaching and accessing metadata
  * to/from arbitrary objects.
  *
+ * <br><br>
+ * <p>属性存取器：为将元数据附加到任意对象或从任意对象访问元数据而定义的通用协议接口。
+ *
  * @author Rob Harrop
  * @since 2.0
  */

@@ -63,6 +63,14 @@ import org.springframework.util.xml.XmlValidationModeDetector;
  * talking to the latter's implementation of the
  * {@link org.springframework.beans.factory.support.BeanDefinitionRegistry} interface.
  *
+ * <br><br>
+ * 工作原理：
+ * 1、传入一个BeanDefinitionRegistry注册表，用于存放bean定义信息。
+ * 2、调用loadBeanDefinitions方法，解析具体的xml资源文件
+ * 3、具体的解析工作交给 {@link BeanDefinitionDocumentReader} 做，它的实例类型是由
+ * {@code documentReaderClass}决定的
+ * 4、通过 {@link XmlReaderContext} 共享信息，一个资源文件一个上下文。
+ *
  * @author Juergen Hoeller
  * @author Rob Harrop
  * @author Chris Beams
@@ -327,6 +335,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 					"Detected cyclic loading of " + encodedResource + " - check your import definitions!");
 		}
 		try {
+			// 这里应该可以encodedResource.getInputStream();
 			InputStream inputStream = encodedResource.getResource().getInputStream();
 			try {
 				InputSource inputSource = new InputSource(inputStream);
@@ -378,6 +387,9 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 
 	/**
 	 * Actually load bean definitions from the specified XML file.
+	 *
+	 * <p>真正的从指定XML文件加载bean定义信息。
+	 *
 	 * @param inputSource the SAX InputSource to read from
 	 * @param resource the resource descriptor for the XML file
 	 * @return the number of bean definitions found
@@ -418,6 +430,9 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 
 	/**
 	 * Actually load the specified document using the configured DocumentLoader.
+	 *
+	 * <p>真正的用已配置的DocumentLoader加载指定文档。
+	 *
 	 * @param inputSource the SAX InputSource to read from
 	 * @param resource the resource descriptor for the XML file
 	 * @return the DOM Document
@@ -506,6 +521,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 		BeanDefinitionDocumentReader documentReader = createBeanDefinitionDocumentReader();
 		int countBefore = getRegistry().getBeanDefinitionCount();
 		documentReader.registerBeanDefinitions(doc, createReaderContext(resource));
+		// 返回解析的bean定义数量，当前总的 - 之前总的
 		return getRegistry().getBeanDefinitionCount() - countBefore;
 	}
 
@@ -521,6 +537,8 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 
 	/**
 	 * Create the {@link XmlReaderContext} to pass over to the document reader.
+	 *
+	 * <p>创建 {@link XmlReaderContext} 传递给文档读取类
 	 */
 	public XmlReaderContext createReaderContext(Resource resource) {
 		return new XmlReaderContext(resource, this.problemReporter, this.eventListener,

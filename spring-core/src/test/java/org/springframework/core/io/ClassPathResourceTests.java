@@ -18,6 +18,9 @@ package org.springframework.core.io;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,6 +42,9 @@ public class ClassPathResourceTests {
 	private static final String NONEXISTENT_RESOURCE_NAME = "nonexistent.xml";
 	private static final String FQ_RESOURCE_PATH = PACKAGE_PATH + '/' + NONEXISTENT_RESOURCE_NAME;
 
+	/** jar包内资源， */
+	private static final String JAR_RESOURCE = "META-INF\\io.netty.versions.properties";
+
 	/**
 	 * Absolute path version of {@link #FQ_RESOURCE_PATH}.
 	 */
@@ -46,6 +52,15 @@ public class ClassPathResourceTests {
 
 	private static final Pattern DESCRIPTION_PATTERN = Pattern.compile("^class path resource \\[(.+?)\\]$");
 
+	@Test
+	public void test1() throws IOException {
+		ClassPathResource resource = new ClassPathResource(JAR_RESOURCE);
+		InputStream inputStream = resource.getInputStream();
+		InputStreamReader reader = new InputStreamReader(inputStream);
+		Properties properties = new Properties();
+		properties.load(reader);
+		System.out.println(properties.getProperty("netty-buffer.version"));
+	}
 
 	@Test
 	public void stringConstructorRaisesExceptionWithFullyQualifiedPath() {

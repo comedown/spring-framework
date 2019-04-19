@@ -35,6 +35,14 @@ import java.net.URLConnection;
  * object, which in turn allows one to obtain a {@code java.io.File} in the
  * file system through its {@code getFile()} method.
  *
+ * <br><br>
+ * <p>一些用于把资源位置解析成文件系统中的文件的公共方法。主要用于框架内部。
+ *
+ * <p>考虑使用Spring核心包中的资源抽象来以统一的方式处理所有类型的文件资源。
+ * {@link org.springframework.core.io.ResourceLoader} 的 {@code getResource()} 方法
+ * 能够把任何位置解析成一个 {@link org.springframework.core.io.Resource} 对象，反过来可以允许
+ * 通过它的 {@code getFile()} 方法从文件系统中获取一个 {@code java.io.File} 对象。
+ *
  * @author Juergen Hoeller
  * @since 1.1.5
  * @see org.springframework.core.io.Resource
@@ -94,6 +102,9 @@ public abstract class ResourceUtils {
 	/**
 	 * Return whether the given resource location is a URL:
 	 * either a special "classpath" pseudo URL or a standard URL.
+	 *
+	 * <p>返回给定资源路径是否是URL：一个特殊的“classpath”的伪URL或者标准的URL
+	 *
 	 * @param resourceLocation the location String to check
 	 * @return whether the location qualifies as a URL
 	 * @see #CLASSPATH_URL_PREFIX

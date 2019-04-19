@@ -32,6 +32,13 @@ import org.apache.commons.logging.LogFactory;
  * and {@link #addLast}, this is with regard to the order in which property sources
  * will be searched when resolving a given property with a {@link PropertyResolver}.
  *
+ * <br><br>
+ * <p>{@link PropertySources} 接口的默认实现类。允许对包含的属性源操作，并提供一个拷贝已有的
+ * {@code PropertySources}实例的构造函数。</p>
+ * <p>如果在 {@link #addFirst} 和 {@link #addLast} 等方法中涉及优先级，则与使用
+ * {@link PropertyResolver} 解析给定属性时搜索的属性源顺序有关。</p>
+ * 内部维护一个CopyOnWriteArrayList作为属性源
+ *
  * @author Chris Beams
  * @author Juergen Hoeller
  * @since 3.1
@@ -41,6 +48,9 @@ public class MutablePropertySources implements PropertySources {
 
 	private final Log logger;
 
+	/**
+	 * 属性源
+	 */
 	private final List<PropertySource<?>> propertySourceList = new CopyOnWriteArrayList<PropertySource<?>>();
 
 
@@ -54,6 +64,10 @@ public class MutablePropertySources implements PropertySources {
 	/**
 	 * Create a new {@code MutablePropertySources} from the given propertySources
 	 * object, preserving the original order of contained {@code PropertySource} objects.
+	 *
+	 * <br><br>
+	 * 根据给定的属性源对象新建一个 {@code MutablePropertySources} 对象，保留包含的
+	 * {@code PropertySource} 对象的原始顺序。
 	 */
 	public MutablePropertySources(PropertySources propertySources) {
 		this();

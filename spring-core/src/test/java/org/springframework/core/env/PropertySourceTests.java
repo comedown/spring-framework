@@ -38,6 +38,7 @@ public class PropertySourceTests {
 	@Test
 	@SuppressWarnings("serial")
 	public void equals() {
+		// 实例化代码块+构造方法
 		Map<String, Object> map1 = new HashMap<String, Object>() {{ put("a", "b"); }};
 		Map<String, Object> map2 = new HashMap<String, Object>() {{ put("c", "d"); }};
 		Properties props1 = new Properties() {{ setProperty("a", "b"); }};

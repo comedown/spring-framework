@@ -28,6 +28,11 @@ import java.util.Set;
  * <p>The currently supported {@link MethodOverride} variants are
  * {@link LookupOverride} and {@link ReplaceOverride}.
  *
+ * <br><br>
+ * <p>重写方法的集合，如果有的话，Spring IoC容器将在运行时重写托管对象上的这些方法。
+ *
+ * <p>当前支持 {@link MethodOverride} 变体是 {@link LookupOverride} 和 {@link ReplaceOverride}。
+ *
  * @author Rod Johnson
  * @author Juergen Hoeller
  * @since 1.1
