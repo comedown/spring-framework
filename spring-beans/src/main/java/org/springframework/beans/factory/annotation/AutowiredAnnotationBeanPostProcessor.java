@@ -106,6 +106,28 @@ import org.springframework.util.StringUtils;
  * version of {@code getBean(Class, args)} and {@code getBean(String, args)},
  * See {@link Lookup @Lookup's javadoc} for details.
  *
+ * <br><br>
+ * {@link org.springframework.beans.factory.config.BeanPostProcessor}的实现类，
+ * 自动装配带注解的字段、setter方法和任意配置方法。一些注入的成员通过Java5的注解发现：默认
+ * 情况下是Spring的{@link Autowired @Autowired}和{@link Value @Value}注解。
+ *
+ * <p>还支持JSR-330的{@link javax.inject.Inject @Inject}注解，如果可能的话，可以作为
+ * Spring自己的{@code @Autowired}替代品。
+ *
+ * <p>
+ *
+ * <p>
+ *
+ * <p>注意：默认的AutowiredAnnotationBeanPostProcessor将由"context:annotation-config"
+ * 和"context:component-scan" XML标签注册。如果要自定义AutowiredAnnotationBeanPostProcessor
+ * 的bean定义信息，请删除或关闭这里的默认注解配置。
+ *
+ * <p><b>注意：</b>注解注入将在XML注入<i>之前</i>；因此，由这两种方式装配的属性，前者将会覆盖掉后者。
+ *
+ * <p>除了上面讨论的常规注入点之外，此后处理器还处理Spring的{@link Lookup @Lookup}注解，这个注解
+ * 标记在运行时由Spring容器替换的方法。这本质上是{@code getBean(Class, args)}和{@code getBean(String, args)}
+ * 类型安全的版本。详情参考{@link Lookup @Lookup's javadoc}。
+ *
  * @author Juergen Hoeller
  * @author Mark Fisher
  * @author Stephane Nicoll

@@ -49,6 +49,19 @@ import org.springframework.util.PatternMatchUtils;
  * <p>Also supports Java EE 6's {@link javax.annotation.ManagedBean} and
  * JSR-330's {@link javax.inject.Named} annotations, if available.
  *
+ * <br><br>
+ * 一个bean定义扫描器，用于检测类路径中bean的候选者，并在给定的注册表中注册相关bean定义信息。
+ * {@code BeanFactory} 或者 {@code ApplicationContext}
+ *
+ * <p>通过可配置的类型过滤器检测候选类。默认的过滤器包括标注一下注解的类：
+ * {@link org.springframework.stereotype.Component @Component},
+ * {@link org.springframework.stereotype.Repository @Repository},
+ * {@link org.springframework.stereotype.Service @Service},
+ * {@link org.springframework.stereotype.Controller @Controller}
+ *
+ * <p>如果可行，也支持Java EE 6的{@link javax.annotation.ManagedBean}和JSR-330的
+ * {@link javax.inject.Named}注解。
+ *
  * @author Mark Fisher
  * @author Juergen Hoeller
  * @author Chris Beams
@@ -262,6 +275,11 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 	 * returning the registered bean definitions.
 	 * <p>This method does <i>not</i> register an annotation config processor
 	 * but rather leaves this up to the caller.
+	 *
+	 * <br><br>
+	 * 在指定的基础包内执行扫描，返回注册的bean定义信息。此方法<i>不</i>注册注释配置处理器，
+	 * 而是将其留给调用方。
+	 *
 	 * @param basePackages the packages to check for annotated classes
 	 * @return set of beans registered if any for tooling registration purposes (never {@code null})
 	 */

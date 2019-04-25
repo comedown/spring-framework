@@ -30,6 +30,10 @@ import org.springframework.util.ClassUtils;
  *
  * <p>The matching logic mirrors that of {@link java.lang.Class#isAnnotationPresent(Class)}.
  *
+ * <br><br>
+ * 一个简单的过滤器，匹配类的注解和给定注解，并检查继承注解。
+ * 匹配逻辑和{@link java.lang.Class#isAnnotationPresent(Class)}类似。
+ *
  * @author Mark Fisher
  * @author Ramnivas Laddad
  * @author Juergen Hoeller

@@ -111,6 +111,7 @@ public final class ParserContext {
 		registerComponent(popContainingComponent());
 	}
 
+	/** 注册内部组件 */
 	public void registerComponent(ComponentDefinition component) {
 		CompositeComponentDefinition containingComponent = getContainingComponent();
 		if (containingComponent != null) {

@@ -44,6 +44,10 @@ public interface ConfigurableApplicationContext extends ApplicationContext, Life
 	/**
 	 * Any number of these characters are considered delimiters between
 	 * multiple context config paths in a single String value.
+	 *
+	 * <br><br>
+	 * 任何数量的这些字符都被视为单个字符串值中多个上下文配置路径之间的分隔符。
+	 *
 	 * @see org.springframework.context.support.AbstractXmlApplicationContext#setConfigLocation
 	 * @see org.springframework.web.context.ContextLoader#CONFIG_LOCATION_PARAM
 	 * @see org.springframework.web.servlet.FrameworkServlet#setContextConfigLocation
