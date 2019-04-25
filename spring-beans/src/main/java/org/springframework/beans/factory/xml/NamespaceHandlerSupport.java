@@ -35,6 +35,10 @@ import org.springframework.beans.factory.config.BeanDefinitionHolder;
  * methods for registering a {@link BeanDefinitionParser} or {@link BeanDefinitionDecorator}
  * to handle a specific element.
  *
+ * <br><br>
+ * 自定义{@link NamespaceHandler NamespaceHandlers}实现的支持类。单独的节点分别通过
+ * {@link BeanDefinitionParser} 和 {@link BeanDefinitionDecorator} 策略接口完成解析和装饰。
+ *
  * @author Rob Harrop
  * @author Juergen Hoeller
  * @since 2.0
@@ -46,6 +50,10 @@ public abstract class NamespaceHandlerSupport implements NamespaceHandler {
 	/**
 	 * Stores the {@link BeanDefinitionParser} implementations keyed by the
 	 * local name of the {@link Element Elements} they handle.
+	 *
+	 * <br><br>
+	 * 存储以要处理的{@link Element Elements}本地名称作为key的{@link BeanDefinitionParser}实现。
+	 *
 	 */
 	private final Map<String, BeanDefinitionParser> parsers =
 			new HashMap<String, BeanDefinitionParser>();

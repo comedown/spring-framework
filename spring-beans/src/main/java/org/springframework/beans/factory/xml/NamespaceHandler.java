@@ -51,6 +51,10 @@ public interface NamespaceHandler {
 	 * Invoked by the {@link DefaultBeanDefinitionDocumentReader} after
 	 * construction but before any custom elements are parsed.
 	 * @see NamespaceHandlerSupport#registerBeanDefinitionParser(String, BeanDefinitionParser)
+	 *
+	 * <br><br>
+	 * 在构造{@link DefaultBeanDefinitionDocumentReader}实例之后，但在任何自定义元素解析之前调用此方法。
+	 *
 	 */
 	void init();
 

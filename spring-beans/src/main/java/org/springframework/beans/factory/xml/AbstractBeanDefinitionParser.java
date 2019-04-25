@@ -41,6 +41,16 @@ import org.springframework.util.StringUtils;
  * {@link AbstractSingleBeanDefinitionParser} and
  * {@link AbstractSimpleBeanDefinitionParser}.
  *
+ * <br><br>
+ * {@link BeanDefinitionParser}的抽象实现类，提供一系列便利的方法和一个用于让
+ * 子类覆盖已提供实际解析逻辑的{@link AbstractBeanDefinitionParser#parseInternal}
+ * 模板方法。
+ *
+ * <p>当你想要将一些任意复杂的XML解析为一个或多个{@link BeanDefinition BeanDefinitions}时，
+ * 可以使用这个{@link BeanDefinitionParser}的实现。当你仅仅想要将一些XML解析为一个{@code BeanDefinition}时，
+ * 你可以使用这个类更简单便捷的扩展，即{@link AbstractSingleBeanDefinitionParser} 和
+ * {@link AbstractSimpleBeanDefinitionParser}。</p>
+ *
  * @author Rob Harrop
  * @author Juergen Hoeller
  * @author Rick Evans
@@ -58,6 +68,7 @@ public abstract class AbstractBeanDefinitionParser implements BeanDefinitionPars
 
 	@Override
 	public final BeanDefinition parse(Element element, ParserContext parserContext) {
+		// 下游提供解析逻辑实现
 		AbstractBeanDefinition definition = parseInternal(element, parserContext);
 		if (definition != null && !parserContext.isNested()) {
 			try {

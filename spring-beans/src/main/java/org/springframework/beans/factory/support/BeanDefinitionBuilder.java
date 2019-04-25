@@ -25,6 +25,11 @@ import org.springframework.util.ObjectUtils;
  * using the builder pattern. Intended primarily for use when implementing Spring 2.0
  * {@link org.springframework.beans.factory.xml.NamespaceHandler NamespaceHandlers}.
  *
+ * <br><br>
+ * 使用建造者模式构造{@link org.springframework.beans.factory.config.BeanDefinition BeanDefinitions}实例
+ * 的编码方式。主要用于实现Spring 2.0
+ * {@link org.springframework.beans.factory.xml.NamespaceHandler NamespaceHandlers}。
+ *
  * @author Rod Johnson
  * @author Rob Harrop
  * @author Juergen Hoeller

@@ -35,6 +35,11 @@ import org.springframework.beans.factory.support.BeanDefinitionBuilder;
  * Your job simply is to {@link #doParse parse} the custom XML {@link Element}
  * into a single {@code BeanDefinition}.
  *
+ * <br><br>
+ * {@link BeanDefinitionParser}的实现的基础类，要求只能解析定义<i>单个</i> {@code BeanDefinition}。
+ *
+ * <p>
+ *
  * @author Rob Harrop
  * @author Juergen Hoeller
  * @author Rick Evans
@@ -67,6 +72,7 @@ public abstract class AbstractSingleBeanDefinitionParser extends AbstractBeanDef
 		if (beanClass != null) {
 			builder.getRawBeanDefinition().setBeanClass(beanClass);
 		}
+		// 获取bean名称
 		else {
 			String beanClassName = getBeanClassName(element);
 			if (beanClassName != null) {

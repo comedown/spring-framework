@@ -30,6 +30,10 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistry;
  * encapsulating all relevant configuration as well as state.
  * Nested inside an {@link XmlReaderContext}.
  *
+ * <br><br>
+ * bean定义信息解析过程传递的上下文，封装所有相关配置和状态。
+ * 内部嵌套{@link XmlReaderContext}。
+ *
  * @author Rob Harrop
  * @author Juergen Hoeller
  * @since 2.0
@@ -38,12 +42,14 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistry;
  */
 public final class ParserContext {
 
+	/** xml解析上下文 */
 	private final XmlReaderContext readerContext;
 
 	private final BeanDefinitionParserDelegate delegate;
 
 	private BeanDefinition containingBeanDefinition;
 
+	/** 组合组件定义栈 */
 	private final Stack<CompositeComponentDefinition> containingComponents = new Stack<CompositeComponentDefinition>();
 
 

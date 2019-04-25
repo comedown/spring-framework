@@ -162,6 +162,12 @@ public abstract class PropertiesLoaderUtils {
 	 * (in ISO-8859-1 encoding), using the given class loader.
 	 * <p>Merges properties if more than one resource of the same name
 	 * found in the class path.
+	 *
+	 * <br><br>
+	 * 使用给定类加载器，从指定类路径资源（ISO-8859-1编码）加载属性资源。
+	 *
+	 * <p>如果在类路径下存在一个或多个相同名称的资源，则会合并它们。
+	 *
 	 * @param resourceName the name of the class path resource
 	 * @param classLoader the ClassLoader to use for loading
 	 * (or {@code null} to use the default class loader)

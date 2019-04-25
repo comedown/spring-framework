@@ -1112,6 +1112,10 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	/**
 	 * Return the bean name, stripping out the factory dereference prefix if necessary,
 	 * and resolving aliases to canonical names.
+	 *
+	 * <br><br>
+	 * 返回bean名称，必要时去掉工厂间接引用前缀，并将别名解析为规范名称。
+	 *
 	 * @param name the user-specified name
 	 * @return the transformed bean name
 	 */

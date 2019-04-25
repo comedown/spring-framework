@@ -40,6 +40,12 @@ import org.springframework.util.CollectionUtils;
  * {@code META-INF/spring.handlers}, but this can be changed using the
  * {@link #DefaultNamespaceHandlerResolver(ClassLoader, String)} constructor.
  *
+ * <br><br>
+ * {@link NamespaceHandlerResolver}接口的默认实现。基于映射文件解析命名空间URI对应的实现类。
+ *
+ * <p>默认情况下，这个类查找{@code META-INF/spring.handlers}映射文件下的类，但是可以通过
+ * 构造器{@link #DefaultNamespaceHandlerResolver(ClassLoader, String)}改变他。
+ *
  * @author Rob Harrop
  * @author Juergen Hoeller
  * @since 2.0
@@ -50,6 +56,10 @@ public class DefaultNamespaceHandlerResolver implements NamespaceHandlerResolver
 
 	/**
 	 * The location to look for the mapping files. Can be present in multiple JAR files.
+	 *
+	 * <br><br>
+	 * 自定义NamespaceHandler的定义文件路径
+	 *
 	 */
 	public static final String DEFAULT_HANDLER_MAPPINGS_LOCATION = "META-INF/spring.handlers";
 
@@ -60,10 +70,22 @@ public class DefaultNamespaceHandlerResolver implements NamespaceHandlerResolver
 	/** ClassLoader to use for NamespaceHandler classes */
 	private final ClassLoader classLoader;
 
-	/** Resource location to search for */
+	/**
+	 * Resource location to search for
+	 *
+	 * <br><br>
+	 * 映射文件路径，默认是：META-INF/spring.handlers
+	 *
+	 */
 	private final String handlerMappingsLocation;
 
-	/** Stores the mappings from namespace URI to NamespaceHandler class name / instance */
+	/**
+	 * Stores the mappings from namespace URI to NamespaceHandler class name / instance
+	 *
+	 * <br><br>
+	 * 用于存储命名空间对应的NamespaceHandler的类名 / 接口
+	 *
+	 */
 	private volatile Map<String, Object> handlerMappings;
 
 
@@ -128,6 +150,7 @@ public class DefaultNamespaceHandlerResolver implements NamespaceHandlerResolver
 							"] does not implement the [" + NamespaceHandler.class.getName() + "] interface");
 				}
 				NamespaceHandler namespaceHandler = (NamespaceHandler) BeanUtils.instantiateClass(handlerClass);
+				// 初始化parser
 				namespaceHandler.init();
 				handlerMappings.put(namespaceUri, namespaceHandler);
 				return namespaceHandler;

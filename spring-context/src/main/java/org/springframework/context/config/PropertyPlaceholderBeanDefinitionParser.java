@@ -27,6 +27,10 @@ import org.springframework.util.StringUtils;
 /**
  * Parser for the {@code <context:property-placeholder/>} element.
  *
+ * <br><br>
+ * {@code <context:property-placeholder/>}元素解析器。
+ * 解析为{@link PropertyPlaceholderConfigurer}
+ *
  * @author Juergen Hoeller
  * @author Dave Syer
  * @author Chris Beams
@@ -54,13 +58,21 @@ class PropertyPlaceholderBeanDefinitionParser extends AbstractPropertyLoadingBea
 		return PropertyPlaceholderConfigurer.class;
 	}
 
+	/**
+	 * 解析context:property-placeholder元素
+	 * @param element
+	 * @param parserContext
+	 * @param builder
+	 */
 	@Override
 	protected void doParse(Element element, ParserContext parserContext, BeanDefinitionBuilder builder) {
 		super.doParse(element, parserContext, builder);
 
+		// 是否忽略不能解析的，默认false
 		builder.addPropertyValue("ignoreUnresolvablePlaceholders",
 				Boolean.valueOf(element.getAttribute("ignore-unresolvable")));
 
+		// 默认：ENVIRONMENT
 		String systemPropertiesModeName = element.getAttribute(SYSTEM_PROPERTIES_MODE_ATTRIBUTE);
 		if (StringUtils.hasLength(systemPropertiesModeName) &&
 				!systemPropertiesModeName.equals(SYSTEM_PROPERTIES_MODE_DEFAULT)) {
