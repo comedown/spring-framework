@@ -36,6 +36,15 @@ import org.springframework.util.StringUtils;
  * and a {@link ClassPathResource} if it is a non-URL path or a
  * "classpath:" pseudo-URL.
  *
+ * <br><br>
+ * {@link ResourceLoader}接口默认实现。可以为了
+ * {@link org.springframework.context.support.AbstractApplicationContext}
+ * {@link ResourceEditor} 和 servers的基础类来使用。
+ * 也可以单独使用。
+ *
+ * <p>如果地址值是一个URL，将会返回一个{@link UrlResource}实例，如果地址是一个非URL路径
+ * 或者是一个"classpath:"开头的伪URL路径，将返回一个{@link ClassPathResource}实例。
+ *
  * @author Juergen Hoeller
  * @since 10.03.2004
  * @see FileSystemResourceLoader

@@ -507,6 +507,10 @@ public abstract class ClassUtils {
 
 	/**
 	 * Convert a "."-based fully qualified class name to a "/"-based resource path.
+	 *
+	 * <br><br>
+	 * 将基于“.”的完全限定类名转换为基于“/”的资源路径。
+	 *
 	 * @param className the fully qualified class name
 	 * @return the corresponding resource path, pointing to the class
 	 */

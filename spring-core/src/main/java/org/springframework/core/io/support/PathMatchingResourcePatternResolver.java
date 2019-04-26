@@ -287,8 +287,10 @@ public class PathMatchingResourcePatternResolver implements ResourcePatternResol
 		else {
 			// Generally only look for a pattern after a prefix here,
 			// and on Tomcat only after the "*/" separator for its "war:" protocol.
+			// 前缀结束下标
 			int prefixEnd = (locationPattern.startsWith("war:") ? locationPattern.indexOf("*/") + 1 :
 					locationPattern.indexOf(':') + 1);
+			// 是否包含通配符
 			if (getPathMatcher().isPattern(locationPattern.substring(prefixEnd))) {
 				// a file pattern
 				return findPathMatchingResources(locationPattern);
@@ -484,7 +486,9 @@ public class PathMatchingResourcePatternResolver implements ResourcePatternResol
 	 * @see org.springframework.util.PathMatcher
 	 */
 	protected Resource[] findPathMatchingResources(String locationPattern) throws IOException {
+		// 根路径
 		String rootDirPath = determineRootDir(locationPattern);
+		// 通配符路径
 		String subPattern = locationPattern.substring(rootDirPath.length());
 		Resource[] rootDirResources = getResources(rootDirPath);
 		Set<Resource> result = new LinkedHashSet<Resource>(16);
@@ -521,6 +525,12 @@ public class PathMatchingResourcePatternResolver implements ResourcePatternResol
 	 * remainder of the location as pattern.
 	 * <p>Will return "/WEB-INF/" for the pattern "/WEB-INF/*.xml",
 	 * for example.
+	 *
+	 * <br><br>
+	 * 返回给定地址的根目录。
+	 *
+	 * <p>
+	 *
 	 * @param location the location to check
 	 * @return the part of the location that denotes the root directory
 	 * @see #retrieveMatchingFiles
