@@ -47,6 +47,12 @@ public class AntPathMatcherTests {
 	@Rule
 	public final ExpectedException exception = ExpectedException.none();
 
+	@Test
+	public void test1() {
+		assertTrue(pathMatcher.match("org/springframe/a**/bla", "opg/springframe/ah/bla"));
+//		assertTrue(pathMatcher.match("/x/x/**/bla", "/x/x/bla"));
+//		assertFalse(pathMatcher.match("/x/x/a?/bla", "/x/x/a/bla"));
+	}
 
 	@Test
 	public void match() {

@@ -60,6 +60,35 @@ import java.util.regex.Pattern;
  * that users of this implementation to sanitize patterns in order to prefix
  * them with "/" as it makes sense in the context in which they're used.
  *
+ * <br><br>
+ * {@link PathMatcher}实现Ant风格的路径模型。
+ *
+ * <p>部分映射代码是从<a href="http://ant.apache.org">Apache Ant</a>借鉴的。
+ *
+ * <p>映射匹配URL遵循以下规则：<br>
+ * <ul>
+ * <li>{@code ?} 匹配一个字符</li>
+ * <li>{@code *} 匹配零个、一个或多个字符</li>
+ * <li>{@code **} 匹配路径中零个、一个或多个<em>文件夹</em></li>
+ * <li>{@code {spring:[a-z]+}} 将正则表达式{@code [a-z]+}作为名字是“spring”的路径变量进行匹配</li>
+ * </ul>
+ *
+ * <h3>例子</h3>
+ * <ul>
+ * <li>{@code com/t?st.jsp} &mdash; 匹配 {@code com/test.jsp}，但也匹配
+ * {@code com/tast.jsp} 或 {@code com/txst.jsp}</li>
+ * <li>{@code com/*.jsp} &mdash; 匹配所有在{@code com}下面文件夹的 {@code .jsp} 文件
+ * {@code com} directory</li>
+ * <li><code>com/&#42;&#42;/test.jsp</code> &mdash; 匹配所有 {@code com} 路径下面的 {@code test.jsp} 文件</li>
+ * <li><code>org/springframework/&#42;&#42;/*.jsp</code> &mdash; 匹配所有
+ * {@code org/springframework} 路径下面的 {@code .jsp} 文件</li>
+ * <li><code>org/&#42;&#42;/servlet/bla.jsp</code> &mdash; 匹配
+ * {@code org/springframework/servlet/bla.jsp} 但也匹配
+ * {@code org/springframework/testing/servlet/bla.jsp} 和 {@code org/servlet/bla.jsp}</li>
+ * <li>{@code com/{filename:\\w+}.jsp} 将匹配 {@code com/test.jsp} 并且指定 {@code filename} 变量的
+ * 值为 {@code test}</li>
+ * </ul>
+ *
  * @author Alef Arendsen
  * @author Juergen Hoeller
  * @author Rob Harrop
@@ -79,19 +108,23 @@ public class AntPathMatcher implements PathMatcher {
 
 	private static final char[] WILDCARD_CHARS = { '*', '?', '{' };
 
-
+	// 路径分隔符，默认为 “/”
 	private String pathSeparator;
 
 	private PathSeparatorPatternCache pathSeparatorPatternCache;
 
 	private boolean caseSensitive = true;
 
+	// 是否去掉路径段中的空格
 	private boolean trimTokens = false;
 
+	// 是否缓存模板相关
 	private volatile Boolean cachePatterns;
 
+	// 模板路径分词结果缓存
 	private final Map<String, String[]> tokenizedPatternCache = new ConcurrentHashMap<String, String[]>(256);
 
+	// 模板路径匹配器缓存
 	final Map<String, AntPathStringMatcher> stringMatcherCache = new ConcurrentHashMap<String, AntPathStringMatcher>(256);
 
 
@@ -157,13 +190,14 @@ public class AntPathMatcher implements PathMatcher {
 		this.cachePatterns = cachePatterns;
 	}
 
+	/** 停用模板路径缓存 */
 	private void deactivatePatternCache() {
 		this.cachePatterns = false;
 		this.tokenizedPatternCache.clear();
 		this.stringMatcherCache.clear();
 	}
 
-
+	/** 是否是模板路径 */
 	@Override
 	public boolean isPattern(String path) {
 		return (path.indexOf('*') != -1 || path.indexOf('?') != -1);
@@ -192,11 +226,13 @@ public class AntPathMatcher implements PathMatcher {
 			return false;
 		}
 
+		// 模板路径分词
 		String[] pattDirs = tokenizePattern(pattern);
 		if (fullMatch && this.caseSensitive && !isPotentialMatch(path, pattDirs)) {
 			return false;
 		}
 
+		// 路径分词器
 		String[] pathDirs = tokenizePath(path);
 
 		int pattIdxStart = 0;
@@ -315,6 +351,7 @@ public class AntPathMatcher implements PathMatcher {
 		return true;
 	}
 
+	/** 如果是全匹配，校验是否有可能匹配 */
 	private boolean isPotentialMatch(String path, String[] pattDirs) {
 		if (!this.trimTokens) {
 			int pos = 0;
@@ -323,6 +360,7 @@ public class AntPathMatcher implements PathMatcher {
 				pos += skipped;
 				skipped = skipSegment(path, pos, pattDir);
 				if (skipped < pattDir.length()) {
+					// 如果要跳过的字符数大于0或者要跳过的字符数小于0，但是路径模板第一个为通配符，表示可能匹配
 					return (skipped > 0 || (pattDir.length() > 0 && isWildcardChar(pattDir.charAt(0))));
 				}
 				pos += skipped;
@@ -331,6 +369,7 @@ public class AntPathMatcher implements PathMatcher {
 		return true;
 	}
 
+	/** 跳过非通配符路径段 */
 	private int skipSegment(String path, int pos, String prefix) {
 		int skipped = 0;
 		for (int i = 0; i < prefix.length(); i++) {
@@ -349,6 +388,7 @@ public class AntPathMatcher implements PathMatcher {
 		return skipped;
 	}
 
+	/** 跳过分隔符。比如com//1.jsp，则//将被跳过 */
 	private int skipSeparator(String path, int pos, String separator) {
 		int skipped = 0;
 		while (path.startsWith(separator, pos + skipped)) {
@@ -357,6 +397,7 @@ public class AntPathMatcher implements PathMatcher {
 		return skipped;
 	}
 
+	/** 是否是通配符 */
 	private boolean isWildcardChar(char c) {
 		for (char candidate : WILDCARD_CHARS) {
 			if (c == candidate) {
@@ -375,12 +416,15 @@ public class AntPathMatcher implements PathMatcher {
 	 */
 	protected String[] tokenizePattern(String pattern) {
 		String[] tokenized = null;
+		// 是否开启模板路径分词结果缓存
 		Boolean cachePatterns = this.cachePatterns;
 		if (cachePatterns == null || cachePatterns.booleanValue()) {
+			// 从缓存获取
 			tokenized = this.tokenizedPatternCache.get(pattern);
 		}
 		if (tokenized == null) {
 			tokenized = tokenizePath(pattern);
+			// 如果缓存过大，停用缓存
 			if (cachePatterns == null && this.tokenizedPatternCache.size() >= CACHE_TURNOFF_THRESHOLD) {
 				// Try to adapt to the runtime situation that we're encountering:
 				// There are obviously too many different patterns coming in here...
@@ -388,6 +432,7 @@ public class AntPathMatcher implements PathMatcher {
 				deactivatePatternCache();
 				return tokenized;
 			}
+			// 分词结果放入缓存
 			if (cachePatterns == null || cachePatterns.booleanValue()) {
 				this.tokenizedPatternCache.put(pattern, tokenized);
 			}
@@ -885,11 +930,17 @@ public class AntPathMatcher implements PathMatcher {
 
 	/**
 	 * A simple cache for patterns that depend on the configured path separator.
+	 *
+	 * <br><br>
+	 * 依赖配置的路径分隔符的简单缓存，用于路径模板
+	 *
 	 */
 	private static class PathSeparatorPatternCache {
 
+		// 通配符（*）结尾
 		private final String endsOnWildCard;
 
+		/// 双通配符（**）结尾
 		private final String endsOnDoubleWildCard;
 
 		public PathSeparatorPatternCache(String pathSeparator) {
