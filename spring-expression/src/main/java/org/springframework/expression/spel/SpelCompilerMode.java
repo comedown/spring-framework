@@ -20,6 +20,9 @@ package org.springframework.expression.spel;
  * Captures the possible configuration settings for a compiler that can be
  * used when evaluating expressions.
  *
+ * <br><br>
+ * 捕获在计算表达式时可以使用的编译器可能的配置设置。
+ *
  * @author Andy Clement
  * @since 4.1
  */
@@ -27,6 +30,9 @@ public enum SpelCompilerMode {
 
 	/**
 	 * The compiler is switched off; this is the default.
+	 *
+	 * <br><br>
+	 * 默认模式，编译器关闭
 	 */
 	OFF,
 

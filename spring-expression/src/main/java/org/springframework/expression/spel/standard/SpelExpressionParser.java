@@ -25,6 +25,9 @@ import org.springframework.util.Assert;
 /**
  * SpEL parser. Instances are reusable and thread-safe.
  *
+ * <br><br>
+ * SpEL解析器。实例对象是可重用和线程安全的。
+ *
  * @author Andy Clement
  * @author Juergen Hoeller
  * @since 3.0
