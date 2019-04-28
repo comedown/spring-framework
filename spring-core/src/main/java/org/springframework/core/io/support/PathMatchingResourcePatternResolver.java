@@ -167,6 +167,19 @@ import org.springframework.util.StringUtils;
  * Ant-style pattern in such a case, which will search <i>all</i> class path
  * locations that contain the root package.
  *
+ * <br><br>
+ * {@link ResourcePatternResolver}的实现类，能够把给定的资源地址路径解析为一个或多个资源。
+ * 源路径可以是一个简单的路径，能够一对一映射到具体的{@link org.springframework.core.io.Resource}，
+ * 也可以包含特殊的"{@code classpath*:}"前缀和/或内部Ant风格的正则表达式（使用
+ * {@link org.springframework.util.AntPathMatcher}实用程序匹配）。后者都是有效的通配符。
+ *
+ * <p><b>无通配符：</b>
+ *
+ * <p><b>警告：</b>注意当"{@code classpath*:}"和Ant风格模式组合使用时，除非实际目标文件驻留在文件系统中，
+ * 否则在模式进行匹配之前，至少只能与一个根目录可靠的工作。这意味着类似"{@code classpath*:*.xml}"的模式
+ * 不会从jar文件的根目录中检索文件，而是只从扩展目录的根目录中检索文件。这源于JDK的{@code ClassLoader.getResources()}
+ * 方法的限制，该方法只返回传入空字符串的文件系统位置（指示要搜索的潜在的根路径）。
+ *
  * @author Juergen Hoeller
  * @author Colin Sampaleanu
  * @author Marius Bogoevici
@@ -281,6 +294,7 @@ public class PathMatchingResourcePatternResolver implements ResourcePatternResol
 			}
 			else {
 				// all class path resources with the given name
+				// 获取给定名称下所有路径资源
 				return findAllClassPathResources(locationPattern.substring(CLASSPATH_ALL_URL_PREFIX.length()));
 			}
 		}
@@ -531,6 +545,8 @@ public class PathMatchingResourcePatternResolver implements ResourcePatternResol
 	 *
 	 * <p>
 	 *
+	 * <p>classpath*:spring&#47;**&#47;config&47;*.xml  返回  classpath*:spring/
+	 *
 	 * @param location the location to check
 	 * @return the part of the location that denotes the root directory
 	 * @see #retrieveMatchingFiles
@@ -713,6 +729,10 @@ public class PathMatchingResourcePatternResolver implements ResourcePatternResol
 	/**
 	 * Find all resources in the file system that match the given location pattern
 	 * via the Ant-style PathMatcher.
+	 *
+	 * <br><br>
+	 * 通过Ant风格的路径匹配器查找文件系统下所有匹配给定地址模式的资源
+	 *
 	 * @param rootDirResource the root directory as Resource
 	 * @param subPattern the sub pattern to match (below the root directory)
 	 * @return a mutable Set of matching Resource instances
@@ -768,6 +788,10 @@ public class PathMatchingResourcePatternResolver implements ResourcePatternResol
 	/**
 	 * Retrieve files that match the given path pattern,
 	 * checking the given directory and its subdirectories.
+	 *
+	 * <br><br>
+	 * 检索匹配给定路径模式的文件，检查给定目录和它的子目录。
+	 *
 	 * @param rootDir the directory to start from
 	 * @param pattern the pattern to match against,
 	 * relative to the root directory
@@ -777,6 +801,7 @@ public class PathMatchingResourcePatternResolver implements ResourcePatternResol
 	protected Set<File> retrieveMatchingFiles(File rootDir, String pattern) throws IOException {
 		if (!rootDir.exists()) {
 			// Silently skip non-existing directories.
+			// 悄悄的跳过不存在的目录
 			if (logger.isDebugEnabled()) {
 				logger.debug("Skipping [" + rootDir.getAbsolutePath() + "] because it does not exist");
 			}
@@ -784,11 +809,13 @@ public class PathMatchingResourcePatternResolver implements ResourcePatternResol
 		}
 		if (!rootDir.isDirectory()) {
 			// Complain louder if it exists but is no directory.
+			// 如果存在但不是目录，更要跳过
 			if (logger.isWarnEnabled()) {
 				logger.warn("Skipping [" + rootDir.getAbsolutePath() + "] because it does not denote a directory");
 			}
 			return Collections.emptySet();
 		}
+		// 不可读
 		if (!rootDir.canRead()) {
 			if (logger.isWarnEnabled()) {
 				logger.warn("Cannot search for matching files underneath directory [" + rootDir.getAbsolutePath() +
@@ -802,6 +829,7 @@ public class PathMatchingResourcePatternResolver implements ResourcePatternResol
 		}
 		fullPattern = fullPattern + StringUtils.replace(pattern, File.separator, "/");
 		Set<File> result = new LinkedHashSet<File>(8);
+		// 检索匹配的文件
 		doRetrieveMatchingFiles(fullPattern, rootDir, result);
 		return result;
 	}
@@ -809,6 +837,10 @@ public class PathMatchingResourcePatternResolver implements ResourcePatternResol
 	/**
 	 * Recursively retrieve files that match the given pattern,
 	 * adding them to the given result list.
+	 *
+	 * <br><br>
+	 * 递归检索与给定模式匹配的文件，把他添加到给定的结果集中。
+	 *
 	 * @param fullPattern the pattern to match against,
 	 * with prepended root directory path
 	 * @param dir the current directory
@@ -838,6 +870,7 @@ public class PathMatchingResourcePatternResolver implements ResourcePatternResol
 					}
 				}
 				else {
+					// 递归检索
 					doRetrieveMatchingFiles(fullPattern, content, result);
 				}
 			}
