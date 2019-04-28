@@ -29,6 +29,12 @@ import org.springframework.core.AttributeAccessor;
  * {@link BeanFactoryPostProcessor} such as {@link PropertyPlaceholderConfigurer}
  * to introspect and modify property values and other bean metadata.
  *
+ * <br><br>
+ * BeanDefinition描述一个bean实例，该实例具有属性值、构造器参数，以及具体实现类提供的更多信息。
+ *
+ * <p>这只是一个最小的接口：主要目的是允许一个 {@link BeanFactoryPostProcessor} 比如
+ * {@link PropertyPlaceholderConfigurer} 对其属性和其他元数据进行自检和修改。
+ *
  * @author Juergen Hoeller
  * @author Rob Harrop
  * @since 19.03.2004
@@ -41,6 +47,11 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	/**
 	 * Scope identifier for the standard singleton scope: "singleton".
 	 * <p>Note that extended bean factories might support further scopes.
+	 *
+	 * <br><br>
+	 * 标准单例作用域的作用域标识符："singleton"。
+	 * <p>注意，扩展的bean工程或许支持更多作用域。
+	 *
 	 * @see #setScope
 	 */
 	String SCOPE_SINGLETON = ConfigurableBeanFactory.SCOPE_SINGLETON;
@@ -48,6 +59,11 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	/**
 	 * Scope identifier for the standard prototype scope: "prototype".
 	 * <p>Note that extended bean factories might support further scopes.
+	 *
+	 * <br><br>
+	 * 标准原型作用域的作用域标识符："prototype"。
+	 * <p>注意，扩展的bean工程或许支持更多作用域。
+	 *
 	 * @see #setScope
 	 */
 	String SCOPE_PROTOTYPE = ConfigurableBeanFactory.SCOPE_PROTOTYPE;

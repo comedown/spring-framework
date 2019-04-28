@@ -37,6 +37,24 @@ import org.apache.commons.logging.LogFactory;
  * where JVM system properties are locked on the target platform (e.g. WebSphere).
  * See {@link #setFlag} for a convenient way to locally set such flags to "true".
  *
+ * <br><br>
+ * 拉丁文缩写：
+ * <ul>
+ *     <li>i.e. ：即；也就是说</li>
+ *     <li>e.g. ：举个例子</li>
+ *     <li>etc. ：等等</li>
+ * </ul>
+ *
+ * 本地Spring属性的静态持有类，也就是说，定义在Spring本地库级别的属性。
+ *
+ * <p>从Spring库的类路径根目录读取 {@code spring.properties} 文件，也允许通过 {@link #setProperty} 方法
+ * 编程式的设置属性。在检查一个属性时，首先检查本地条目，然后返回到JVM层级通过{@link System#getProperty}检查
+ * JVM系统属性。
+ *
+ * <p>这是设置Spring相关的系统属性比如 "spring.getenv.ignore"、"spring.beaninfo.ignore" 的另一种方式，
+ * 尤其是在JVM系属性被目标平台锁定的情况（比如WebSphere）。请参阅 {@link #setFlag}，以获取一个方便的方式将
+ * 这些本地化标记设置为"true"。
+ *
  * @author Juergen Hoeller
  * @since 3.2.7
  * @see org.springframework.core.env.AbstractEnvironment#IGNORE_GETENV_PROPERTY_NAME

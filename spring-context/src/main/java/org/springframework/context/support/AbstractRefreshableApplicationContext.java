@@ -70,7 +70,12 @@ public abstract class AbstractRefreshableApplicationContext extends AbstractAppl
 	/** Bean factory for this context */
 	private DefaultListableBeanFactory beanFactory;
 
-	/** Synchronization monitor for the internal BeanFactory */
+	/** Synchronization monitor for the internal BeanFactory.
+	 *
+	 * <br><br>
+	 * BeanFactory同步监视器
+	 *
+	 */
 	private final Object beanFactoryMonitor = new Object();
 
 
@@ -118,6 +123,7 @@ public abstract class AbstractRefreshableApplicationContext extends AbstractAppl
 	 */
 	@Override
 	protected final void refreshBeanFactory() throws BeansException {
+		// 是否已经有BeanFactory实例，有就先销毁
 		if (hasBeanFactory()) {
 			destroyBeans();
 			closeBeanFactory();
@@ -126,6 +132,7 @@ public abstract class AbstractRefreshableApplicationContext extends AbstractAppl
 			DefaultListableBeanFactory beanFactory = createBeanFactory();
 			beanFactory.setSerializationId(getId());
 			customizeBeanFactory(beanFactory);
+			// 加载bean定义信息
 			loadBeanDefinitions(beanFactory);
 			synchronized (this.beanFactoryMonitor) {
 				this.beanFactory = beanFactory;
@@ -156,6 +163,9 @@ public abstract class AbstractRefreshableApplicationContext extends AbstractAppl
 	/**
 	 * Determine whether this context currently holds a bean factory,
 	 * i.e. has been refreshed at least once and not been closed yet.
+	 *
+	 * <br><br>
+	 * 该上下文是否持有一个bean工厂，也就是说，已经被刷新至少一次并且还没有关闭。
 	 */
 	protected final boolean hasBeanFactory() {
 		synchronized (this.beanFactoryMonitor) {
