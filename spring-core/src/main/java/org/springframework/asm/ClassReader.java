@@ -37,6 +37,10 @@ import java.io.InputStream;
  * This class parses a byte array conforming to the Java class file format and
  * calls the appropriate visit methods of a given class visitor for each field,
  * method and bytecode instruction encountered.
+ *
+ * <br><br>
+ * Java 类解析器，用于产生一个访问现有类的{@link ClassVisitor}实例。这个类解析一个遵循Java类
+ * 文件格式的字节数组，并且调用遇到的给定类的每个字段、方法和字节码指令合适的访问方法。
  * 
  * @author Eric Bruneton
  * @author Eugene Kuleshov
@@ -151,6 +155,10 @@ public class ClassReader {
     /**
      * Start index of the class header information (access, name...) in
      * {@link #b b}.
+     *
+     * <br><br>
+     * class文件信息的头偏移量在 {@link #b b}。
+     *
      */
     public final int header;
 
@@ -182,11 +190,13 @@ public class ClassReader {
         this.b = b;
         // checks the class version
 		/* SPRING PATCH: REMOVED FOR FORWARD COMPATIBILITY WITH JDK 9
+		 * Spring补丁：为了与jdk9向前兼容而删除
         if (readShort(off + 6) > Opcodes.V1_8) {
             throw new IllegalArgumentException();
         }
 		*/
         // parses the constant pool
+        // 解析常量池大小
         items = new int[readUnsignedShort(off + 8)];
         int n = items.length;
         strings = new String[n];

@@ -28,6 +28,10 @@ import org.springframework.core.io.ResourceLoader;
  * caching a {@link MetadataReader} instance per Spring {@link Resource} handle
  * (i.e. per ".class" file).
  *
+ * <br><br>
+ * {@link MetadataReaderFactory}接口的缓存实现，每个Spring{@link Resource}句柄缓存一个
+ * {@link MetadataReader}实例（即每个“.class”文件）。
+ *
  * @author Juergen Hoeller
  * @author Costin Leau
  * @since 2.5
@@ -93,6 +97,7 @@ public class CachingMetadataReaderFactory extends SimpleMetadataReaderFactory {
 
 	@Override
 	public MetadataReader getMetadataReader(Resource resource) throws IOException {
+		// 缓存数量限制
 		if (getCacheLimit() <= 0) {
 			return super.getMetadataReader(resource);
 		}
