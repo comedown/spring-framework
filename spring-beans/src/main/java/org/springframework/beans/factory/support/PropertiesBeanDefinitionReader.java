@@ -417,26 +417,32 @@ public class PropertiesBeanDefinitionReader extends AbstractBeanDefinitionReader
 			String key = StringUtils.trimWhitespace((String) entry.getKey());
 			if (key.startsWith(prefix + SEPARATOR)) {
 				String property = key.substring(prefix.length() + SEPARATOR.length());
+				// (class)
 				if (CLASS_KEY.equals(property)) {
 					className = StringUtils.trimWhitespace((String) entry.getValue());
 				}
+				// (parent)
 				else if (PARENT_KEY.equals(property)) {
 					parent = StringUtils.trimWhitespace((String) entry.getValue());
 				}
+				// (abstract)
 				else if (ABSTRACT_KEY.equals(property)) {
 					String val = StringUtils.trimWhitespace((String) entry.getValue());
 					isAbstract = TRUE_VALUE.equals(val);
 				}
+				// (scope)
 				else if (SCOPE_KEY.equals(property)) {
 					// Spring 2.0 style
 					scope = StringUtils.trimWhitespace((String) entry.getValue());
 				}
+				// (singleton)
 				else if (SINGLETON_KEY.equals(property)) {
 					// Spring 1.2 style
 					String val = StringUtils.trimWhitespace((String) entry.getValue());
 					scope = ((val == null || TRUE_VALUE.equals(val) ? GenericBeanDefinition.SCOPE_SINGLETON :
 							GenericBeanDefinition.SCOPE_PROTOTYPE));
 				}
+				// (lazy-init)
 				else if (LAZY_INIT_KEY.equals(property)) {
 					String val = StringUtils.trimWhitespace((String) entry.getValue());
 					lazyInit = TRUE_VALUE.equals(val);

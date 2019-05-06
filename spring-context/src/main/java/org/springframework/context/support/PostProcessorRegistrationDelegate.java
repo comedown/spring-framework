@@ -44,6 +44,9 @@ import org.springframework.core.PriorityOrdered;
 /**
  * Delegate for AbstractApplicationContext's post-processor handling.
  *
+ * <br><br>
+ * AbstractApplicationContext的后处理器处理委托。
+ *
  * @author Juergen Hoeller
  * @since 4.0
  */
@@ -53,6 +56,7 @@ class PostProcessorRegistrationDelegate {
 			ConfigurableListableBeanFactory beanFactory, List<BeanFactoryPostProcessor> beanFactoryPostProcessors) {
 
 		// Invoke BeanDefinitionRegistryPostProcessors first, if any.
+		// 如果存在BeanDefinitionRegistryPostProcessors，则先调用。
 		Set<String> processedBeans = new HashSet<String>();
 
 		if (beanFactory instanceof BeanDefinitionRegistry) {
@@ -79,6 +83,7 @@ class PostProcessorRegistrationDelegate {
 			List<BeanDefinitionRegistryPostProcessor> currentRegistryProcessors = new ArrayList<BeanDefinitionRegistryPostProcessor>();
 
 			// First, invoke the BeanDefinitionRegistryPostProcessors that implement PriorityOrdered.
+			// 首先，调用实现了PriorityOrdered的BeanDefinitionRegistryPostProcessors。
 			String[] postProcessorNames =
 					beanFactory.getBeanNamesForType(BeanDefinitionRegistryPostProcessor.class, true, false);
 			for (String ppName : postProcessorNames) {

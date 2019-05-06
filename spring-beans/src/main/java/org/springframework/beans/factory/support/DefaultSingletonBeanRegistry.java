@@ -82,7 +82,13 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	/** Logger available to subclasses */
 	protected final Log logger = LogFactory.getLog(getClass());
 
-	/** Cache of singleton objects: bean name --> bean instance */
+	/**
+     * Cache of singleton objects: bean name --> bean instance
+     *
+     * <br><br>
+     * 单例对象缓存：bean名称 -> bean实例
+     *
+     */
 	private final Map<String, Object> singletonObjects = new ConcurrentHashMap<String, Object>(256);
 
 	/** Cache of singleton factories: bean name --> ObjectFactory */

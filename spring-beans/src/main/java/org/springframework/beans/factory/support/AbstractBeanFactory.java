@@ -993,7 +993,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	@Override
 	public boolean isFactoryBean(String name) throws NoSuchBeanDefinitionException {
 		String beanName = transformedBeanName(name);
-		Object beanInstance = getSingleton(beanName, false);
+ 		Object beanInstance = getSingleton(beanName, false);
 		if (beanInstance != null) {
 			return (beanInstance instanceof FactoryBean);
 		}
@@ -1594,6 +1594,10 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	/**
 	 * Check whether this factory's bean creation phase already started,
 	 * i.e. whether any bean has been marked as created in the meantime.
+     *
+     * <br><br>
+     * 检查该工厂的bean创建阶段是否已经开始，即在这期间是否所有bean都被标记为已创建。
+     *
 	 * @since 4.2.2
 	 * @see #markBeanAsCreated
 	 */

@@ -79,6 +79,15 @@ import static org.springframework.context.annotation.AnnotationConfigUtils.CONFI
  * their corresponding bean definitions registered before any other
  * {@link BeanFactoryPostProcessor} executes.
  *
+ * <br><br>
+ * {@link BeanFactoryPostProcessor} 用于引导处理标注{@link Configuration @Configuration}的类。
+ *
+ * <p>当使用{@code <context:annotation-config/>} 或 {@code <context:component-scan/>}配置时，
+ * 将被Spring容器自动注册。否则，可以像声明其他任何BeanFactoryPostProcessor一样手动声明。
+ *
+ * <p>这个后处理器是按优先级排序的，因为在任何其他{@link BeanFactoryPostProcessor}执行之前注册所有
+ * 声明在{@code @Configuration}类中的的{@link Bean}方法相关bean的定义是很重要的。
+ *
  * @author Chris Beams
  * @author Juergen Hoeller
  * @author Phillip Webb
