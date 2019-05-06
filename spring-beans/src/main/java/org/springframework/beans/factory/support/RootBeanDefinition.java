@@ -42,6 +42,15 @@ import org.springframework.util.Assert;
  * GenericBeanDefinition has the advantage that it allows to dynamically define
  * parent dependencies, not 'hard-coding' the role as a root bean definition.
  *
+ * <br><br>
+ * 根bean定义代表运行时支持Spring BeanFactory中特定bean的合并bean定义。它可能是从相互继承的多个原始bean
+ * 定义创建二来，通常注册为{@link GenericBeanDefinition GenericBeanDefinitions}。根bean定义实质上
+ * 是运行时“统一的”bean定义视图。
+ *
+ * <p>根bean定义也可以用于在配置阶段注册独特的bean定义。但是，从Spring 2.5开始，以编程方式注册bean定义
+ * 的首选途径是{@link GenericBeanDefinition}类。GenericBeanDefinition的优势是允许自动定义父依赖项，
+ * 而不是将角色“硬编码”成一个根bean定义。
+ *
  * @author Rod Johnson
  * @author Juergen Hoeller
  * @see GenericBeanDefinition
@@ -50,6 +59,7 @@ import org.springframework.util.Assert;
 @SuppressWarnings("serial")
 public class RootBeanDefinition extends AbstractBeanDefinition {
 
+	// 装饰bean定义
 	private BeanDefinitionHolder decoratedDefinition;
 
 	private AnnotatedElement qualifiedElement;

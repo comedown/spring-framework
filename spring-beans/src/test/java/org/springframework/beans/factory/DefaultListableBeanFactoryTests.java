@@ -120,6 +120,7 @@ public class DefaultListableBeanFactoryTests {
 	public ExpectedException thrown = ExpectedException.none();
 
 
+	/** 测试无引用的单例bean是否被实例化 */
 	@Test
 	public void testUnreferencedSingletonWasInstantiated() {
 		KnowsIfInstantiated.clearInstantiationRecord();
