@@ -158,6 +158,7 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 	private final Map<Class<?>, Constructor<?>[]> candidateConstructorsCache =
 			new ConcurrentHashMap<Class<?>, Constructor<?>[]>(256);
 
+	// 注入元素据缓存
 	private final Map<String, InjectionMetadata> injectionMetadataCache =
 			new ConcurrentHashMap<String, InjectionMetadata>(256);
 
@@ -166,6 +167,10 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 	 * Create a new AutowiredAnnotationBeanPostProcessor
 	 * for Spring's standard {@link Autowired} annotation.
 	 * <p>Also supports JSR-330's {@link javax.inject.Inject} annotation, if available.
+	 *
+	 * <br><br>
+	 * 创建一个新的AutowiredAnnotationBeanPostProcessor实例，为了Spring的标准注解{@link Autowired}。
+	 * <p>如果可以得到，同时也支持JSR-330的 {@link javax.inject.Inject} 注解。
 	 */
 	@SuppressWarnings("unchecked")
 	public AutowiredAnnotationBeanPostProcessor() {
@@ -421,8 +426,10 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 		String cacheKey = (StringUtils.hasLength(beanName) ? beanName : clazz.getName());
 		// Quick check on the concurrent map first, with minimal locking.
 		InjectionMetadata metadata = this.injectionMetadataCache.get(cacheKey);
+		// 缓存是否需要刷新：metadata == null || metadata.targetClass != clazz
 		if (InjectionMetadata.needsRefresh(metadata, clazz)) {
 			synchronized (this.injectionMetadataCache) {
+				// 双重检查
 				metadata = this.injectionMetadataCache.get(cacheKey);
 				if (InjectionMetadata.needsRefresh(metadata, clazz)) {
 					if (metadata != null) {
@@ -455,6 +462,7 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 				public void doWith(Field field) throws IllegalArgumentException, IllegalAccessException {
 					AnnotationAttributes ann = findAutowiredAnnotation(field);
 					if (ann != null) {
+						// 自动装配注解不支持静态字段
 						if (Modifier.isStatic(field.getModifiers())) {
 							if (logger.isWarnEnabled()) {
 								logger.warn("Autowired annotation is not supported on static fields: " + field);
@@ -503,6 +511,7 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 		return new InjectionMetadata(clazz, elements);
 	}
 
+	/** 查找第一个符合自动装配的注解 */
 	private AnnotationAttributes findAutowiredAnnotation(AccessibleObject ao) {
 		if (ao.getAnnotations().length > 0) {  // autowiring annotations have to be local
 			for (Class<? extends Annotation> type : this.autowiredAnnotationTypes) {

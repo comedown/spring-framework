@@ -652,6 +652,7 @@ public abstract class ReflectionUtils {
 	 * @see #doWithFields
 	 */
 	public static void doWithLocalFields(Class<?> clazz, FieldCallback fc) {
+		// TODO: fc没有判空，空指针异常隐患
 		for (Field field : getDeclaredFields(clazz)) {
 			try {
 				fc.doWith(field);

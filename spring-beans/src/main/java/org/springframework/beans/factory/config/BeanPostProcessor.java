@@ -32,6 +32,15 @@ import org.springframework.beans.BeansException;
  * while post-processors that wrap beans with proxies will normally
  * implement {@link #postProcessAfterInitialization}.
  *
+ * <br><br>
+ * 允许自定义修改新bean实例的工厂钩子，例如检查标记接口或用代理包装它们。
+ *
+ * <p>应用上下文可以在bean定义中自动检测BeanPostProcessor bean，并将其应用于随后创建的任何bean。
+ * 简单的bean工厂允许对后处理器进行编程注册，应用于通过该工厂创建的所有bean。
+ *
+ * <p>通常，通过标记接口或类似的接口来填充bean的后处理器将实现{@link #postProcessBeforeInitialization}
+ * 方法，而通过代理包装bean的后处理器通常会实现{@link #postProcessAfterInitialization}方法。
+ *
  * @author Juergen Hoeller
  * @since 10.10.2003
  * @see InstantiationAwareBeanPostProcessor

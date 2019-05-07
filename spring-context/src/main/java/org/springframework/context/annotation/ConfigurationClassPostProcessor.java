@@ -116,6 +116,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 
 	private boolean setMetadataReaderFactoryCalled = false;
 
+	// 注册表后处理器，存储注册表id
 	private final Set<Integer> registriesPostProcessed = new HashSet<Integer>();
 
 	private final Set<Integer> factoriesPostProcessed = new HashSet<Integer>();
@@ -220,6 +221,10 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 
 	/**
 	 * Derive further bean definitions from the configuration classes in the registry.
+	 *
+	 * <br><br>
+	 * 从注册表中的配置类派生更多的bean定义。
+	 *
 	 */
 	@Override
 	public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) {
