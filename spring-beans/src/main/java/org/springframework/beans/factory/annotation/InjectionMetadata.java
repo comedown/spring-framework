@@ -50,6 +50,7 @@ public class InjectionMetadata {
 
 	private final Class<?> targetClass;
 
+	// 注入元素
 	private final Collection<InjectedElement> injectedElements;
 
 	private volatile Set<InjectedElement> checkedElements;

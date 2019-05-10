@@ -318,6 +318,13 @@ public class AnnotatedElementUtils {
 	 * <p>{@link AliasFor @AliasFor} semantics are fully supported, both
 	 * within a single annotation and within the annotation hierarchy.
 	 * <p>This method delegates to {@link #getMergedAnnotationAttributes(AnnotatedElement, String)}.
+	 *
+	 * <br><br>
+	 * 在提供的{@code element}参数<em>上的</em>注解层次结构中，获取指定的{@code annotationType}的第一个注解，
+	 * 并将该注解的属性与注释层次结构较低级别的注释<em>匹配</em>的属性合并。
+	 * <p>{@link AliasFor @AliasFor} 语义在单个注解和注解层次结构中都完全支持。
+	 * <p>该方法委托给{@link #getMergedAnnotationAttributes(AnnotatedElement, String)}。
+	 *
 	 * @param element the annotated element
 	 * @param annotationType the annotation type to find
 	 * @return the merged {@code AnnotationAttributes}, or {@code null} if not found
