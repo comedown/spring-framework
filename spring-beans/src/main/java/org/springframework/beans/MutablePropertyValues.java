@@ -30,6 +30,10 @@ import org.springframework.util.StringUtils;
  * Allows simple manipulation of properties, and provides constructors
  * to support deep copy and construction from a Map.
  *
+ * <br><br>
+ * {@link PropertyValues}接口的默认实现。允许对属性进行简单的操作，并提供支持从Map
+ * 进行深度复制和构造的构造器。
+ *
  * @author Rod Johnson
  * @author Juergen Hoeller
  * @author Rob Harrop
@@ -160,13 +164,19 @@ public class MutablePropertyValues implements PropertyValues, Serializable {
 	/**
 	 * Add a PropertyValue object, replacing any existing one for the
 	 * corresponding property or getting merged with it (if applicable).
+	 *
+	 * <br><br>
+	 * 添加一个PropertyValue对象，替换相应属性的任何已经存在的对象或者与其合并（如果允许）。
+	 *
 	 * @param pv PropertyValue object to add
 	 * @return this in order to allow for adding multiple property values in a chain
 	 */
 	public MutablePropertyValues addPropertyValue(PropertyValue pv) {
 		for (int i = 0; i < this.propertyValueList.size(); i++) {
 			PropertyValue currentPv = this.propertyValueList.get(i);
+			// 存在相同名称的对象
 			if (currentPv.getName().equals(pv.getName())) {
+				// 如果允许，则与已存在的对象合并
 				pv = mergeIfRequired(pv, currentPv);
 				setPropertyValueAt(pv, i);
 				return this;
@@ -216,6 +226,7 @@ public class MutablePropertyValues implements PropertyValues, Serializable {
 	 */
 	private PropertyValue mergeIfRequired(PropertyValue newPv, PropertyValue currentPv) {
 		Object value = newPv.getValue();
+		// 如果值是Mergeable类型，表示允许合并
 		if (value instanceof Mergeable) {
 			Mergeable mergeable = (Mergeable) value;
 			if (mergeable.isMergeEnabled()) {
@@ -287,6 +298,7 @@ public class MutablePropertyValues implements PropertyValues, Serializable {
 				changes.addPropertyValue(newPv);
 			}
 		}
+		// 返回改变了或者新增的值
 		return changes;
 	}
 

@@ -1206,6 +1206,10 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	/**
 	 * Populate the bean instance in the given BeanWrapper with the property values
 	 * from the bean definition.
+	 *
+	 * <br><br>
+	 * 用bean定义中的属性值填充给定BeanWrapper中的bean实例。
+	 *
 	 * @param beanName the name of the bean
 	 * @param mbd the bean definition for the bean
 	 * @param bw the BeanWrapper with bean instance
@@ -1214,10 +1218,12 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		PropertyValues pvs = mbd.getPropertyValues();
 
 		if (bw == null) {
+			// 对于null实例，如果属性值不为空，报错
 			if (!pvs.isEmpty()) {
 				throw new BeanCreationException(
 						mbd.getResourceDescription(), beanName, "Cannot apply property values to null instance");
 			}
+			// 否则，跳过填充null实例。
 			else {
 				// Skip property population phase for null instance.
 				return;

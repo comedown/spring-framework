@@ -180,6 +180,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	// 初始化方法名称
 	private String initMethodName;
 
+	// 销毁方法名称
 	private String destroyMethodName;
 
 	private boolean enforceInitMethod = true;

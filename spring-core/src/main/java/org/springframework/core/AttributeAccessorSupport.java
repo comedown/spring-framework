@@ -30,7 +30,7 @@ import org.springframework.util.StringUtils;
  * <p>{@link Serializable} if subclasses and all attribute values are {@link Serializable}.
  *
  * <br><br>
- * <p>{@link AttributeAccessor AttributeAccessors} 的支持类，提供所有方法的基础实现。子类可以基础这些方法。
+ * <p>{@link AttributeAccessor AttributeAccessors} 的支持类，提供所有方法的基础实现。子类可以继承这些方法。
  *
  * <p>如果子类和所有属性值都是 {@link Serializable}，那么这个类也是{@link Serializable}。
  *

@@ -20,6 +20,9 @@ package org.springframework.beans;
  * Holder containing one or more {@link PropertyValue} objects,
  * typically comprising one update for a specific target bean.
  *
+ * <br><br>
+ * 包含一个或多个{@link PropertyValue}对象的容器，通常包含特定目标bean的一个更新。
+ *
  * @author Rod Johnson
  * @author Juergen Hoeller
  * @since 13 May 2001
@@ -42,6 +45,11 @@ public interface PropertyValues {
 	/**
 	 * Return the changes since the previous PropertyValues.
 	 * Subclasses should also override {@code equals}.
+	 *
+	 * <br><br>
+	 * 返回自上一个PropertyValues以来改变的值。
+	 * 子类应当覆盖{@code equals}方法。
+	 *
 	 * @param old old property values
 	 * @return PropertyValues updated or new properties.
 	 * Return empty PropertyValues if there are no changes.
