@@ -208,6 +208,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	 */
 	protected AbstractBeanDefinition(ConstructorArgumentValues cargs, MutablePropertyValues pvs) {
 		setConstructorArgumentValues(cargs);
+		// 设置指定的pvs，如果指定的为空，则new一个
 		setPropertyValues(pvs);
 	}
 
