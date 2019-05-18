@@ -117,21 +117,26 @@ public abstract class AnnotationUtils {
 	private static final Map<AnnotationCacheKey, Annotation> findAnnotationCache =
 			new ConcurrentReferenceHashMap<AnnotationCacheKey, Annotation>(256);
 
+	/** 元存在缓存 */
 	private static final Map<AnnotationCacheKey, Boolean> metaPresentCache =
 			new ConcurrentReferenceHashMap<AnnotationCacheKey, Boolean>(256);
 
 	private static final Map<Class<?>, Boolean> annotatedInterfaceCache =
 			new ConcurrentReferenceHashMap<Class<?>, Boolean>(256);
 
+	/** 注解是否可合成缓存：注解类型 -> 是否可合成 */
 	private static final Map<Class<? extends Annotation>, Boolean> synthesizableCache =
 			new ConcurrentReferenceHashMap<Class<? extends Annotation>, Boolean>(256);
 
+	/** 别名属性缓存：元注解类型 -> 别名映射键值对 */
 	private static final Map<Class<? extends Annotation>, Map<String, List<String>>> attributeAliasesCache =
 			new ConcurrentReferenceHashMap<Class<? extends Annotation>, Map<String, List<String>>>(256);
 
+	/** 注解属性方法缓存：注解类型 -> 属性方法集合 */
 	private static final Map<Class<? extends Annotation>, List<Method>> attributeMethodsCache =
 			new ConcurrentReferenceHashMap<Class<? extends Annotation>, List<Method>>(256);
 
+	/** 别名描述符缓存：注解属性 -> 别名描述符 */
 	private static final Map<Method, AliasDescriptor> aliasDescriptorCache =
 			new ConcurrentReferenceHashMap<Method, AliasDescriptor>(256);
 
@@ -669,6 +674,10 @@ public abstract class AnnotationUtils {
 	/**
 	 * Perform the actual work for {@link #findAnnotation(AnnotatedElement, Class)},
 	 * honoring the {@code synthesize} flag.
+	 *
+	 * <br><br>
+	 * 查找{@code clazz}中和{@code annotationType}匹配的注解，并返回
+	 *
 	 * @param clazz the class to look for annotations on
 	 * @param annotationType the type of annotation to look for
 	 * @param synthesize {@code true} if the result should be
@@ -699,6 +708,10 @@ public abstract class AnnotationUtils {
 	 * Perform the search algorithm for {@link #findAnnotation(Class, Class)},
 	 * avoiding endless recursion by tracking which annotations have already
 	 * been <em>visited</em>.
+	 *
+	 * <br><br>
+	 * 递归查找返回{@code clazz}中和{@code annotationType}匹配的注解，包括接口、父类中的注解
+	 *
 	 * @param clazz the class to look for annotations on
 	 * @param annotationType the type of annotation to look for
 	 * @param visited the set of annotations that have already been visited
@@ -727,6 +740,7 @@ public abstract class AnnotationUtils {
 			return null;
 		}
 
+		// 遍历接口的注解
 		for (Class<?> ifc : clazz.getInterfaces()) {
 			A annotation = findAnnotation(ifc, annotationType, visited);
 			if (annotation != null) {
@@ -734,6 +748,7 @@ public abstract class AnnotationUtils {
 			}
 		}
 
+		// 遍历父类的注解
 		Class<?> superclass = clazz.getSuperclass();
 		if (superclass == null || Object.class == superclass) {
 			return null;
@@ -873,6 +888,10 @@ public abstract class AnnotationUtils {
 	/**
 	 * Determine if an annotation of type {@code metaAnnotationType} is
 	 * <em>meta-present</em> on the supplied {@code annotationType}.
+	 *
+	 * <br><br>
+	 * 检查提供的{@code annotationType}参数是否存在{@code metaAnnotationType}。
+	 *
 	 * @param annotationType the annotation type to search on
 	 * @param metaAnnotationType the type of meta-annotation to search for
 	 * @return {@code true} if such an annotation is meta-present
@@ -1099,11 +1118,15 @@ public abstract class AnnotationUtils {
 			boolean classValuesAsString, boolean nestedAnnotationsAsMap) {
 
 		Class<? extends Annotation> annotationType = annotation.annotationType();
+		// 注解属性映射对象
 		AnnotationAttributes attributes = new AnnotationAttributes(annotationType);
 
+		// 遍历所有注解属性方法
 		for (Method method : getAttributeMethods(annotationType)) {
 			try {
+				// 注解属性的值
 				Object attributeValue = method.invoke(annotation);
+				// 注解属性默认值
 				Object defaultValue = method.getDefaultValue();
 				if (defaultValue != null && ObjectUtils.nullSafeEquals(attributeValue, defaultValue)) {
 					attributeValue = new DefaultValueHolder(defaultValue);
@@ -1464,6 +1487,11 @@ public abstract class AnnotationUtils {
 	 * by wrapping it in a dynamic proxy that transparently enforces
 	 * <em>attribute alias</em> semantics for annotation attributes that are
 	 * annotated with {@link AliasFor @AliasFor}.
+	 *
+	 * <br><br>
+	 * 通过将提供的{@code annotation}包装在动态代理中，来<em>合成</em>注解，该代理透明地强制对
+	 * 被{@link AliasFor @AliasFor}标注的注解属性进行注解<em>属性别名</em>语义解析。
+	 *
 	 * @param annotation the annotation to synthesize
 	 * @param annotatedElement the element that is annotated with the supplied
 	 * annotation; may be {@code null} if unknown
@@ -1645,6 +1673,16 @@ public abstract class AnnotationUtils {
 	 * {@code x -> (y, z)}, {@code y -> (x, z)}, {@code z -> (x, y)}.
 	 * <p>An empty return value implies that the annotation does not declare
 	 * any attribute aliases.
+	 *
+	 * <br><br>
+	 * 获取在提供的注解类型中通过{@code @AliasFor}声明的所有属性别名的映射。
+	 * <p>Map的key是属性名称，每个值代表属性别名的名称集合。
+	 * <p>对于<em>显示</em>别名对，比如 x 和 y （即x：{@code @AliasFor("y")}，y：{@code @AliasFor("x")），
+	 * map里面将有两个键值对：{@code x -> (y)} 和 {@code y -> (x)}。
+	 * <p>对于<em>隐式</em>别名（即：声明在相同元注解中的相同属性的属性覆盖），map中将会有n个键值对。
+	 * 比如，如果x，y，z是隐式别名，map将包含如下键值对：{@code x -> (y, z)}, {@code y -> (x, z)}, {@code z -> (x, y)}。
+	 * <p>空返回值意味着注解没有声明任何属性别名。
+	 *
 	 * @param annotationType the annotation type to find attribute aliases in
 	 * @return a map containing attribute aliases (never {@code null})
 	 * @since 4.2
@@ -1654,6 +1692,7 @@ public abstract class AnnotationUtils {
 			return Collections.emptyMap();
 		}
 
+		// 首先从缓存中获取
 		Map<String, List<String>> map = attributeAliasesCache.get(annotationType);
 		if (map != null) {
 			return map;
@@ -1707,7 +1746,9 @@ public abstract class AnnotationUtils {
 
 		synthesizable = Boolean.FALSE;
 		for (Method attribute : getAttributeMethods(annotationType)) {
+			// 如果找到别名对应的注解属性，证明可合成
 			if (!getAttributeAliasNames(attribute).isEmpty()) {
+				//
 				synthesizable = Boolean.TRUE;
 				break;
 			}
@@ -1798,11 +1839,13 @@ public abstract class AnnotationUtils {
 		methods = new ArrayList<Method>();
 		for (Method method : annotationType.getDeclaredMethods()) {
 			if (isAttributeMethod(method)) {
+				// 设置方法访问权限为true
 				ReflectionUtils.makeAccessible(method);
 				methods.add(method);
 			}
 		}
 
+		// 加入缓存
 		attributeMethodsCache.put(annotationType, methods);
 		return methods;
 	}
@@ -1827,6 +1870,10 @@ public abstract class AnnotationUtils {
 
 	/**
 	 * Determine if the supplied {@code method} is an annotation attribute method.
+	 *
+	 * <br><br>
+	 * true：参数为空，返回值不是void的方法
+	 *
 	 * @param method the method to check
 	 * @return {@code true} if the method is an attribute method
 	 * @since 4.2
@@ -2050,6 +2097,11 @@ public abstract class AnnotationUtils {
 	 * {@code AliasDescriptor} encapsulates the declaration of {@code @AliasFor}
 	 * on a given annotation attribute and includes support for validating
 	 * the configuration of aliases (both explicit and implicit).
+	 *
+	 * <br><br>
+	 * {@code AliasDescriptor}封装给定注解属性上的{@code @AliasFor}声明，
+	 * 并包括对验证别名配置（显式和隐式）的支持。
+	 *
 	 * @since 4.2.1
 	 * @see #from
 	 * @see #getAttributeAliasNames
@@ -2065,6 +2117,7 @@ public abstract class AnnotationUtils {
 
 		private final Method aliasedAttribute;
 
+		// @AliasFor的annotation属性的类型
 		private final Class<? extends Annotation> aliasedAnnotationType;
 
 		private final String aliasedAttributeName;
@@ -2075,6 +2128,11 @@ public abstract class AnnotationUtils {
 		 * Create an {@code AliasDescriptor} <em>from</em> the declaration
 		 * of {@code @AliasFor} on the supplied annotation attribute and
 		 * validate the configuration of {@code @AliasFor}.
+		 *
+		 * <br><br>
+		 * <em>从</em>所提供的注解属性上的{@code @AliasFor}声明创建{@code AliasDescriptor}，
+		 * 并验证{@code @AliasFor}的配置。
+		 *
 		 * @param attribute the annotation attribute that is annotated with
 		 * {@code @AliasFor}
 		 * @return an alias descriptor, or {@code null} if the attribute
@@ -2087,13 +2145,16 @@ public abstract class AnnotationUtils {
 				return descriptor;
 			}
 
+			// 获取注解属性上的@AliasFor注解
 			AliasFor aliasFor = attribute.getAnnotation(AliasFor.class);
 			if (aliasFor == null) {
 				return null;
 			}
 
+			// 创建AliasDescriptor，并校验
 			descriptor = new AliasDescriptor(attribute, aliasFor);
 			descriptor.validate();
+			// 放入缓存
 			aliasDescriptorCache.put(attribute, descriptor);
 			return descriptor;
 		}
@@ -2103,13 +2164,19 @@ public abstract class AnnotationUtils {
 			Class<?> declaringClass = sourceAttribute.getDeclaringClass();
 			Assert.isTrue(declaringClass.isAnnotation(), "sourceAttribute must be from an annotation");
 
+			// 原注解属性
 			this.sourceAttribute = sourceAttribute;
+			// 原注解Class类型
 			this.sourceAnnotationType = (Class<? extends Annotation>) declaringClass;
+			// 原注解属性名称
 			this.sourceAttributeName = sourceAttribute.getName();
 
+			// 别名指定的注解annotation类型，如果未指定，为原注解类型
 			this.aliasedAnnotationType = (Annotation.class == aliasFor.annotation() ?
 					this.sourceAnnotationType : aliasFor.annotation());
+			// 别名声明的属性名称
 			this.aliasedAttributeName = getAliasedAttributeName(aliasFor, sourceAttribute);
+			// 如果别名指定的注解类型和当前注解类型一样，并且别名指定的属性名和当前注解属性名称一样，报错
 			if (this.aliasedAnnotationType == this.sourceAnnotationType &&
 					this.aliasedAttributeName.equals(this.sourceAttributeName)) {
 				String msg = String.format("@AliasFor declaration on attribute '%s' in annotation [%s] points to " +
@@ -2118,6 +2185,7 @@ public abstract class AnnotationUtils {
 				throw new AnnotationConfigurationException(msg);
 			}
 			try {
+				// 别名所指的属性方法
 				this.aliasedAttribute = this.aliasedAnnotationType.getDeclaredMethod(this.aliasedAttributeName);
 			}
 			catch (NoSuchMethodException ex) {
@@ -2128,11 +2196,13 @@ public abstract class AnnotationUtils {
 				throw new AnnotationConfigurationException(msg, ex);
 			}
 
+			// 是否别名对，即是否是原注解内部属性相互引用别名
 			this.isAliasPair = (this.sourceAnnotationType == this.aliasedAnnotationType);
 		}
 
 		private void validate() {
 			// Target annotation is not meta-present?
+			// 如果别名指定的注解和原注解不一样，并且原注解不存在别名指定的注解，报错
 			if (!this.isAliasPair && !isAnnotationMetaPresent(this.sourceAnnotationType, this.aliasedAnnotationType)) {
 				String msg = String.format("@AliasFor declaration on attribute '%s' in annotation [%s] declares " +
 						"an alias for attribute '%s' in meta-annotation [%s] which is not meta-present.",
@@ -2142,7 +2212,9 @@ public abstract class AnnotationUtils {
 			}
 
 			if (this.isAliasPair) {
+				// 从别名指定的属性方法中获取@AliasFor
 				AliasFor mirrorAliasFor = this.aliasedAttribute.getAnnotation(AliasFor.class);
+				// 没找到，报错，必须成对出现
 				if (mirrorAliasFor == null) {
 					String msg = String.format("Attribute '%s' in annotation [%s] must be declared as an @AliasFor [%s].",
 							this.aliasedAttributeName, this.sourceAnnotationType.getName(), this.sourceAttributeName);
@@ -2150,6 +2222,7 @@ public abstract class AnnotationUtils {
 				}
 
 				String mirrorAliasedAttributeName = getAliasedAttributeName(mirrorAliasFor, this.aliasedAttribute);
+				// 别名指定的属性方法声明的属性名称是否和配对的相同
 				if (!this.sourceAttributeName.equals(mirrorAliasedAttributeName)) {
 					String msg = String.format("Attribute '%s' in annotation [%s] must be declared as an @AliasFor [%s], not [%s].",
 							this.aliasedAttributeName, this.sourceAnnotationType.getName(), this.sourceAttributeName,
@@ -2158,6 +2231,7 @@ public abstract class AnnotationUtils {
 				}
 			}
 
+			// 校验返回类型是否相同
 			Class<?> returnType = this.sourceAttribute.getReturnType();
 			Class<?> aliasedReturnType = this.aliasedAttribute.getReturnType();
 			if (returnType != aliasedReturnType &&
@@ -2169,6 +2243,7 @@ public abstract class AnnotationUtils {
 				throw new AnnotationConfigurationException(msg);
 			}
 
+			// 成对的别名必须指定默认值
 			if (this.isAliasPair) {
 				validateDefaultValueConfiguration(this.aliasedAttribute);
 			}
@@ -2239,6 +2314,7 @@ public abstract class AnnotationUtils {
 
 		public List<String> getAttributeAliasNames() {
 			// Explicit alias pair?
+			// 显示别名对
 			if (this.isAliasPair) {
 				return Collections.singletonList(this.aliasedAttributeName);
 			}
@@ -2246,6 +2322,7 @@ public abstract class AnnotationUtils {
 			// Else: search for implicit aliases
 			List<String> aliases = new ArrayList<String>();
 			for (AliasDescriptor otherDescriptor : getOtherDescriptors()) {
+				// 获取其他和别名匹配的注解属性
 				if (this.isAliasFor(otherDescriptor)) {
 					this.validateAgainst(otherDescriptor);
 					aliases.add(otherDescriptor.sourceAttributeName);
@@ -2254,6 +2331,7 @@ public abstract class AnnotationUtils {
 			return aliases;
 		}
 
+		/** 获取原注解类型中除了原注解属性的其他属性 */
 		private List<AliasDescriptor> getOtherDescriptors() {
 			List<AliasDescriptor> otherDescriptors = new ArrayList<AliasDescriptor>();
 			for (Method currentAttribute : getAttributeMethods(this.sourceAnnotationType)) {
@@ -2299,6 +2377,13 @@ public abstract class AnnotationUtils {
 		 * or {@code value} attribute of {@code @AliasFor}, ensuring that only
 		 * one of the attributes has been declared while simultaneously ensuring
 		 * that at least one of the attributes has been declared.
+		 *
+		 * <br><br>
+		 * 通过提供的{@code attribute}参数上提供的{@link AliasFor @AliasFor}注解获取配置的
+		 * 别名属性的名称，或者如果没有一个指定别名则返回原始属性（表明引用被指到一个元属性上相同名称的属性）。
+		 * <p>该方法返回{@code @AliasFor}的{@code attribute}属性或者{@code value}的值，
+		 * 确保同时有且只有其中一个属性被声明。
+		 *
 		 * @param aliasFor the {@code @AliasFor} annotation from which to retrieve
 		 * the aliased attribute name
 		 * @param attribute the attribute that is annotated with {@code @AliasFor}
@@ -2307,12 +2392,14 @@ public abstract class AnnotationUtils {
 		 * {@code @AliasFor} is detected
 		 */
 		private String getAliasedAttributeName(AliasFor aliasFor, Method attribute) {
+			// 声明的属性名
 			String attributeName = aliasFor.attribute();
 			String value = aliasFor.value();
 			boolean attributeDeclared = StringUtils.hasText(attributeName);
 			boolean valueDeclared = StringUtils.hasText(value);
 
 			// Ensure user did not declare both 'value' and 'attribute' in @AliasFor
+			// 不能在@AliasFor中同时声明value 和 attribute
 			if (attributeDeclared && valueDeclared) {
 				String msg = String.format("In @AliasFor declared on attribute '%s' in annotation [%s], attribute 'attribute' " +
 						"and its alias 'value' are present with values of [%s] and [%s], but only one is permitted.",
@@ -2321,7 +2408,9 @@ public abstract class AnnotationUtils {
 			}
 
 			// Either explicit attribute name or pointing to same-named attribute by default
+			// 默认情况下，要么显式属性名，要么指向同一命名属性
 			attributeName = (attributeDeclared ? attributeName : value);
+			// 如果声明别名属性名称，采用原注解属性的名称
 			return (StringUtils.hasText(attributeName) ? attributeName.trim() : attribute.getName());
 		}
 
@@ -2334,6 +2423,7 @@ public abstract class AnnotationUtils {
 	}
 
 
+	/** 默认值持有类 */
 	private static class DefaultValueHolder {
 
 		final Object defaultValue;

@@ -869,6 +869,11 @@ public class AnnotatedElementUtils {
 	 * Search for annotations of the specified {@code annotationName} or
 	 * {@code annotationType} on the specified {@code element}, following
 	 * <em>get semantics</em>.
+	 *
+	 * <br><br>
+	 * 在指定的{@code element}上查找指定的{@code annotationName} 或 {@code annotationType}的注解，
+	 * 遵循<em>get 语义</em>。
+	 *
 	 * @param element the annotated element
 	 * @param annotationType the annotation type to find
 	 * @param annotationName the fully qualified class name of the annotation
@@ -934,9 +939,11 @@ public class AnnotatedElementUtils {
 
 		Assert.notNull(element, "AnnotatedElement must not be null");
 
+		// 解析过的element加入visited集合
 		if (visited.add(element)) {
 			try {
 				// Start searching within locally declared annotations
+				// 首先查找本身声明的注解
 				List<Annotation> declaredAnnotations = Arrays.asList(element.getDeclaredAnnotations());
 				T result = searchWithGetSemanticsInAnnotations(element, declaredAnnotations,
 						annotationType, annotationName, containerType, processor, visited, metaDepth);
@@ -998,12 +1005,15 @@ public class AnnotatedElementUtils {
 		// Search in annotations
 		for (Annotation annotation : annotations) {
 			Class<? extends Annotation> currentAnnotationType = annotation.annotationType();
+			// 非jdk声明的注解
 			if (!AnnotationUtils.isInJavaLangAnnotationPackage(currentAnnotationType)) {
+				// 如果当前注解和指定注解一致，或者处理器始终处理注解
 				if (currentAnnotationType == annotationType ||
 						currentAnnotationType.getName().equals(annotationName) ||
 						processor.alwaysProcesses()) {
 					T result = processor.process(element, annotation, metaDepth);
 					if (result != null) {
+						// 如果统计总数，并且元素据深度不为0
 						if (processor.aggregates() && metaDepth == 0) {
 							processor.getAggregatedResults().add(result);
 						}
@@ -1013,6 +1023,7 @@ public class AnnotatedElementUtils {
 					}
 				}
 				// Repeatable annotations in container?
+				// 是否重复注解
 				else if (currentAnnotationType == containerType) {
 					for (Annotation contained : getRawAnnotationsFromContainer(element, annotation)) {
 						T result = processor.process(element, contained, metaDepth);
@@ -1027,12 +1038,14 @@ public class AnnotatedElementUtils {
 		}
 
 		// Recursively search in meta-annotations
+		// 在元注解中递归查找
 		for (Annotation annotation : annotations) {
 			Class<? extends Annotation> currentAnnotationType = annotation.annotationType();
 			if (!AnnotationUtils.isInJavaLangAnnotationPackage(currentAnnotationType)) {
 				T result = searchWithGetSemantics(currentAnnotationType, annotationType,
 						annotationName, containerType, processor, visited, metaDepth + 1);
 				if (result != null) {
+					// 后处理，解析@AliasFor注解
 					processor.postProcess(element, annotation, result);
 					if (processor.aggregates() && metaDepth == 0) {
 						processor.getAggregatedResults().add(result);
@@ -1427,6 +1440,12 @@ public class AnnotatedElementUtils {
 		 * that is present in the annotation hierarchy, between the initial
 		 * {@link AnnotatedElement} and an invocation of {@link #process}
 		 * that returned a non-null value.
+		 *
+		 * <br><br>
+		 * 通过{@link #process}方法返回结果后处理。
+		 * <p>提供给此方法的{@code annotation}参数是注解层次结构中的注解，位于初始
+		 * {@link AnnotatedElement}和调用返回非空值的{@link #process}之间。
+		 *
 		 * @param annotatedElement the element that is annotated with the
 		 * supplied annotation, used for contextual logging; may be
 		 * {@code null} if unknown
@@ -1438,6 +1457,10 @@ public class AnnotatedElementUtils {
 		/**
 		 * Determine if this processor always processes annotations regardless of
 		 * whether or not the target annotation has been found.
+		 *
+		 * <br><br>
+		 * 确定此处理器是否始终处理批注，而不管是否找到目标批注。
+		 *
 		 * @return {@code true} if this processor always processes annotations
 		 * @since 4.3
 		 */
@@ -1584,11 +1607,13 @@ public class AnnotatedElementUtils {
 
 		@Override
 		public void postProcess(AnnotatedElement element, Annotation annotation, AnnotationAttributes attributes) {
+			// 合并注解，解析@AliasFor
 			annotation = AnnotationUtils.synthesizeAnnotation(annotation, element);
 			Class<? extends Annotation> targetAnnotationType = attributes.annotationType();
 
 			// Track which attribute values have already been replaced so that we can short
 			// circuit the search algorithms.
+			// 跟踪存储已经被替换的属性值，以缩短查找算法的链路
 			Set<String> valuesAlreadyReplaced = new HashSet<String>();
 
 			for (Method attributeMethod : AnnotationUtils.getAttributeMethods(annotation.annotationType())) {
@@ -1596,16 +1621,19 @@ public class AnnotatedElementUtils {
 				String attributeOverrideName = AnnotationUtils.getAttributeOverrideName(attributeMethod, targetAnnotationType);
 
 				// Explicit annotation attribute override declared via @AliasFor
+				// 显示注解属性覆盖由@AliasFor声明的注解。
 				if (attributeOverrideName != null) {
 					if (valuesAlreadyReplaced.contains(attributeOverrideName)) {
 						continue;
 					}
 
+					// 存放需要覆盖的属性名称
 					List<String> targetAttributeNames = new ArrayList<String>();
 					targetAttributeNames.add(attributeOverrideName);
 					valuesAlreadyReplaced.add(attributeOverrideName);
 
 					// Ensure all aliased attributes in the target annotation are overridden. (SPR-14069)
+					// 获取目标注解中所有声明的别名属性
 					List<String> aliases = AnnotationUtils.getAttributeAliasMap(targetAnnotationType).get(attributeOverrideName);
 					if (aliases != null) {
 						for (String alias : aliases) {
@@ -1616,6 +1644,7 @@ public class AnnotatedElementUtils {
 						}
 					}
 
+					// 覆盖别名声明的属性
 					overrideAttributes(element, annotation, attributes, attributeName, targetAttributeNames);
 				}
 				// Implicit annotation attribute override based on convention

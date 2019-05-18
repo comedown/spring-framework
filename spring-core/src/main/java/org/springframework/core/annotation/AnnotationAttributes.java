@@ -38,6 +38,12 @@ import org.springframework.util.StringUtils;
  * code as well as convenience methods for looking up annotation attributes
  * in a type-safe fashion.
  *
+ * <br><br>
+ * {@link LinkedHashMap}的子类，表示通过{@link AnnotationUtils}、{@link AnnotatedElementUtils}、
+ * 和Spring反射和基于ASM的{@link org.springframework.core.type.AnnotationMetadata}实现的注解属性键值对。
+ *
+ * <p>提供“伪真实化”，以避免调用代码中出现嘈杂的映射泛型，以及以类型安全的方式查找注解属性的方便方法。
+ *
  * @author Chris Beams
  * @author Sam Brannen
  * @author Juergen Hoeller
@@ -50,8 +56,10 @@ public class AnnotationAttributes extends LinkedHashMap<String, Object> {
 
 	private static final String UNKNOWN = "unknown";
 
+	// 注解类型
 	private final Class<? extends Annotation> annotationType;
 
+	// 注解全路径名
 	private final String displayName;
 
 	boolean validated = false;

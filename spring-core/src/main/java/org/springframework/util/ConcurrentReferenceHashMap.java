@@ -51,6 +51,10 @@ import java.util.concurrent.locks.ReentrantLock;
  * <p>If not explicitly specified, this implementation will use
  * {@linkplain SoftReference soft entry references}.
  *
+ * <br><br>
+ * 一个对{@code keys} 和 {@code values}都是用{@link ReferenceType#SOFT soft}或
+ * {@linkplain ReferenceType#WEAK weak}引用类型的{@link ConcurrentHashMap}。
+ *
  * @author Phillip Webb
  * @author Juergen Hoeller
  * @since 3.2
