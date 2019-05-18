@@ -29,6 +29,11 @@ import org.springframework.util.ObjectUtils;
  * <p>This holder will just store the String value and the target type.
  * The actual conversion will be performed by the bean factory.
  *
+ * <br><br>
+ * 字符串类型值的持有者。可以添加到bean定义中，以便为字符串值，显式指定目标类型，比如集合元素。
+ *
+ * 这个持有者只存储字符串值和目标类型。实际的转换将由bean工厂执行。
+ *
  * @author Juergen Hoeller
  * @since 1.2
  * @see BeanDefinition#getPropertyValues

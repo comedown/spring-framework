@@ -174,6 +174,9 @@ import java.lang.annotation.Target;
  * attribute aliases. Consult the Javadoc for individual annotations as well
  * as the reference manual for details.
  *
+ * <br><br>
+ * {@code @AliasFor}是一个用于声明注解属性别名的注解。
+ *
  * @author Sam Brannen
  * @since 4.2
  * @see AnnotatedElementUtils

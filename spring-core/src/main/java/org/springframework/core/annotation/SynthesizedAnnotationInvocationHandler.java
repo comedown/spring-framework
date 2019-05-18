@@ -61,6 +61,7 @@ class SynthesizedAnnotationInvocationHandler implements InvocationHandler {
 
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+		// 特殊处理equals、hashCode、toString、annotationType方法
 		if (ReflectionUtils.isEqualsMethod(method)) {
 			return annotationEquals(args[0]);
 		}
