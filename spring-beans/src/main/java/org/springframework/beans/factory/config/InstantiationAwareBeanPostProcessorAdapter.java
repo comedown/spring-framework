@@ -33,6 +33,13 @@ import org.springframework.beans.PropertyValues;
  * is plain {@link BeanPostProcessor} functionality, prefer a straight
  * implementation of that (simpler) interface.
  *
+ * <br><br>
+ * 实现{@link SmartInstantiationAwareBeanPostProcessor}接口上所有方法的适配器，方法中不做任何操作，
+ * 它不改变由容器实例化的每个bean的正常处理。子类可以只覆盖他们真正感兴趣的那些方法。
+ *
+ * <p>注意：只有当您实际需要{@link InstantiationAwareBeanPostProcessor}功能时，才建议使用此基础类。
+ * 如果您所需要的只是简单的{@link BeanPostProcessor}功能，那么最好直接实现该（更简单的）接口
+ *
  * @author Rod Johnson
  * @author Juergen Hoeller
  * @since 2.0

@@ -63,6 +63,10 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
 	/**
 	 * Constant that indicates no externally defined autowiring. Note that
 	 * BeanFactoryAware etc and annotation-driven injection will still be applied.
+	 *
+	 * <br><br>
+	 * 表示没有外部定义的自动装配的常量。请注意，BeanFactoryAware等和注解驱动的注入仍将应用。
+	 *
 	 * @see #createBean
 	 * @see #autowire
 	 * @see #autowireBeanProperties
@@ -72,6 +76,10 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
 	/**
 	 * Constant that indicates autowiring bean properties by name
 	 * (applying to all bean property setters).
+	 *
+	 * <br><br>
+	 * 表明通过名称自动装配属性的常量（应用于所有bean属性的set方法）。
+	 *
 	 * @see #createBean
 	 * @see #autowire
 	 * @see #autowireBeanProperties
@@ -81,6 +89,10 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
 	/**
 	 * Constant that indicates autowiring bean properties by type
 	 * (applying to all bean property setters).
+	 *
+	 * <br><br>
+	 * 表明通过类型自动装配bean属性的常量（应用于所有bean属性的set方法）。
+	 *
 	 * @see #createBean
 	 * @see #autowire
 	 * @see #autowireBeanProperties

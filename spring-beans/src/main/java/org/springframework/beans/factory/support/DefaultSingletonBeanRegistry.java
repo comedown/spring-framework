@@ -87,7 +87,6 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
      *
      * <br><br>
      * 单例对象缓存：bean名称 -> bean实例
-     *
      */
 	private final Map<String, Object> singletonObjects = new ConcurrentHashMap<String, Object>(256);
 
@@ -232,6 +231,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 				if (logger.isDebugEnabled()) {
 					logger.debug("Creating shared instance of singleton bean '" + beanName + "'");
 				}
+				// 把当前bean加入到正在创建的bean集合中
 				beforeSingletonCreation(beanName);
 				boolean newSingleton = false;
 				boolean recordSuppressedExceptions = (this.suppressedExceptions == null);
@@ -355,6 +355,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	 * @see #isSingletonCurrentlyInCreation
 	 */
 	protected void beforeSingletonCreation(String beanName) {
+	    // 如果这个bean是被排除在创建校验之外的，并且这个bean正在创建
 		if (!this.inCreationCheckExclusions.contains(beanName) && !this.singletonsCurrentlyInCreation.add(beanName)) {
 			throw new BeanCurrentlyInCreationException(beanName);
 		}

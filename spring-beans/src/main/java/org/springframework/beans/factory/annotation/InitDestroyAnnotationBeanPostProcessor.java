@@ -66,6 +66,22 @@ import org.springframework.util.ReflectionUtils;
  * Furthermore, it also supports the {@link javax.annotation.Resource} annotation
  * for annotation-driven injection of named beans.
  *
+ * <br><br>
+ * {@link org.springframework.beans.factory.config.BeanPostProcessor}的实现类，调用标注init和destroy注解的方法。
+ * 允许以注解方式替代{@link org.springframework.beans.factory.InitializingBean}和
+ * {@link org.springframework.beans.factory.DisposableBean}接口。
+ *
+ * <p>该后处理器检查的实际注解类型可以通过{@link #setInitAnnotationType "initAnnotationType"}和
+ * {@link #setDestroyAnnotationType "destroyAnnotationType"}属性配置。可以使用任何自定义注解，
+ * 因为没有必需的批注属性。
+ *
+ * <p>init和destroy注解可以应用于任何可见性的方法：public、package-protected、protected或private。
+ * 可以注释多个这样的方法，但建议分别只注释一个init方法和destroy方法。
+ *
+ * <p>Spring的{@link org.springframework.context.annotation.CommonAnnotationBeanPostProcessor}
+ * 支持JSR-250{@link javax.annotation.PostConstruct}和{@link javax.annotation.PreDestroy}注解，
+ * 分别作为init注解和destroy注解。此外，它还支持{@link javax.annotation.Resource}注解，用于命名bean的注解驱动注入。
+ *
  * @author Juergen Hoeller
  * @since 2.5
  * @see #setInitAnnotationType
@@ -176,6 +192,7 @@ public class InitDestroyAnnotationBeanPostProcessor
 	private LifecycleMetadata findLifecycleMetadata(Class<?> clazz) {
 		if (this.lifecycleMetadataCache == null) {
 			// Happens after deserialization, during destruction...
+			// 在反序列化后、销毁期间发生
 			return buildLifecycleMetadata(clazz);
 		}
 		// Quick check on the concurrent map first, with minimal locking.

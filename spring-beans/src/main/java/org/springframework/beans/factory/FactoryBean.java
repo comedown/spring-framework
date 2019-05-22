@@ -46,6 +46,9 @@ package org.springframework.beans.factory;
  * synchronization other than for purposes of lazy initialization within the
  * FactoryBean itself (or the like).
  *
+ * <br><br>
+ *
+ *
  * @author Rod Johnson
  * @author Juergen Hoeller
  * @since 08.03.2003

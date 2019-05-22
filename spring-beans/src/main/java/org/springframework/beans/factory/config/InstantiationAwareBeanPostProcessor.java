@@ -37,6 +37,17 @@ import org.springframework.beans.PropertyValues;
  * {@link InstantiationAwareBeanPostProcessorAdapter} in order to be shielded
  * from extensions to this interface.
  *
+ * <br><br>
+ * {@link BeanPostProcessor}的子接口，在实例化之前添加回调，在实例化之后但在设置显式属性
+ * 或发生自动装配之前添加回调。
+ *
+ * <p>通常用于抑制特定目标bean的默认实例化，例如创建具有特殊目标源（池目标、延迟初始化目标等）
+ * 的代理，或实现其他注入策略，如字段注入。
+ *
+ * <p><b>注意：</b>此接口是一个特殊用途的接口，主要用于框架的内部使用。建议尽可能实现
+ * 直接的{@link BeanPostProcessor}接口，或从{@link InstantiationAwareBeanPostProcessorAdapter}
+ * 类派生，以屏蔽对该接口的扩展。
+ *
  * @author Juergen Hoeller
  * @author Rod Johnson
  * @since 1.2
@@ -73,6 +84,11 @@ public interface InstantiationAwareBeanPostProcessor extends BeanPostProcessor {
 	 * but before Spring property population (from explicit properties or autowiring) occurs.
 	 * <p>This is the ideal callback for performing custom field injection on the given bean
 	 * instance, right before Spring's autowiring kicks in.
+	 *
+	 * <br><br>
+	 * 在bean被实例化之后,但在Spring属性填充（从显式属性或自动装配）发生之前，通过构造函数或工厂方法，执行操作。
+	 * <p>这是对给定bean实例执行自定义字段注入的理想回调，就在Spring的自动装配开始之前。
+	 *
 	 * @param bean the bean instance created, with properties not having been set yet
 	 * @param beanName the name of the bean
 	 * @return {@code true} if properties should be set on the bean; {@code false}

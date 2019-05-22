@@ -55,6 +55,15 @@ import java.util.concurrent.locks.ReentrantLock;
  * 一个对{@code keys} 和 {@code values}都是用{@link ReferenceType#SOFT soft}或
  * {@linkplain ReferenceType#WEAK weak}引用类型的{@link ConcurrentHashMap}。
  *
+ * <p>这个类可以用作{@code Collections.synchronizedMap(new WeakHashMap<K, Reference<V>>())}
+ * 的另一种方式，为了支持更高性能的并发访问。这个Map实现类遵循着和{@link ConcurrentHashMap}同样的设计约束，
+ * 支持{@code null}值和{@code null}键时异常。
+ *
+ * <p><b>注意：</b>引用的使用意味着无法保证放置在Map中的条目随后将可用。垃圾收集器可以随时丢弃引用，
+ * 因此可能会出现一个未知线程正在悄悄地删除条目。
+ *
+ * <p>如果没有显示地指定，该类将使用{@linkplain SoftReference soft entry references}。
+ *
  * @author Phillip Webb
  * @author Juergen Hoeller
  * @since 3.2

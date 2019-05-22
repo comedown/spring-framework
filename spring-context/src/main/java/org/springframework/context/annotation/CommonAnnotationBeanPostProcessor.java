@@ -131,6 +131,16 @@ import org.springframework.util.StringValueResolver;
  * the latter configuration will override the former for properties wired through
  * both approaches.
  *
+ * <br><br>
+ * 该类支持Java常用的注解，尤其是{@code javax.annotation}包中的。
+ * 通过继承{@link InitDestroyAnnotationBeanPostProcessor}实现支持{@link javax.annotation.PostConstruct}
+ * 和{@link javax.annotation.PreDestroy}注解。
+ * 核心元素是{@link javax.annotation.Resource}注解，用于注解驱动注入命名的bean。
+ * <b>注意：</b>"context:annotation-config" 和 "context:component-scan" XML标签将自动注册一个
+ * 默认的CommonAnnotationBeanPostProcessor实例。如果你想指定一个自定义的CommonAnnotationBeanPostProcessor
+ * bean定义，请移出或者关闭默认的注解配置！
+ * <b>注意：</b>注解注入将在XML注入<i>之前</i>执行；因此后者的配置将覆盖前者的通过两种方法连接的属性。
+ *
  * @author Juergen Hoeller
  * @since 2.5
  * @see #setAlwaysUseJndiLookup

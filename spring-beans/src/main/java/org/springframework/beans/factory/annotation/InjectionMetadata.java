@@ -41,6 +41,9 @@ import org.springframework.util.ReflectionUtils;
  * {@link org.springframework.context.annotation.CommonAnnotationBeanPostProcessor} and
  * {@link org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor}.
  *
+ * <br><br>
+ * 管理注入元数据内部类。不建议在应用程序中直接使用。
+ *
  * @author Juergen Hoeller
  * @since 2.5
  */

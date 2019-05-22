@@ -39,6 +39,10 @@ public abstract class PropertyAccessorUtils {
 
 	/**
 	 * Check whether the given property path indicates an indexed or nested property.
+	 *
+	 * <br><br>
+	 * 检查给定属性路径是否表示下表或者嵌套属性。
+	 *
 	 * @param propertyPath the property path to check
 	 * @return whether the path indicates an indexed or nested property
 	 */
@@ -134,6 +138,12 @@ public abstract class PropertyAccessorUtils {
 	 * Removes surrounding quotes from map keys:<br>
 	 * {@code map['key']} -> {@code map[key]}<br>
 	 * {@code map["key"]} -> {@code map[key]}
+	 *
+	 * <br><br>
+	 * 根据给定的属性路径返回简单名称。删除映射键中周围的引号：<br>
+	 * {@code map['key']} -> {@code map[key]}<br>
+	 * {@code map["key"]} -> {@code map[key]}
+	 *
 	 * @param propertyName the bean property path
 	 * @return the canonical representation of the property path
 	 */

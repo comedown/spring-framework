@@ -30,6 +30,14 @@ import org.springframework.beans.BeansException;
  * <p>For a list of all bean lifecycle methods, see the
  * {@link BeanFactory BeanFactory javadocs}.
  *
+ * <br><br>
+ * 用于希望感知到属于它们自己的{@link BeanFactory}的bean实现的接口。
+ *
+ * <p>例如，bean可以通过工厂查找协作bean（依赖项查找）。注意，大多数bean将选择通过相应的
+ * bean属性或构造函数参数（依赖注入）来接收对协作bean的引用。
+ *
+ * <p>关于所有bean生命周期方法的集合信息详情，查看{@link BeanFactory BeanFactory javadocs}。
+ *
  * @author Rod Johnson
  * @author Chris Beams
  * @since 11.03.2003
