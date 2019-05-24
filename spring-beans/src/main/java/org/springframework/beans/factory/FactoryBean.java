@@ -47,7 +47,8 @@ package org.springframework.beans.factory;
  * FactoryBean itself (or the like).
  *
  * <br><br>
- *
+ * 接口由{@link BeanFactory}中使用的对象实现，这些对象本身就是单个对象的工厂。
+ * 如果bean实现了这个接口，那么它将用作对象公开的工厂，而不是直接作为将公开自己的bean实例。
  *
  * @author Rod Johnson
  * @author Juergen Hoeller

@@ -93,12 +93,21 @@ public class InitDestroyAnnotationBeanPostProcessor
 
 	protected transient Log logger = LogFactory.getLog(getClass());
 
+	/**
+	 * 初始化方法注解
+	 */
 	private Class<? extends Annotation> initAnnotationType;
 
+	/**
+	 * 销毁方法注解
+	 */
 	private Class<? extends Annotation> destroyAnnotationType;
 
 	private int order = Ordered.LOWEST_PRECEDENCE;
 
+	/**
+	 * 生命周期元数据缓存
+	 */
 	private transient final Map<Class<?>, LifecycleMetadata> lifecycleMetadataCache =
 			new ConcurrentHashMap<Class<?>, LifecycleMetadata>(256);
 
