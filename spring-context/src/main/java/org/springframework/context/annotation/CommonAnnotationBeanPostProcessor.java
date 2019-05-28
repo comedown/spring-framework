@@ -335,9 +335,10 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 		return pvs;
 	}
 
-
+	/** 查找bean生命周期注解元数据 */
 	private InjectionMetadata findResourceMetadata(String beanName, final Class<?> clazz, PropertyValues pvs) {
 		// Fall back to class name as cache key, for backwards compatibility with custom callers.
+		// 类名作为缓存的key，以便与自定义调用方向后兼容。
 		String cacheKey = (StringUtils.hasLength(beanName) ? beanName : clazz.getName());
 		// Quick check on the concurrent map first, with minimal locking.
 		InjectionMetadata metadata = this.injectionMetadataCache.get(cacheKey);
@@ -362,6 +363,7 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 		return metadata;
 	}
 
+	/** 构建Resource注解元数据 */
 	private InjectionMetadata buildResourceMetadata(final Class<?> clazz) {
 		LinkedList<InjectionMetadata.InjectedElement> elements = new LinkedList<InjectionMetadata.InjectedElement>();
 		Class<?> targetClass = clazz;
@@ -385,7 +387,9 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 						}
 						currElements.add(new EjbRefElement(field, field, null));
 					}
+					// @Resource注解
 					else if (field.isAnnotationPresent(Resource.class)) {
+						// 不支持静态属性字段
 						if (Modifier.isStatic(field.getModifiers())) {
 							throw new IllegalStateException("@Resource annotation is not supported on static fields");
 						}
@@ -399,6 +403,7 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 			ReflectionUtils.doWithLocalMethods(targetClass, new ReflectionUtils.MethodCallback() {
 				@Override
 				public void doWith(Method method) throws IllegalArgumentException, IllegalAccessException {
+					// 得到该方法的桥接方法
 					Method bridgedMethod = BridgeMethodResolver.findBridgedMethod(method);
 					if (!BridgeMethodResolver.isVisibilityBridgeMethodPair(method, bridgedMethod)) {
 						return;
@@ -424,11 +429,14 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 							PropertyDescriptor pd = BeanUtils.findPropertyForMethod(bridgedMethod, clazz);
 							currElements.add(new EjbRefElement(method, bridgedMethod, pd));
 						}
+						// @Resource注解在方法上
 						else if (bridgedMethod.isAnnotationPresent(Resource.class)) {
+							// 非静态方法
 							if (Modifier.isStatic(method.getModifiers())) {
 								throw new IllegalStateException("@Resource annotation is not supported on static methods");
 							}
 							Class<?>[] paramTypes = method.getParameterTypes();
+							// 参数必须只有一个
 							if (paramTypes.length != 1) {
 								throw new IllegalStateException("@Resource annotation requires a single-arg method: " + method);
 							}

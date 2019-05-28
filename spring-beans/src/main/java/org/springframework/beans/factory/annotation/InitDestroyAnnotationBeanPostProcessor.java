@@ -197,7 +197,7 @@ public class InitDestroyAnnotationBeanPostProcessor
 		return findLifecycleMetadata(bean.getClass()).hasDestroyMethods();
 	}
 
-
+	/** 查找bean生命周期注解元数据 */
 	private LifecycleMetadata findLifecycleMetadata(Class<?> clazz) {
 		if (this.lifecycleMetadataCache == null) {
 			// Happens after deserialization, during destruction...
@@ -219,6 +219,7 @@ public class InitDestroyAnnotationBeanPostProcessor
 		return metadata;
 	}
 
+	/** 构建bean生命周期注解元数据 */
 	private LifecycleMetadata buildLifecycleMetadata(final Class<?> clazz) {
 		final boolean debug = logger.isDebugEnabled();
 		LinkedList<LifecycleElement> initMethods = new LinkedList<LifecycleElement>();
@@ -232,6 +233,7 @@ public class InitDestroyAnnotationBeanPostProcessor
 			ReflectionUtils.doWithLocalMethods(targetClass, new ReflectionUtils.MethodCallback() {
 				@Override
 				public void doWith(Method method) throws IllegalArgumentException, IllegalAccessException {
+					// bean初始化方法注解
 					if (initAnnotationType != null) {
 						if (method.getAnnotation(initAnnotationType) != null) {
 							LifecycleElement element = new LifecycleElement(method);
@@ -241,6 +243,7 @@ public class InitDestroyAnnotationBeanPostProcessor
 							}
 						}
 					}
+					// bean销毁方法注解
 					if (destroyAnnotationType != null) {
 						if (method.getAnnotation(destroyAnnotationType) != null) {
 							currDestroyMethods.add(new LifecycleElement(method));

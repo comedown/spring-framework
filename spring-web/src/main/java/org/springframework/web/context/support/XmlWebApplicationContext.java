@@ -51,6 +51,27 @@ import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
  * Such a context implementation can be specified as "contextClass" context-param
  * for ContextLoader or "contextClass" init-param for FrameworkServlet.
  *
+ * <br><br>
+ * {@link org.springframework.web.context.WebApplicationContext}的实现类，从XML文档中获取配置，
+ * 由{@link org.springframework.beans.factory.xml.XmlBeanDefinitionReader}加载。这个类本质上
+ * 是一个web环境的{@link org.springframework.context.support.GenericXmlApplicationContext}。
+ *
+ * <p>默认情况下，根上下文的配置将从“/WEB-INF/applicationContext.xml”获取，命名空间为“test-servlet”
+ * 的上下文的配置将从“/WEB-INF/test-servlet.xml”获取（与servlet名称为“test”的DispatcherServlet实例类似）。
+ *
+ * <p>配置的默认路径可以通过{@link org.springframework.web.context.ContextLoader}的
+ * “contextConfigLocation” context-param 元素和{@link org.springframework.web.servlet.FrameworkServlet}
+ * 的servlet init-param元素替换。配置文件路径也可以是具体的文件，比如“/WEB-INF/context.xml”和
+ * Ant风格模式的文件，比如“/WEB-INF/*-context.xml”（模式详情见：{@link org.springframework.util.PathMatcher} java文档）。
+ *
+ * <p>注意：存在多个配置路径的情况下，之后的bean定义将覆盖之前加载的文件中bean的定义。
+ * 这可以用来通过一个额外的XML文件故意重写某些bean定义。
+ *
+ * <p><b>对于读取不同bean定义风格的WebApplicationContext，可以创建一个和
+ * {@link AbstractRefreshableWebApplicationContext}类似的子类。</b>
+ * 这样的上下文实现类能够指定为ContextLoader的“contextClass” context-param元素
+ * 和FrameworkServlet的“contextClass” init-param元素。
+ *
  * @author Rod Johnson
  * @author Juergen Hoeller
  * @see #setNamespace

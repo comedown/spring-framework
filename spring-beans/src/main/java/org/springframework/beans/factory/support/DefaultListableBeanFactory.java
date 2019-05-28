@@ -205,10 +205,20 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
      */
 	private volatile Set<String> manualSingletonNames = new LinkedHashSet<String>(16);
 
-	/** Cached array of bean definition names in case of frozen configuration */
+	/**
+	 * Cached array of bean definition names in case of frozen configuration
+	 *
+	 * <br><br>
+	 * 在冻结配置的情况下，bean定义名称缓存数组
+	 */
 	private volatile String[] frozenBeanDefinitionNames;
 
-	/** Whether bean definition metadata may be cached for all beans */
+	/**
+	 * Whether bean definition metadata may be cached for all beans
+	 *
+	 * <br><br>
+	 * 是否缓存所有bean的定义元素据
+	 */
 	private volatile boolean configurationFrozen = false;
 
 
@@ -772,6 +782,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			// 合并当前bean和其父bean
 			RootBeanDefinition bd = getMergedLocalBeanDefinition(beanName);
 			if (!bd.isAbstract() && bd.isSingleton() && !bd.isLazyInit()) {
+				// FactoryBean
 				if (isFactoryBean(beanName)) {
 					final FactoryBean<?> factory = (FactoryBean<?>) getBean(FACTORY_BEAN_PREFIX + beanName);
 					boolean isEagerInit;
@@ -791,6 +802,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 						getBean(beanName);
 					}
 				}
+				// 普通bean
 				else {
 					getBean(beanName);
 				}
@@ -798,7 +810,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		}
 
 		// Trigger post-initialization callback for all applicable beans...
-		// 启动所有适合bean的初始化h后回调
+		// 启动所有适合bean的初始化后回调
 		for (String beanName : beanNames) {
 			Object singletonInstance = getSingleton(beanName);
 			if (singletonInstance instanceof SmartInitializingSingleton) {
