@@ -1161,6 +1161,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 				autowiredBeanName = determineAutowireCandidate(matchingBeans, descriptor);
 				if (autowiredBeanName == null) {
 					if (isRequired(descriptor) || !indicatesMultipleBeans(type)) {
+						// 抛出检测到多个相同类型bean异常
 						return descriptor.resolveNotUnique(type, matchingBeans);
 					}
 					else {
@@ -1182,6 +1183,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			if (autowiredBeanNames != null) {
 				autowiredBeanNames.add(autowiredBeanName);
 			}
+			// 如果候选者实例是一个Class对象，则通过BeanFactory获取bean实例
 			return (instanceCandidate instanceof Class ?
 					descriptor.resolveCandidate(autowiredBeanName, type, this) : instanceCandidate);
 		}
@@ -1190,10 +1192,12 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		}
 	}
 
+	/** 解析多个bean依赖的类型 */
 	private Object resolveMultipleBeans(DependencyDescriptor descriptor, String beanName,
 			Set<String> autowiredBeanNames, TypeConverter typeConverter) {
 
 		Class<?> type = descriptor.getDependencyType();
+		// 数组类型
 		if (type.isArray()) {
 			Class<?> componentType = type.getComponentType();
 			ResolvableType resolvableType = descriptor.getResolvableType();
@@ -1220,6 +1224,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			}
 			return result;
 		}
+		// 集合类型，字段依赖的类型必须是集合框架下面的接口
 		else if (Collection.class.isAssignableFrom(type) && type.isInterface()) {
 			Class<?> elementType = descriptor.getResolvableType().asCollection().resolveGeneric();
 			if (elementType == null) {
@@ -1240,9 +1245,11 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			}
 			return result;
 		}
+		// Map类型，字段依赖的类型必须是Map，key类型为String
 		else if (Map.class == type) {
 			ResolvableType mapType = descriptor.getResolvableType().asMap();
 			Class<?> keyType = mapType.resolveGeneric(0);
+			// key类型必须为String
 			if (String.class != keyType) {
 				return null;
 			}
@@ -1265,6 +1272,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		}
 	}
 
+	/** true：依赖为必须的 */
 	private boolean isRequired(DependencyDescriptor descriptor) {
 		AutowireCandidateResolver resolver = getAutowireCandidateResolver();
 		return (resolver instanceof SimpleAutowireCandidateResolver ?
@@ -1272,6 +1280,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 				descriptor.isRequired());
 	}
 
+	/** 是否多个bean装配 */
 	private boolean indicatesMultipleBeans(Class<?> type) {
 		return (type.isArray() || (type.isInterface() &&
 				(Collection.class.isAssignableFrom(type) || Map.class.isAssignableFrom(type))));
@@ -1520,6 +1529,10 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	 * Determine whether the given beanName/candidateName pair indicates a self reference,
 	 * i.e. whether the candidate points back to the original bean or to a factory method
 	 * on the original bean.
+	 *
+	 * <br><br>
+	 * 检查给定bean名称/候选者名称对是否表示一个自身引用，即一个候选者是否引用原始的bean或者引用原始bean的
+	 * 一个工厂方法。
 	 */
 	private boolean isSelfReference(String beanName, String candidateName) {
 		return (beanName != null && candidateName != null &&

@@ -145,8 +145,10 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 	private final Set<Class<? extends Annotation>> autowiredAnnotationTypes =
  			new LinkedHashSet<Class<? extends Annotation>>(4);
 
+	/** @Autowired required属性名称 */
 	private String requiredParameterName = "required";
 
+	/** @Autowired required属性默认值 */
 	private boolean requiredParameterValue = true;
 
 	private int order = Ordered.LOWEST_PRECEDENCE - 2;
@@ -421,7 +423,7 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 		}
 	}
 
-
+	/** 查找@Autowired注解的元数据 */
 	private InjectionMetadata findAutowiringMetadata(String beanName, Class<?> clazz, PropertyValues pvs) {
 		// Fall back to class name as cache key, for backwards compatibility with custom callers.
 		String cacheKey = (StringUtils.hasLength(beanName) ? beanName : clazz.getName());
@@ -450,6 +452,7 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 		return metadata;
 	}
 
+	/** 构建@Autowired注解的元数据 */
 	private InjectionMetadata buildAutowiringMetadata(final Class<?> clazz) {
 		LinkedList<InjectionMetadata.InjectedElement> elements = new LinkedList<InjectionMetadata.InjectedElement>();
 		Class<?> targetClass = clazz;
@@ -591,10 +594,13 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 	 */
 	private class AutowiredFieldElement extends InjectionMetadata.InjectedElement {
 
+		/** {@link @Autowired} required属性 */
 		private final boolean required;
 
+		/** 是否缓存属性字段值 */
 		private volatile boolean cached = false;
 
+		/** 属性字段缓存值 */
 		private volatile Object cachedFieldValue;
 
 		public AutowiredFieldElement(Field field, boolean required) {
@@ -606,6 +612,7 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 		protected void inject(Object bean, String beanName, PropertyValues pvs) throws Throwable {
 			Field field = (Field) this.member;
 			Object value;
+			// 允许缓存属性值
 			if (this.cached) {
 				value = resolvedCachedArgument(beanName, this.cachedFieldValue);
 			}

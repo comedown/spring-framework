@@ -59,7 +59,7 @@ import org.springframework.util.Assert;
 @SuppressWarnings("serial")
 public class RootBeanDefinition extends AbstractBeanDefinition {
 
-	// 装饰bean定义
+	/** 装饰bean定义 */
 	private BeanDefinitionHolder decoratedDefinition;
 
 	private AnnotatedElement qualifiedElement;

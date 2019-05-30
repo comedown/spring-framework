@@ -38,6 +38,9 @@ import org.springframework.core.ResolvableType;
  * Wraps a constructor parameter, a method parameter or a field,
  * allowing unified access to their metadata.
  *
+ * <br><br>
+ * 将要注入的特定依赖项的描述符。包装构造函数参数、方法参数或字段，允许统一访问其元数据。
+ *
  * @author Juergen Hoeller
  * @since 2.5
  */
@@ -52,8 +55,10 @@ public class DependencyDescriptor extends InjectionPoint implements Serializable
 
 	private int parameterIndex;
 
+	/** 字段名称 */
 	private String fieldName;
 
+	/** 依赖项是否必须 */
 	private final boolean required;
 
 	private final boolean eager;
@@ -280,6 +285,10 @@ public class DependencyDescriptor extends InjectionPoint implements Serializable
 	 * <p>This method does not actually try to retrieve the parameter name at
 	 * this point; it just allows discovery to happen when the application calls
 	 * {@link #getDependencyName()} (if ever).
+	 *
+	 * <br><br>
+	 * 如果存在，则初始化当下方法参数的参数名称发现。
+	 * <p>此方法此时并不实际尝试检索参数名；它只允许在应用程序调用{@link #getDependencyName()}（如果有）时进行发现。
 	 */
 	public void initParameterNameDiscovery(ParameterNameDiscoverer parameterNameDiscoverer) {
 		if (this.methodParameter != null) {

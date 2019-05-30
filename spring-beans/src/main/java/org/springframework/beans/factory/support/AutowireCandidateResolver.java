@@ -23,6 +23,9 @@ import org.springframework.beans.factory.config.DependencyDescriptor;
  * Strategy interface for determining whether a specific bean definition
  * qualifies as an autowire candidate for a specific dependency.
  *
+ * <br><br>
+ * 策略接口，用于确定指定bean定义是否符合特定依赖项的autowire候选者。
+ *
  * @author Juergen Hoeller
  * @author Mark Fisher
  * @since 2.5

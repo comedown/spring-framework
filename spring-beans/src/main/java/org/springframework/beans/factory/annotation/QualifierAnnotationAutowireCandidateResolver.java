@@ -48,6 +48,10 @@ import org.springframework.util.StringUtils;
  *
  * <p>Also supports JSR-330's {@link javax.inject.Qualifier} annotation, if available.
  *
+ * <br><br>
+ * {@link AutowireCandidateResolver}的实现类，将bean定义限定符与自动装配的字段或参数上的
+ * {@link Qualifier qualifier annotations}匹配。还通过{@link Value value}注解支持建议的表达式值。
+ *
  * @author Mark Fisher
  * @author Juergen Hoeller
  * @author Stephane Nicoll
@@ -58,8 +62,10 @@ import org.springframework.util.StringUtils;
  */
 public class QualifierAnnotationAutowireCandidateResolver extends GenericTypeAwareAutowireCandidateResolver {
 
+	/** 限定符注解类型 */
 	private final Set<Class<? extends Annotation>> qualifierTypes = new LinkedHashSet<Class<? extends Annotation>>(2);
 
+	/** 值注解类型 */
 	private Class<? extends Annotation> valueAnnotationType = Value.class;
 
 
@@ -70,6 +76,7 @@ public class QualifierAnnotationAutowireCandidateResolver extends GenericTypeAwa
 	 */
 	@SuppressWarnings("unchecked")
 	public QualifierAnnotationAutowireCandidateResolver() {
+		// 初始化限定符类型
 		this.qualifierTypes.add(Qualifier.class);
 		try {
 			this.qualifierTypes.add((Class<? extends Annotation>) ClassUtils.forName("javax.inject.Qualifier",

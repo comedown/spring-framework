@@ -117,8 +117,10 @@ public class InjectionMetadata {
 	 */
 	public abstract static class InjectedElement {
 
+		/** 注入的元素类型 */
 		protected final Member member;
 
+		/** 是否是Field类型 */
 		protected final boolean isField;
 
 		protected final PropertyDescriptor pd;
