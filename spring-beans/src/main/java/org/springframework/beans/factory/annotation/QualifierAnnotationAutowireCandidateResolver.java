@@ -170,6 +170,7 @@ public class QualifierAnnotationAutowireCandidateResolver extends GenericTypeAwa
 	 * Match the given qualifier annotations against the candidate bean definition.
 	 */
 	protected boolean checkQualifiers(BeanDefinitionHolder bdHolder, Annotation[] annotationsToSearch) {
+		// 如果依赖项上不存在注解，返回true
 		if (ObjectUtils.isEmpty(annotationsToSearch)) {
 			return true;
 		}
@@ -235,6 +236,7 @@ public class QualifierAnnotationAutowireCandidateResolver extends GenericTypeAwa
 		}
 		if (qualifier == null) {
 			// First, check annotation on qualified element, if any
+			// 首先，检查qualified元素的注解
 			Annotation targetAnnotation = getQualifiedElementAnnotation(bd, type);
 			// Then, check annotation on factory method, if applicable
 			if (targetAnnotation == null) {

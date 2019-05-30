@@ -156,6 +156,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 
 	private String[] dependsOn;
 
+	/** 是否可以作为自动装配候选者 */
 	private boolean autowireCandidate = true;
 
 	private boolean primary = false;

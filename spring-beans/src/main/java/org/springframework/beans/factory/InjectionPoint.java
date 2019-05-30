@@ -37,8 +37,10 @@ public class InjectionPoint {
 
 	protected MethodParameter methodParameter;
 
+	/** 包装的字段 */
 	protected Field field;
 
+	/** 包装的字段、方法、构造参数上相关的注解 */
 	private volatile Annotation[] fieldAnnotations;
 
 
@@ -98,6 +100,9 @@ public class InjectionPoint {
 
 	/**
 	 * Obtain the annotations associated with the wrapped field or method/constructor parameter.
+	 *
+	 * <br><br>
+	 * 获取包装的字段、方法、构造参数上相关的注解
 	 */
 	public Annotation[] getAnnotations() {
 		if (this.field != null) {

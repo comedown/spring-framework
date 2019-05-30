@@ -61,6 +61,7 @@ public class ComponentScanBeanDefinitionParser implements BeanDefinitionParser {
 
 	private static final String USE_DEFAULT_FILTERS_ATTRIBUTE = "use-default-filters";
 
+	/** true：启用annotation-config */
 	private static final String ANNOTATION_CONFIG_ATTRIBUTE = "annotation-config";
 
 	private static final String NAME_GENERATOR_ATTRIBUTE = "name-generator";

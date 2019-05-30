@@ -47,6 +47,7 @@ import org.springframework.core.ResolvableType;
 @SuppressWarnings("serial")
 public class DependencyDescriptor extends InjectionPoint implements Serializable {
 
+	/** 构造函数、方法、字段所在类的类型 */
 	private final Class<?> declaringClass;
 
 	private String methodName;

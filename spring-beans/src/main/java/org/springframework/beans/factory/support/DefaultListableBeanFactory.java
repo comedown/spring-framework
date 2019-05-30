@@ -174,7 +174,14 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	/** Optional OrderComparator for dependency Lists and arrays */
 	private Comparator<Object> dependencyComparator;
 
-	/** Resolver to use for checking if a bean definition is an autowire candidate */
+	/**
+	 * Resolver to use for checking if a bean definition is an autowire candidate
+	 *
+	 * <br><br>
+	 * 检查bean定义是否是自动装配候选的解析器。
+	 * 默认为SimpleAutowireCandidateResolver。
+	 * context中为：ContextAnnotationAutowireCandidateResolver
+	 */
 	private AutowireCandidateResolver autowireCandidateResolver = new SimpleAutowireCandidateResolver();
 
 	/** Map from dependency type to corresponding autowired value */
@@ -326,6 +333,10 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	 * Set a custom autowire candidate resolver for this BeanFactory to use
 	 * when deciding whether a bean definition should be considered as a
 	 * candidate for autowiring.
+	 *
+	 * <br><br>
+	 * 为这个BeanFactory设置一个自定义的Autowire候选解析器，
+	 * 以便在决定是否应该将bean定义视为自动装配的候选时使用。
 	 */
 	public void setAutowireCandidateResolver(final AutowireCandidateResolver autowireCandidateResolver) {
 		Assert.notNull(autowireCandidateResolver, "AutowireCandidateResolver must not be null");
