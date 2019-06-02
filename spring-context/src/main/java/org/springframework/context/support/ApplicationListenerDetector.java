@@ -39,6 +39,14 @@ import org.springframework.util.ObjectUtils;
  * mechanisms, {@code DisposableBeanAdapter.writeReplace} might not get used at all, so we
  * defensively mark this post-processor's field state as {@code transient}.
  *
+ * <br><br>
+ * {@code BeanPostProcessor}检测实现{@code ApplicationListener}接口的bean。
+ * 这捕获了{@code getBeanNamesForType}方法无法可靠检测到的bean以及仅对顶级bean起作用的相关操作。
+ *
+ * <p>使用标准的Java序列化，这个后置处理器将不会被序列化为{@code DisposableBeanAdapter}的一部分。
+ * 但是，使用其他序列化机制，{@code DisposableBeanAdapter.writeReplace}可能根本无法使用，
+ * 因此我们将后处理器的字段状态标记为{@code transient}。
+ *
  * @author Juergen Hoeller
  * @since 4.3.4
  */

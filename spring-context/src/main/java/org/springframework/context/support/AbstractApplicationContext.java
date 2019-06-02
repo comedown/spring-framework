@@ -206,7 +206,12 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	/** Statically specified listeners */
 	private final Set<ApplicationListener<?>> applicationListeners = new LinkedHashSet<ApplicationListener<?>>();
 
-	/** ApplicationEvents published early */
+	/**
+	 * ApplicationEvents published early
+	 *
+	 * <br><br>
+	 * 尽早发布的事件源
+	 */
 	private Set<ApplicationEvent> earlyApplicationEvents;
 
 
@@ -842,6 +847,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 		// Do not initialize FactoryBeans here: We need to leave all regular beans
 		// uninitialized to let post-processors apply to them!
+		// 不要在这里初始化FactoryBean：我们需要将所有常规bean都保持为未初始化状态，以让后处理器应用于它们！
 		String[] listenerBeanNames = getBeanNamesForType(ApplicationListener.class, true, false);
 		for (String listenerBeanName : listenerBeanNames) {
 			getApplicationEventMulticaster().addApplicationListenerBean(listenerBeanName);

@@ -28,6 +28,13 @@ import org.springframework.core.ResolvableType;
  * a Spring {@link org.springframework.context.ApplicationContext}, can use an
  * ApplicationEventMulticaster as a delegate for actually publishing events.
  *
+ * <br><br>
+ * 用于能够管理一系列{@link ApplicationListener}对象并且向它们发布事件的对象继承的接口。
+ *
+ * <p>一个{@link org.springframework.context.ApplicationEventPublisher}，通常是spring的
+ * {@link org.springframework.context.ApplicationContext}，能够委派一个ApplicationEventMulticaster
+ * 做实际的发布事件操作。
+ *
  * @author Rod Johnson
  * @author Juergen Hoeller
  * @author Stephane Nicoll

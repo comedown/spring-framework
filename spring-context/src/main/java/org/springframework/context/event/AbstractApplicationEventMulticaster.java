@@ -51,6 +51,17 @@ import org.springframework.util.ObjectUtils;
  * all events to all registered listeners, invoking them in the calling thread.
  * Alternative implementations could be more sophisticated in those respects.
  *
+ * <br><br>
+ * {@link ApplicationEventMulticaster}接口的抽象实现类，提供基础监听器注册功能。
+ *
+ * <p>默认情况下不允许同一监听器的多个实例，因为它将监听器保持在一个Linked set中。
+ * 用于保存ApplicationListener对象的集合类可以通过“CollectionClass”bean属性重写。
+ *
+ * <p>
+ * ApplicationEventMulticaster的实际{@link #multicastEvent}方法留给子类实现。
+ * {@link SimpleApplicationEventMulticaster}简单地广播所有的事件给所有注册的监听器，
+ * 在调用的线程中调用他们。在这些方面替换实现类可能更复杂。
+ *
  * @author Juergen Hoeller
  * @author Stephane Nicoll
  * @since 1.2.3
@@ -103,6 +114,7 @@ public abstract class AbstractApplicationEventMulticaster
 		synchronized (this.retrievalMutex) {
 			// Explicitly remove target for a proxy, if registered already,
 			// in order to avoid double invocations of the same listener.
+			// 如果监听器已注册，则显式删除代理的目标，以避免重复调用同一监听器。
 			Object singletonTarget = AopProxyUtils.getSingletonTarget(listener);
 			if (singletonTarget instanceof ApplicationListener) {
 				this.defaultRetriever.applicationListeners.remove(singletonTarget);
@@ -343,13 +355,19 @@ public abstract class AbstractApplicationEventMulticaster
 	 * Helper class that encapsulates a specific set of target listeners,
 	 * allowing for efficient retrieval of pre-filtered listeners.
 	 * <p>An instance of this helper gets cached per event type and source type.
+	 *
+	 * <br><br>
+	 * 监听器帮助类，封装了一组特定的目标监听器，允许高效地检索预筛选的监听器。
+	 * <p>此帮助类的实例将按事件类型和源类型进行缓存。
 	 */
 	private class ListenerRetriever {
 
 		public final Set<ApplicationListener<?>> applicationListeners = new LinkedHashSet<ApplicationListener<?>>();
 
+		/** 监听器bean的名称 */
 		public final Set<String> applicationListenerBeans = new LinkedHashSet<String>();
 
+		/** 是否预先筛选 */
 		private final boolean preFiltered;
 
 		public ListenerRetriever(boolean preFiltered) {
