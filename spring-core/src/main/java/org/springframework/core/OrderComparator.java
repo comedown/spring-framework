@@ -37,6 +37,17 @@ import org.springframework.util.ObjectUtils;
  * at the end of a sorted collection in arbitrary order with respect to
  * other objects with the same order value.
  *
+ * <br><br>
+ * {@link Comparator}的实现类，用于{@link Ordered}对象的排序，按照顺序值升序排列，
+ * 顺序为优先级降序排列。
+ *
+ * <h3>相同顺序值的对象</h3>
+ * <p>与具有相同顺序值的其他对象相比，具有相同顺序值的对象将按任意顺序排序。
+ *
+ * <h3>非顺序对象</h3>
+ * <p>任何不提供自己的顺序值的对象都会隐式分配一个{@link Ordered#LOWEST_PRECEDENCE}
+ * 最大值（优先级最小），从而相对于具有相同顺序值的其他对象，以任意顺序结束在排序集合的末尾。
+ *
  * @author Juergen Hoeller
  * @author Sam Brannen
  * @since 07.04.2003

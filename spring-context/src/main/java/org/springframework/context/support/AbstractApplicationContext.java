@@ -200,7 +200,12 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	/** MessageSource we delegate our implementation of this interface to */
 	private MessageSource messageSource;
 
-	/** Helper class used in event publishing */
+	/**
+	 * Helper class used in event publishing.
+	 *
+	 * <br><br>
+	 * 用于发布事件的帮助类。应用程序事件广播器。
+	 */
 	private ApplicationEventMulticaster applicationEventMulticaster;
 
 	/** Statically specified listeners */
@@ -535,6 +540,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				initMessageSource();
 
 				// Initialize event multicaster for this context.
+				// 初始化该上下文的事件广播器。
 				initApplicationEventMulticaster();
 
 				// Initialize other special beans in specific context subclasses.
@@ -770,17 +776,23 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	/**
 	 * Initialize the ApplicationEventMulticaster.
 	 * Uses SimpleApplicationEventMulticaster if none defined in the context.
+	 *
+	 * <br><br>
+	 * 初始化ApplicationEventMulticaster。如果上下文中没有定义，则使用SimpleApplicationEventMulticaster。
 	 * @see org.springframework.context.event.SimpleApplicationEventMulticaster
 	 */
 	protected void initApplicationEventMulticaster() {
 		ConfigurableListableBeanFactory beanFactory = getBeanFactory();
+		// 如果bean工厂存在一个名为applicationEventMulticaster的bean
 		if (beanFactory.containsLocalBean(APPLICATION_EVENT_MULTICASTER_BEAN_NAME)) {
+			// 获取名称为applicationEventMulticaster，类型为ApplicationEventMulticaster的bean实例
 			this.applicationEventMulticaster =
 					beanFactory.getBean(APPLICATION_EVENT_MULTICASTER_BEAN_NAME, ApplicationEventMulticaster.class);
 			if (logger.isDebugEnabled()) {
 				logger.debug("Using ApplicationEventMulticaster [" + this.applicationEventMulticaster + "]");
 			}
 		}
+		// 如果不存在，使用SimpleApplicationEventMulticaster
 		else {
 			this.applicationEventMulticaster = new SimpleApplicationEventMulticaster(beanFactory);
 			beanFactory.registerSingleton(APPLICATION_EVENT_MULTICASTER_BEAN_NAME, this.applicationEventMulticaster);
@@ -833,9 +845,14 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	/**
 	 * Add beans that implement ApplicationListener as listeners.
 	 * Doesn't affect other listeners, which can be added without being beans.
+	 *
+	 * <br><br>
+	 * 添加实现了ApplicationListener的bean作为监听者。
+	 * 不会影响其他监听者，可以作为bean添加。
 	 */
 	protected void registerListeners() {
 		// Register statically specified listeners first.
+		// 首先，注册静态指定的监听器。
 		for (ApplicationListener<?> listener : getApplicationListeners()) {
 			getApplicationEventMulticaster().addApplicationListener(listener);
 		}
