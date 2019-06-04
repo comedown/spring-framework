@@ -53,7 +53,6 @@ public abstract class NamespaceHandlerSupport implements NamespaceHandler {
 	 *
 	 * <br><br>
 	 * 存储以要处理的{@link Element Elements}本地名称作为key的{@link BeanDefinitionParser}实现。
-	 *
 	 */
 	private final Map<String, BeanDefinitionParser> parsers =
 			new HashMap<String, BeanDefinitionParser>();

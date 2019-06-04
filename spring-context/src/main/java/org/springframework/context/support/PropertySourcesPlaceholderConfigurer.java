@@ -54,6 +54,22 @@ import org.springframework.util.StringValueResolver;
  * <p>See {@link org.springframework.core.env.ConfigurableEnvironment} and related javadocs
  * for details on manipulating environment property sources.
  *
+ * <br><br>
+ * {@link PlaceholderConfigurerSupport}的特殊实现类，通过当前Spring{@link Environment}和它自己的
+ * {@link PropertySources}集合解析bean定义属性值和{@code @Value}注解中的${...}占位符。
+ *
+ * <p>这个类在Spring3.1中引入，设计为{@code PropertyPlaceholderConfigurer}的一般的替代。它在
+ * spring-context-3.1或者更高版本的XSD中被默认使用，支持解析{@code property-placeholder}元素，
+ * 相反，spring-context.xsd版本&lt;= 3.0时，则默认使用{@code PropertyPlaceholderConfigurer}
+ * 来确保向后兼容。完整的详情请参考spring-context XSD文档。
+ *
+ * <p>任何本地属性（例如 这些通过{@link #setProperties}，{@link #setLocations}等方式添加的）都会被
+ * 添加为{@code PropertySource}。本地属性的搜索优先级基于{@link #setLocalOverride localOverride}
+ * 属性的值，默认为{@code false}表示在所有环境属性源之后最后搜索本地属性。
+ *
+ * <p>有关操作环境属性源的详情，请参见{@link org.springframework.core.env.ConfigurableEnvironment}
+ * 和相关javadoc文档。
+ *
  * @author Chris Beams
  * @author Juergen Hoeller
  * @since 3.1
@@ -75,7 +91,7 @@ public class PropertySourcesPlaceholderConfigurer extends PlaceholderConfigurerS
 	 */
 	public static final String ENVIRONMENT_PROPERTIES_PROPERTY_SOURCE_NAME = "environmentProperties";
 
-
+	/** 本地属性 */
 	private MutablePropertySources propertySources;
 
 	private PropertySources appliedPropertySources;
@@ -119,9 +135,21 @@ public class PropertySourcesPlaceholderConfigurer extends PlaceholderConfigurerS
 	 * <p>If {@link #setPropertySources} is called, <strong>environment and local properties will be
 	 * ignored</strong>. This method is designed to give the user fine-grained control over property
 	 * sources, and once set, the configurer makes no assumptions about adding additional sources.
+	 *
+	 * <br><br>
+	 * 该方法发生在解析替换每个bean定义中的${...}占位符的时候，通过{@link PropertySources}集合配置，配置包括：
+	 * <ul>
+	 * <li>如果{@code Environment}的{@linkplain #setEnvironment is present}存在，则所有的
+	 * {@linkplain org.springframework.core.env.ConfigurableEnvironment#getPropertySources
+	 * environment property sources}
+	 * <li>
+	 * </ul>
+	 * <p>如果调用了{@link #setPropertySources}，<strong>environment和本地属性将会被忽略</strong>。
+	 * 该方法旨在为用户提供对属性源的细粒度控制，一旦设置，配置就不会对添加其他源进行任何假设。
 	 */
 	@Override
 	public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
+		// 如果propertySources已经被设置，则不会再去其他地方获取
 		if (this.propertySources == null) {
 			this.propertySources = new MutablePropertySources();
 			if (this.environment != null) {
@@ -149,6 +177,7 @@ public class PropertySourcesPlaceholderConfigurer extends PlaceholderConfigurerS
 			}
 		}
 
+		// 处理bean定义信息中的占位符
 		processProperties(beanFactory, new PropertySourcesPropertyResolver(this.propertySources));
 		this.appliedPropertySources = this.propertySources;
 	}
@@ -177,6 +206,7 @@ public class PropertySourcesPlaceholderConfigurer extends PlaceholderConfigurerS
 			}
 		};
 
+		// 处理beanfactory中的每个bean定义属性
 		doProcessProperties(beanFactoryToProcess, valueResolver);
 	}
 

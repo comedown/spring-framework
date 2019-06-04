@@ -32,6 +32,16 @@ package org.springframework.core;
  * <p>Consult the Javadoc for {@link OrderComparator} for details on the
  * sort semantics for non-ordered objects.
  *
+ * <br><br>
+ * {@code Ordered}接口用于被需要<em>排序</em>的对象实现，比如在{@code Collection}集合中。
+ *
+ * <p>实际的{@link #getOrder() order}顺序可以解释为优先级排序，第一个对象（顺序值最小）的优先级最高。
+ *
+ * <p>注意：还有一个<em>优先级</em>标记接口：{@link PriorityOrdered}。由{@code PriorityOrdered}
+ * 对象表示的顺序值始终优先于由<em>普通的</em>{@link Ordered}对象表示的相同顺序值。
+ *
+ * <p>有关非排序对象的排序语义的详细信息，请参阅{@link OrderComparator} Javadoc。
+ *
  * @author Juergen Hoeller
  * @author Sam Brannen
  * @since 07.04.2003

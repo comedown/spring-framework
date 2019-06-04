@@ -59,7 +59,6 @@ public class DefaultNamespaceHandlerResolver implements NamespaceHandlerResolver
 	 *
 	 * <br><br>
 	 * 自定义NamespaceHandler的定义文件路径
-	 *
 	 */
 	public static final String DEFAULT_HANDLER_MAPPINGS_LOCATION = "META-INF/spring.handlers";
 
@@ -75,7 +74,6 @@ public class DefaultNamespaceHandlerResolver implements NamespaceHandlerResolver
 	 *
 	 * <br><br>
 	 * 映射文件路径，默认是：META-INF/spring.handlers
-	 *
 	 */
 	private final String handlerMappingsLocation;
 
@@ -84,7 +82,6 @@ public class DefaultNamespaceHandlerResolver implements NamespaceHandlerResolver
 	 *
 	 * <br><br>
 	 * 用于存储命名空间对应的NamespaceHandler的类名 / 接口
-	 *
 	 */
 	private volatile Map<String, Object> handlerMappings;
 
@@ -142,6 +139,7 @@ public class DefaultNamespaceHandlerResolver implements NamespaceHandlerResolver
 			return (NamespaceHandler) handlerOrClassName;
 		}
 		else {
+			// 从spring.handlers中读取处理来的是一个String类型的类全路径名
 			String className = (String) handlerOrClassName;
 			try {
 				Class<?> handlerClass = ClassUtils.forName(className, this.classLoader);
@@ -152,6 +150,7 @@ public class DefaultNamespaceHandlerResolver implements NamespaceHandlerResolver
 				NamespaceHandler namespaceHandler = (NamespaceHandler) BeanUtils.instantiateClass(handlerClass);
 				// 初始化parser
 				namespaceHandler.init();
+				// 替换掉缓存里面的String全路径名为NamespaceHandler实例
 				handlerMappings.put(namespaceUri, namespaceHandler);
 				return namespaceHandler;
 			}
@@ -168,6 +167,9 @@ public class DefaultNamespaceHandlerResolver implements NamespaceHandlerResolver
 
 	/**
 	 * Load the specified NamespaceHandler mappings lazily.
+	 *
+	 * <br><br>
+	 * 懒加载指定NamespaceHandler映射。
 	 */
 	private Map<String, Object> getHandlerMappings() {
 		Map<String, Object> handlerMappings = this.handlerMappings;
