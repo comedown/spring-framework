@@ -80,12 +80,15 @@ class PropertyPlaceholderBeanDefinitionParser extends AbstractPropertyLoadingBea
 			builder.addPropertyValue("systemPropertiesModeName", "SYSTEM_PROPERTIES_MODE_" + systemPropertiesModeName);
 		}
 
+		// 值分割符，默认是冒号(:)
 		if (element.hasAttribute("value-separator")) {
 			builder.addPropertyValue("valueSeparator", element.getAttribute("value-separator"));
 		}
+		// 是否去掉value前后的空格、制表符，
 		if (element.hasAttribute("trim-values")) {
 			builder.addPropertyValue("trimValues", element.getAttribute("trim-values"));
 		}
+		// 当解析占位符值时应视为null值：例如""（空字符串）或"null"。默认：不定义此类空值。
 		if (element.hasAttribute("null-value")) {
 			builder.addPropertyValue("nullValue", element.getAttribute("null-value"));
 		}

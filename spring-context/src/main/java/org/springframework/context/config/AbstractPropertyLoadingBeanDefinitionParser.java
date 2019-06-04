@@ -34,6 +34,7 @@ import org.springframework.util.StringUtils;
  */
 abstract class AbstractPropertyLoadingBeanDefinitionParser extends AbstractSingleBeanDefinitionParser {
 
+	/** 自动生成bean id */
 	@Override
 	protected boolean shouldGenerateId() {
 		return true;
@@ -41,9 +42,11 @@ abstract class AbstractPropertyLoadingBeanDefinitionParser extends AbstractSingl
 
 	@Override
 	protected void doParse(Element element, ParserContext parserContext, BeanDefinitionBuilder builder) {
+		// 属性文件路径
 		String location = element.getAttribute("location");
 		if (StringUtils.hasLength(location)) {
 			location = parserContext.getReaderContext().getEnvironment().resolvePlaceholders(location);
+			// 按逗号分隔属性文件路径
 			String[] locations = StringUtils.commaDelimitedListToStringArray(location);
 			builder.addPropertyValue("locations", locations);
 		}
@@ -53,11 +56,13 @@ abstract class AbstractPropertyLoadingBeanDefinitionParser extends AbstractSingl
 			builder.addPropertyReference("properties", propertiesRef);
 		}
 
+		// 属性文件编码
 		String fileEncoding = element.getAttribute("file-encoding");
 		if (StringUtils.hasLength(fileEncoding)) {
 			builder.addPropertyValue("fileEncoding", fileEncoding);
 		}
 
+		//
 		String order = element.getAttribute("order");
 		if (StringUtils.hasLength(order)) {
 			builder.addPropertyValue("order", Integer.valueOf(order));

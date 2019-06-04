@@ -107,14 +107,19 @@ public abstract class PlaceholderConfigurerSupport extends PropertyResourceConfi
 	/** Defaults to {@value #DEFAULT_VALUE_SEPARATOR} */
 	protected String valueSeparator = DEFAULT_VALUE_SEPARATOR;
 
+	/** trim-values 属性值，表示去掉value前后的空格、制表符 */
 	protected boolean trimValues = false;
 
+	/** null-value 属性值，表示处理null值 */
 	protected String nullValue;
 
+	/** ignoreUnresolvablePlaceholders属性值，表示是否忽略不可解析的值，默认false */
 	protected boolean ignoreUnresolvablePlaceholders = false;
 
+	/** bean名称，通过BeanNameAware获取 */
 	private String beanName;
 
+	/** 所在的BeanFactory，通过BeanFactoryAware获取 */
 	private BeanFactory beanFactory;
 
 
@@ -210,6 +215,7 @@ public abstract class PlaceholderConfigurerSupport extends PropertyResourceConfi
 
 		BeanDefinitionVisitor visitor = new BeanDefinitionVisitor(valueResolver);
 
+		// 遍历每个Bean
 		String[] beanNames = beanFactoryToProcess.getBeanDefinitionNames();
 		for (String curName : beanNames) {
 			// Check that we're not parsing our own bean definition,

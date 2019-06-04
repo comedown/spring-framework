@@ -129,9 +129,12 @@ public class BeanDefinitionReaderUtils {
 		else {
 			// Top-level bean: use plain class name.
 			// Increase counter until the id is unique.
+			// 上层bean：使用普通类名。
+			// 增加计数器，直到id唯一，不和之前的id重复。
 			int counter = -1;
 			while (counter == -1 || registry.containsBeanDefinition(id)) {
 				counter++;
+				// 类路径名 + # + 计数器
 				id = generatedBeanName + GENERATED_BEAN_NAME_SEPARATOR + counter;
 			}
 		}
