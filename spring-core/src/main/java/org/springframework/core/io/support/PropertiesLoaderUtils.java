@@ -74,6 +74,9 @@ public abstract class PropertiesLoaderUtils {
 
 	/**
 	 * Actually load properties from the given EncodedResource into the given Properties instance.
+	 *
+	 * <br><br>
+	 * 从给定EncodedResource加载属性资源到给定Properties实例中。
 	 * @param props the Properties instance to load into
 	 * @param resource the resource to load from
 	 * @param persister the PropertiesPersister to use
@@ -86,14 +89,17 @@ public abstract class PropertiesLoaderUtils {
 		Reader reader = null;
 		try {
 			String filename = resource.getResource().getFilename();
+			// xml类型属性资源
 			if (filename != null && filename.endsWith(XML_FILE_EXTENSION)) {
 				stream = resource.getInputStream();
 				persister.loadFromXml(props, stream);
 			}
+			// 是否指定编码
 			else if (resource.requiresReader()) {
 				reader = resource.getReader();
 				persister.load(props, reader);
 			}
+			// 加载属性资源
 			else {
 				stream = resource.getInputStream();
 				persister.load(props, stream);

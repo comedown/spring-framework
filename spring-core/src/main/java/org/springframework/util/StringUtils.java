@@ -627,9 +627,7 @@ public abstract class StringUtils {
 	 *
 	 * <br><br>
 	 * 通过抑制"path/.."和内部简单点等序列来规范化路径。
-	 *
-	 * <p>
-	 * 结果便于路径比较。对于其他用途，请注意Windows分隔符（“\”）被单斜杠替换
+	 * <p>结果便于路径比较。对于其他用途，请注意Windows分隔符（“\”）被单斜杠替换
 	 *
 	 * @param path the original path
 	 * @return the normalized path

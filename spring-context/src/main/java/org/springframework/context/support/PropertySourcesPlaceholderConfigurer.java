@@ -94,6 +94,7 @@ public class PropertySourcesPlaceholderConfigurer extends PlaceholderConfigurerS
 	/** 本地属性 */
 	private MutablePropertySources propertySources;
 
+	/** 应用过的属性资源 */
 	private PropertySources appliedPropertySources;
 
 	private Environment environment;
@@ -166,9 +167,11 @@ public class PropertySourcesPlaceholderConfigurer extends PlaceholderConfigurerS
 				PropertySource<?> localPropertySource =
 						new PropertiesPropertySource(LOCAL_PROPERTIES_PROPERTY_SOURCE_NAME, mergeProperties());
 				if (this.localOverride) {
+					// 加入到属性资源头部，拥有最高优先级
 					this.propertySources.addFirst(localPropertySource);
 				}
 				else {
+					// 加入到属性资源头部，拥有最低优先级
 					this.propertySources.addLast(localPropertySource);
 				}
 			}

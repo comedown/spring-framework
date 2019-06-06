@@ -565,12 +565,17 @@ public abstract class ClassUtils {
 		if (clazz == null) {
 			return "";
 		}
+		// 类全路径名
 		String className = clazz.getName();
+		// 定位最后一层包名
 		int packageEndIndex = className.lastIndexOf(PACKAGE_SEPARATOR);
+		// 如果类没有包，返回空
 		if (packageEndIndex == -1) {
 			return "";
 		}
+		// 去掉类名，截取包路径
 		String packageName = className.substring(0, packageEndIndex);
+		// 替换"."为"/"，并返回
 		return packageName.replace(PACKAGE_SEPARATOR, PATH_SEPARATOR);
 	}
 

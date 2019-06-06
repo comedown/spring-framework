@@ -125,6 +125,7 @@ public class DefaultResourceLoader implements ResourceLoader {
 	public Resource getResource(String location) {
 		Assert.notNull(location, "Location must not be null");
 
+		// 首先用自定义的协议处理器
 		for (ProtocolResolver protocolResolver : this.protocolResolvers) {
 			Resource resource = protocolResolver.resolve(location, this);
 			if (resource != null) {
@@ -132,12 +133,15 @@ public class DefaultResourceLoader implements ResourceLoader {
 			}
 		}
 
+		// 以 "/" 开头
 		if (location.startsWith("/")) {
 			return getResourceByPath(location);
 		}
+		// 以 "classpath:" 开头
 		else if (location.startsWith(CLASSPATH_URL_PREFIX)) {
 			return new ClassPathResource(location.substring(CLASSPATH_URL_PREFIX.length()), getClassLoader());
 		}
+		// 其他
 		else {
 			try {
 				// Try to parse the location as a URL...

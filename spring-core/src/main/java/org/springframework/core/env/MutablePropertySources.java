@@ -103,12 +103,17 @@ public class MutablePropertySources implements PropertySources {
 
 	/**
 	 * Add the given property source object with highest precedence.
+	 *
+	 * <br><br>
+	 * 添加指定属性资源对象，赋予最高优先级。
 	 */
 	public void addFirst(PropertySource<?> propertySource) {
 		if (logger.isDebugEnabled()) {
 			logger.debug("Adding PropertySource '" + propertySource.getName() + "' with highest search precedence");
 		}
+		// 存在则删除
 		removeIfPresent(propertySource);
+		// 加到列表头部
 		this.propertySourceList.add(0, propertySource);
 	}
 

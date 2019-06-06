@@ -220,6 +220,9 @@ public class ClassPathResource extends AbstractFileResolvingResource {
 
 	/**
 	 * This implementation returns a description that includes the class path location.
+	 *
+	 * <br><br>
+	 * 资源描述，包含class路径的地址。形如：class path resource [类路径/资源名称]
 	 */
 	@Override
 	public String getDescription() {
@@ -229,6 +232,7 @@ public class ClassPathResource extends AbstractFileResolvingResource {
 			builder.append(ClassUtils.classPackageAsResourcePath(this.clazz));
 			builder.append('/');
 		}
+		// 如果资源路径以"/"开头，截掉
 		if (pathToUse.startsWith("/")) {
 			pathToUse = pathToUse.substring(1);
 		}

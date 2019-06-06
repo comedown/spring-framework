@@ -23,6 +23,12 @@ package org.springframework.core.io;
  * custom protocols to be handled without subclassing the loader
  * implementation (or application context implementation).
  *
+ * <br><br>
+ * 特定协议资源处理的解决策略。
+ *
+ * <p>用作{@link DefaultResourceLoader}的SPI，允许在没有子类实现资源加载类的
+ * 情况下自定义协议处理（或者实现应用程序上下文）。
+ *
  * @author Juergen Hoeller
  * @since 4.3
  * @see DefaultResourceLoader#addProtocolResolver

@@ -46,10 +46,12 @@ public abstract class PropertiesLoaderSupport {
 
 	protected boolean localOverride = false;
 
+	/** 路径资源 */
 	private Resource[] locations;
 
 	private boolean ignoreResourceNotFound = false;
 
+	/** 资源文件编码 */
 	private String fileEncoding;
 
 	private PropertiesPersister propertiesPersister = new DefaultPropertiesPersister();
@@ -168,6 +170,7 @@ public abstract class PropertiesLoaderSupport {
 	 * @see #setLocations
 	 */
 	protected void loadProperties(Properties props) throws IOException {
+		// 加载配置的资源路径
 		if (this.locations != null) {
 			for (Resource location : this.locations) {
 				if (logger.isDebugEnabled()) {
