@@ -29,6 +29,13 @@ import org.springframework.beans.factory.BeanDefinitionStoreException;
  * {@code registerBeanDefinitions} method &mdash; for example, global
  * settings that are defined for all bean definitions in the document.
  *
+ * <br><br>
+ * 用于解析包含SpringBean定义的XML文档的SPI。
+ * 由{@link XmlBeanDefinitionReader}用于实际解析DOM文档。
+ *
+ * <p>实例化每个要解析的文档：实现类可以在执行{@code registerBeanDefinitions}方法期间
+ * 在实例变量中保存状态 &mdash; 例如，为文档中的所有bean定义信息定义全局设置。
+ *
  * @author Juergen Hoeller
  * @author Rob Harrop
  * @since 18.12.2003

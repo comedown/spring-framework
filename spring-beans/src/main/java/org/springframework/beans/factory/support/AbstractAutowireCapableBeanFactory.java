@@ -472,7 +472,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 		try {
 			// Give BeanPostProcessors a chance to return a proxy instead of the target bean instance.
-			// 提供一个机会给BeanPostProcessors来返回一个代理对象而不是目标bean的实例
+			// 提供一个机会给BeanPostProcessors来返回一个代理对象而不是目标bean的实例。即调用
 			Object bean = resolveBeforeInstantiation(beanName, mbdToUse);
 			if (bean != null) {
 				return bean;
@@ -1650,7 +1650,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 		Object wrappedBean = bean;
 		if (mbd == null || !mbd.isSynthetic()) {
-			// 在bean实例化之前应用BeanPostProcessors
+			// 在bean初始化之前应用BeanPostProcessors
 			wrappedBean = applyBeanPostProcessorsBeforeInitialization(wrappedBean, beanName);
 		}
 

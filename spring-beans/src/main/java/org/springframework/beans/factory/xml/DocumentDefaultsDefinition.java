@@ -23,6 +23,10 @@ import org.springframework.beans.factory.parsing.DefaultsDefinition;
  * level in a standard Spring XML bean definition document:
  * {@code default-lazy-init}, {@code default-autowire}, etc.
  *
+ * <br><br>
+ * 保存默认在标准Spring XML bean定义文档中{@code <beans>}层面指定的：
+ * {@code default-lazy-init}, {@code default-autowire}, 等配置。
+ *
  * @author Juergen Hoeller
  * @since 2.0.2
  */

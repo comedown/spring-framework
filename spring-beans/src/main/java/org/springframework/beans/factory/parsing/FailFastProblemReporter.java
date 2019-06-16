@@ -29,6 +29,13 @@ import org.apache.commons.logging.LogFactory;
  * <p>Warnings are written to
  * {@link #setLogger(org.apache.commons.logging.Log) the log} for this class.
  *
+ * <br><br>
+ * {@link ProblemReporter}简单的实现类，当错误发生时，可以表现出快速失败的行为。
+ *
+ * <p>在遇到第一个错误的时候，抛出{@link BeanDefinitionParsingException}。
+ *
+ * <p>警告会被写入这个类的{@link #setLogger(org.apache.commons.logging.Log) the log}。
+ *
  * @author Rob Harrop
  * @author Juergen Hoeller
  * @author Rick Evans

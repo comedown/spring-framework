@@ -70,8 +70,15 @@ import org.springframework.util.xml.DomUtils;
 /**
  * Stateful delegate class used to parse XML bean definitions.
  * Intended for use by both the main parser and any extension
- * {@link BeanDefinitionParser BeanDefinitionParsers} or
+ * {@link BeanDefinitionParser Bean DefinitionParsers} or
  * {@link BeanDefinitionDecorator BeanDefinitionDecorators}.
+ *
+ * <br><br>
+ * 用于解析XML bean定义的有状态委托类。用于主解析器和任何扩展
+ * {@link BeanDefinitionParser BeanDefinitionParsers} 或
+ * {@link BeanDefinitionDecorator BeanDefinitionDecorators}。
+ *
+ * <p>bean定义解析链，父子关系。
  *
  * @author Rob Harrop
  * @author Juergen Hoeller
@@ -334,11 +341,18 @@ public class BeanDefinitionParserDelegate {
 	 * autowire, dependency check settings, init-method, destroy-method and merge settings.
 	 * Support nested 'beans' element use cases by falling back to <literal>parentDefaults</literal>
 	 * in case the defaults are not explicitly set locally.
+	 *
+	 * <br><br>
+	 * 用default-lazy-init，autowire，dependency check settings，init-method，destroy-method 和 合并设置
+	 * 填充给定DocumentDefaultsDefinition实例。支持嵌套“bean”元素用例
+	 *
 	 * @param defaults the defaults to populate
 	 * @param parentDefaults the parent BeanDefinitionParserDelegate (if any) defaults to fall back to
 	 * @param root the root element of the current bean definition document (or nested beans element)
 	 */
 	protected void populateDefaults(DocumentDefaultsDefinition defaults, DocumentDefaultsDefinition parentDefaults, Element root) {
+		// default-lazy-init : default、true、false
+		// 默认为default
 		String lazyInit = root.getAttribute(DEFAULT_LAZY_INIT_ATTRIBUTE);
 		if (DEFAULT_VALUE.equals(lazyInit)) {
 			// Potentially inherited from outer <beans> sections, otherwise falling back to false.
@@ -346,6 +360,8 @@ public class BeanDefinitionParserDelegate {
 		}
 		defaults.setLazyInit(lazyInit);
 
+		// default-merge : default、true、false
+		// 默认为default
 		String merge = root.getAttribute(DEFAULT_MERGE_ATTRIBUTE);
 		if (DEFAULT_VALUE.equals(merge)) {
 			// Potentially inherited from outer <beans> sections, otherwise falling back to false.
@@ -353,6 +369,8 @@ public class BeanDefinitionParserDelegate {
 		}
 		defaults.setMerge(merge);
 
+		// default-autowire : default、no、byName、byType、constructor
+		// 通过什么方式自动装配，默认default
 		String autowire = root.getAttribute(DEFAULT_AUTOWIRE_ATTRIBUTE);
 		if (DEFAULT_VALUE.equals(autowire)) {
 			// Potentially inherited from outer <beans> sections, otherwise falling back to 'no'.
@@ -364,6 +382,7 @@ public class BeanDefinitionParserDelegate {
 		// <beans> as of 3.0. Therefore, no nested <beans> would ever need to fall back to it.
 		defaults.setDependencyCheck(root.getAttribute(DEFAULT_DEPENDENCY_CHECK_ATTRIBUTE));
 
+		// default-autowire-candidates : "*Service", "data*", "*Service*", "data*Service"
 		if (root.hasAttribute(DEFAULT_AUTOWIRE_CANDIDATES_ATTRIBUTE)) {
 			defaults.setAutowireCandidates(root.getAttribute(DEFAULT_AUTOWIRE_CANDIDATES_ATTRIBUTE));
 		}
@@ -371,6 +390,7 @@ public class BeanDefinitionParserDelegate {
 			defaults.setAutowireCandidates(parentDefaults.getAutowireCandidates());
 		}
 
+		// default-init-method : 默认bean初始化方法
 		if (root.hasAttribute(DEFAULT_INIT_METHOD_ATTRIBUTE)) {
 			defaults.setInitMethod(root.getAttribute(DEFAULT_INIT_METHOD_ATTRIBUTE));
 		}
@@ -378,6 +398,7 @@ public class BeanDefinitionParserDelegate {
 			defaults.setInitMethod(parentDefaults.getInitMethod());
 		}
 
+		// default-destroy-method : 默认bean销毁方法
 		if (root.hasAttribute(DEFAULT_DESTROY_METHOD_ATTRIBUTE)) {
 			defaults.setDestroyMethod(root.getAttribute(DEFAULT_DESTROY_METHOD_ATTRIBUTE));
 		}

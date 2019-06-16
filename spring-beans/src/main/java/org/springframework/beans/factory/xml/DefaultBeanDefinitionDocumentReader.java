@@ -48,6 +48,14 @@ import org.springframework.util.StringUtils;
  * element of the XML document: this class will parse all bean definition elements
  * in the XML file, regardless of the actual root element.
  *
+ * <br><br>
+ * 根据 "spring-beans" DTD和XSD格式（Spring的默认XML Bean定义格式）读取bean定义的
+ * {@link BeanDefinitionDocumentReader}接口的默认实现。
+ *
+ * <p>所需XML文档的结构、元素和属性名称在此类中是硬编码的。
+ * （当然，如果需要生成这种格式，可以运行转换）。{@code <beans>}不需要是XML文档的根元素：
+ * 这个类将解析XML文件中的所有bean定义元素，不管实际根元素是什么。
+ *
  * @author Rod Johnson
  * @author Juergen Hoeller
  * @author Rob Harrop
@@ -139,8 +147,11 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 			}
 		}
 
+		// 提供子类解析xml前处理
 		preProcessXml(root);
+		// 解析xml Bean定义
 		parseBeanDefinitions(root, this.delegate);
+		// 提供子类解析xml后处理
 		postProcessXml(root);
 
 		this.delegate = parent;
@@ -170,6 +181,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 				if (node instanceof Element) {
 					Element ele = (Element) node;
 					if (delegate.isDefaultNamespace(ele)) {
+						// 解析bean、import、alias、beans默认标签
 						parseDefaultElement(ele, delegate);
 					}
 					// 自定义命名空间
@@ -311,6 +323,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 			bdHolder = delegate.decorateBeanDefinitionIfRequired(ele, bdHolder);
 			try {
 				// Register the final decorated instance.
+				// 注册最终解析完毕的实例。
 				BeanDefinitionReaderUtils.registerBeanDefinition(bdHolder, getReaderContext().getRegistry());
 			}
 			catch (BeanDefinitionStoreException ex) {

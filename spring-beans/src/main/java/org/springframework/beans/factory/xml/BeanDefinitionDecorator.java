@@ -50,6 +50,11 @@ import org.springframework.beans.factory.config.BeanDefinitionHolder;
  * <p>The parser locates a {@link BeanDefinitionDecorator} from the
  * {@link NamespaceHandler} for the namespace in which the custom tag resides.
  *
+ * <br><br>
+ * {@link DefaultBeanDefinitionDocumentReader}使用的用于处理自定义、嵌套的（直接在{@code <bean>}中）标签。
+ *
+ * <p>装饰也可以用于应用{@code <bean>}标签的自定义属性。
+ *
  * @author Rob Harrop
  * @since 2.0
  * @see NamespaceHandler
