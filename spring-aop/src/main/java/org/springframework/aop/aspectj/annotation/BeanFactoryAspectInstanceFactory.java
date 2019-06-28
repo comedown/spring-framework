@@ -43,8 +43,10 @@ import org.springframework.util.ClassUtils;
 @SuppressWarnings("serial")
 public class BeanFactoryAspectInstanceFactory implements MetadataAwareAspectInstanceFactory, Serializable {
 
+	/** Spring bean factory */
 	private final BeanFactory beanFactory;
 
+	/** 切面类bean名称 */
 	private final String name;
 
 	private final AspectMetadata aspectMetadata;
@@ -77,7 +79,7 @@ public class BeanFactoryAspectInstanceFactory implements MetadataAwareAspectInst
 		this.aspectMetadata = new AspectMetadata(type, name);
 	}
 
-
+	/** 通过BeanFacatory获取切面类实例 */
 	@Override
 	public Object getAspectInstance() {
 		return this.beanFactory.getBean(this.name);

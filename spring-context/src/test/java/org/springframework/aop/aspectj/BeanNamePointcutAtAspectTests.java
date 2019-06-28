@@ -16,8 +16,11 @@
 
 package org.springframework.aop.aspectj;
 
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.Signature;
+import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.junit.Test;
 
 import org.springframework.aop.aspectj.annotation.AspectJProxyFactory;
@@ -25,6 +28,10 @@ import org.springframework.aop.framework.Advised;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.tests.sample.beans.ITestBean;
 import org.springframework.tests.sample.beans.TestBean;
+
+import java.lang.reflect.Method;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -98,9 +105,39 @@ class CounterAspect {
 
 	int count;
 
-	@Before("execution(* set*(..)) && bean(testBean1)")
-	public void increment1ForAnonymousPointcut() {
+	Map<String, Method> lruMap = new LinkedHashMap<>(2);
+
+	@Pointcut("execution(* set*(..)) && bean(testBean1)")
+	public void ponitCut() {
+	}
+
+//	@Before("execution(* set*(..)) && bean(testBean1)")
+	@Before("ponitCut()")
+	public void increment1ForAnonymousPointcut(JoinPoint joinPoint) {
+		Signature signature = joinPoint.getSignature();
+		System.out.println(signature.getName());
 		count++;
+	}
+
+//	@After("execution(* set*(..)) && bean(testBean1)")
+	@After("ponitCut()")
+	public void leastRecentAccessLog(JoinPoint joinPoint) {
+		Signature signature = joinPoint.getSignature();
+		System.out.println(signature.getName());
+//		lruMap.put();
+	}
+
+	@Around("ponitCut()")
+	public void aroundLog(ProceedingJoinPoint point) {
+		MethodSignature methodSignature = (MethodSignature) point.getSignature();
+		Method method = methodSignature.getMethod();
+		System.out.println("around before : " + method.getName());
+		try {
+			point.proceed();
+		} catch (Throwable throwable) {
+			throwable.printStackTrace();
+		}
+		System.out.println("around after : " + method.getName());
 	}
 
 }

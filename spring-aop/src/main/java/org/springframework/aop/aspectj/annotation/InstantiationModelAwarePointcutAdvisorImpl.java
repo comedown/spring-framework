@@ -58,6 +58,7 @@ class InstantiationModelAwarePointcutAdvisorImpl
 
 	private final MetadataAwareAspectInstanceFactory aspectInstanceFactory;
 
+	/** 声明顺序 */
 	private final int declarationOrder;
 
 	private final String aspectName;
@@ -66,6 +67,7 @@ class InstantiationModelAwarePointcutAdvisorImpl
 
 	private final boolean lazy;
 
+	/** 实例化通知 */
 	private Advice instantiatedAdvice;
 
 	private Boolean isBeforeAdvice;
@@ -103,6 +105,7 @@ class InstantiationModelAwarePointcutAdvisorImpl
 			// A singleton aspect.
 			this.pointcut = this.declaredPointcut;
 			this.lazy = false;
+			// 实例化通知
 			this.instantiatedAdvice = instantiateAdvice(this.declaredPointcut);
 		}
 	}

@@ -51,13 +51,14 @@ package org.springframework.beans.factory;
  * 如果bean实现了这个接口，那么它将用作对象公开的工厂，而不是直接作为将公开自己的bean实例。
  *
  * <p><b>注意：实现这个接口的bean不能用作普通bean。</b>
- * FactoryBean是以bean样式定义的，但为bean引用而公开的对象(@link getObject())始终是它创建的对象。
+ * FactoryBean是以bean样式定义的，但为bean引用而公开的对象({@link #getObject()})始终是它创建的对象。
  *
  * <p>FactoryBean可以支持单例和原型，并且可以根据需要延迟创建对象，也可以在启动时提前创建对象。
  * {@link SmartFactoryBean}接口允许公开更细粒度的行为元数据。
  *
  * <p>此接口在框架本身中被大量使用，例如AOP中{@link org.springframework.aop.framework.ProxyFactoryBean}
- * 或{@link org.springframework.jndi.JndiObjectFactoryBean}。它也可以用于自定义组件；但是，这只在基础架构代码中常见。
+ * 或{@link org.springframework.jndi.JndiObjectFactoryBean}。它也可以用于自定义组件；
+ * 但是，这只在基础架构代码中常见。
  *
  * <p><b>{@code FactoryBean}是一个编程协议。实现不应该依赖于注解驱动的注入或其他反射功能。</b>
  * {@link #getObjectType()} {@link #getObject()}调用可能在引导过程的早期执行，甚至在任何后处理器设置之前。

@@ -31,6 +31,15 @@ import org.aopalliance.aop.Advice;
  * implements some specific interceptors in order to implement a
  * debugger:
  *
+ * <br><br>
+ * 这个接口表示一个通用的拦截器。
+ *
+ * <p>通用拦截器可以拦截在基本程序中发生的运行时事件。这些事件通过连接点实现（具体化）。
+ * 运行时连接点可以是调用、字段访问、异常...
+ *
+ * <p>这个接口不能直接使用。使用子接口来拦截具体的事件。例如：下面这个类实现了一些
+ * 具体的拦截器，以实现调试器：
+ *
  * <pre class=code>
  * class DebuggingInterceptor implements MethodInterceptor, 
  *     ConstructorInterceptor, FieldInterceptor {

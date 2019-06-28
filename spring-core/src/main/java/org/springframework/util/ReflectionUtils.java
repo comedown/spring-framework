@@ -533,6 +533,7 @@ public abstract class ReflectionUtils {
 				throw new IllegalStateException("Not allowed to access method '" + method.getName() + "': " + ex);
 			}
 		}
+		// 递归获取父类方法
 		if (clazz.getSuperclass() != null) {
 			doWithMethods(clazz.getSuperclass(), mc, mf);
 		}
@@ -602,6 +603,11 @@ public abstract class ReflectionUtils {
 	 * in order to avoid the JVM's SecurityManager check and defensive array copying.
 	 * In addition, it also includes Java 8 default methods from locally implemented
 	 * interfaces, since those are effectively to be treated just like declared methods.
+	 *
+	 * <br><br>
+	 * 此变量从本地缓存中检索{@link Class#getDeclaredMethods()}，以避免JVM的SecurityManager
+	 * 检查和防御数组复制。此外，它还包括来自本地实现接口的Java 8默认方法，因为这些方法有效地被处理，
+	 * 就像声明的方法一样。
 	 * @param clazz the class to introspect
 	 * @return the cached array of methods
 	 * @see Class#getDeclaredMethods()
@@ -610,7 +616,9 @@ public abstract class ReflectionUtils {
 		Assert.notNull(clazz, "Class must not be null");
 		Method[] result = declaredMethodsCache.get(clazz);
 		if (result == null) {
+			// 该类所有方法
 			Method[] declaredMethods = clazz.getDeclaredMethods();
+			// 该类实现的接口的默认方法
 			List<Method> defaultMethods = findConcreteMethodsOnInterfaces(clazz);
 			if (defaultMethods != null) {
 				result = new Method[declaredMethods.length + defaultMethods.size()];
@@ -629,7 +637,9 @@ public abstract class ReflectionUtils {
 		return result;
 	}
 
+	/** 遍历找到接口中的默认方法（jdk8） */
 	private static List<Method> findConcreteMethodsOnInterfaces(Class<?> clazz) {
+		// TODO result可以先实例化?
 		List<Method> result = null;
 		for (Class<?> ifc : clazz.getInterfaces()) {
 			for (Method ifcMethod : ifc.getMethods()) {

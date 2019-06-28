@@ -38,6 +38,12 @@ import org.springframework.aop.support.ComposablePointcut;
  * <p>Uses AspectJ 5 AJType reflection API, enabling us to work with different
  * AspectJ instantiation models such as "singleton", "pertarget" and "perthis".
  *
+ * <br><br>
+ * AspectJ切面类的元数据，为每个子句增加一个Spring AOP切点。
+ *
+ * <p>使用AspectJ 5 AjType反射API，使我们能够使用不同的AspectJ实例模型，
+ * 如“singleton”、“pertarget”和“perthis”。
+ *
  * @author Rod Johnson
  * @author Juergen Hoeller
  * @since 2.0
@@ -50,6 +56,10 @@ public class AspectMetadata implements Serializable {
 	 * The name of this aspect as defined to Spring (the bean name) -
 	 * allows us to determine if two pieces of advice come from the
 	 * same aspect and hence their relative precedence.
+	 *
+	 * <br><br>
+	 * 切面类的名称，通过Spring定义（bean名称）-允许我们确定两天通知是否来自
+	 * 同一切面，从而确定它们的相对优先级。
 	 */
 	private final String aspectName;
 
@@ -83,6 +93,7 @@ public class AspectMetadata implements Serializable {
 
 		Class<?> currClass = aspectClass;
 		AjType<?> ajType = null;
+		// 寻找具有@AspectJ注解的类
 		while (currClass != Object.class) {
 			AjType<?> ajTypeToCheck = AjTypeSystem.getAjType(currClass);
 			if (ajTypeToCheck.isAspect()) {

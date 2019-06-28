@@ -40,6 +40,22 @@ import java.lang.reflect.Method;
  * in an interceptor chain, will have run, so any state changes they have produced in
  * parameters or ThreadLocal state will be available at the time of evaluation.
  *
+ * <br><br>
+ * {@link Pointcut}的一部分：校验目标方法是否具有被通知资格。
+ *
+ * <p>一个MethodMatcher可以<b>静态地</b>或者运行时（动态的）评估。静态匹配涉及方法和（可能）方法参数。
+ * 动态匹配也可以让参数对一次特殊调用可用，以及运行前通知的任何影响应用到切点上。
+ *
+ * <p>如果一个实现类的{@link #isRuntime()}方法返回{@code false}，可以使用静态评估，并且所有这个方法
+ * 的调用都返回同样的结果，无论什么参数。这意味着如果{@link #isRuntime()}方法返回{@code false}，3个
+ * 参数的{@link #matches(java.lang.reflect.Method, Class, Object[])}方法永远不会被调用。
+ *
+ * <p>如果一个实现类2个参数的{@link #matches(java.lang.reflect.Method, Class)}方法返回
+ * {@code true}以及{@link #isRuntime()}返回{@code true}，那么<i>在相关通知的每个潜在的执行之前</i>
+ * 3个参数的{@link #matches(java.lang.reflect.Method, Class, Object[])}方法将会立即执行，
+ * 来决定通知是否会运行。所有前置通知，比如拦截器链中的提前拦截器，将会运行，因此所有他们参数中或ThreadLocal
+ * 状态执行的状态改变将在评估是可获得。
+ *
  * @author Rod Johnson
  * @since 11.11.2003
  * @see Pointcut
@@ -92,6 +108,9 @@ public interface MethodMatcher {
 
 	/**
 	 * Canonical instance that matches all methods.
+	 *
+	 * <br><br>
+	 * 简单的实例，匹配所有方法。
 	 */
 	MethodMatcher TRUE = TrueMethodMatcher.INSTANCE;
 

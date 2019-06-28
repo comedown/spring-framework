@@ -47,11 +47,13 @@ class AspectJAutoProxyBeanDefinitionParser implements BeanDefinitionParser {
 	private void extendBeanDefinition(Element element, ParserContext parserContext) {
 		BeanDefinition beanDef =
 				parserContext.getRegistry().getBeanDefinition(AopConfigUtils.AUTO_PROXY_CREATOR_BEAN_NAME);
+		// 如果包含<include>子元素
 		if (element.hasChildNodes()) {
 			addIncludePatterns(element, parserContext, beanDef);
 		}
 	}
 
+	/** 添加includePattern */
 	private void addIncludePatterns(Element element, ParserContext parserContext, BeanDefinition beanDef) {
 		ManagedList<TypedStringValue> includePatterns = new ManagedList<TypedStringValue>();
 		NodeList childNodes = element.getChildNodes();

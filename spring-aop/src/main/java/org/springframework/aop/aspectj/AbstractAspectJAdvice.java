@@ -100,6 +100,7 @@ public abstract class AbstractAspectJAdvice implements Advice, AspectJPrecedence
 
 	private final AspectJExpressionPointcut pointcut;
 
+	/** 存放切面类实例的工厂 */
 	private final AspectInstanceFactory aspectInstanceFactory;
 
 	/**

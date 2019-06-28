@@ -33,6 +33,10 @@ import org.springframework.util.Assert;
  * Helper for retrieving @AspectJ beans from a BeanFactory and building
  * Spring Advisors based on them, for use with auto-proxying.
  *
+ * <br><br>
+ * 用于auto-proxying的帮助类，从BeanFactory中检索@AspectJ bean，并基于它们构建
+ * Spring Advisor。
+ *
  * @author Juergen Hoeller
  * @since 2.0.2
  * @see AnnotationAwareAspectJAutoProxyCreator
@@ -43,8 +47,10 @@ public class BeanFactoryAspectJAdvisorsBuilder {
 
 	private final AspectJAdvisorFactory advisorFactory;
 
+	/** 切面bean名称 */
 	private volatile List<String> aspectBeanNames;
 
+	/** 通知类缓存：bean名称 -> 通知类集合 */
 	private final Map<String, List<Advisor>> advisorsCache = new ConcurrentHashMap<String, List<Advisor>>();
 
 	private final Map<String, MetadataAwareAspectInstanceFactory> aspectFactoryCache =
@@ -88,6 +94,7 @@ public class BeanFactoryAspectJAdvisorsBuilder {
 				if (aspectNames == null) {
 					List<Advisor> advisors = new LinkedList<Advisor>();
 					aspectNames = new LinkedList<String>();
+					// 获取所有bean名称
 					String[] beanNames = BeanFactoryUtils.beanNamesForTypeIncludingAncestors(
 							this.beanFactory, Object.class, true, false);
 					for (String beanName : beanNames) {
@@ -101,6 +108,7 @@ public class BeanFactoryAspectJAdvisorsBuilder {
 							continue;
 						}
 						if (this.advisorFactory.isAspect(beanType)) {
+							// 加入缓存，防止多次解析
 							aspectNames.add(beanName);
 							AspectMetadata amd = new AspectMetadata(beanType, beanName);
 							if (amd.getAjType().getPerClause().getKind() == PerClauseKind.SINGLETON) {

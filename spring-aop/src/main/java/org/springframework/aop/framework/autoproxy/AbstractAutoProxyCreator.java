@@ -131,12 +131,13 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 	private final Set<String> targetSourcedBeans =
 			Collections.newSetFromMap(new ConcurrentHashMap<String, Boolean>(16));
 
+	/** 提前生成代理引用bean缓存 */
 	private final Set<Object> earlyProxyReferences =
 			Collections.newSetFromMap(new ConcurrentHashMap<Object, Boolean>(16));
 
 	private final Map<Object, Class<?>> proxyTypes = new ConcurrentHashMap<Object, Class<?>>(16);
 
-	/** 切面类缓存：切面key -> 是否存在 */
+	/** 切面类缓存：切面key ->  */
 	private final Map<Object, Boolean> advisedBeans = new ConcurrentHashMap<Object, Boolean>(256);
 
 
@@ -327,6 +328,9 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 
 	/**
 	 * Wrap the given bean if necessary, i.e. if it is eligible for being proxied.
+	 *
+	 * <br><br>
+	 * 如果需要则包装给定bean，即：bean是否有资格被代理。
 	 * @param bean the raw bean instance
 	 * @param beanName the name of the bean
 	 * @param cacheKey the cache key for metadata access
@@ -447,6 +451,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 		ProxyFactory proxyFactory = new ProxyFactory();
 		proxyFactory.copyFrom(this);
 
+		// 代理目标不是类
 		if (!proxyFactory.isProxyTargetClass()) {
 			if (shouldProxyTargetClass(beanClass, beanName)) {
 				proxyFactory.setProxyTargetClass(true);
@@ -459,6 +464,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 		Advisor[] advisors = buildAdvisors(beanName, specificInterceptors);
 		proxyFactory.addAdvisors(advisors);
 		proxyFactory.setTargetSource(targetSource);
+		// 允许用户自定义代理类行为
 		customizeProxyFactory(proxyFactory);
 
 		proxyFactory.setFrozen(this.freezeProxy);

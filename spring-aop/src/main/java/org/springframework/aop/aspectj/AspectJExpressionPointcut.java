@@ -99,10 +99,13 @@ public class AspectJExpressionPointcut extends AbstractExpressionPointcut
 
 	private static final Log logger = LogFactory.getLog(AspectJExpressionPointcut.class);
 
+	/** 切点声明所在类 */
 	private Class<?> pointcutDeclarationScope;
 
+	/** 切点参数 */
 	private String[] pointcutParameterNames = new String[0];
 
+	/** 切点参数类型 */
 	private Class<?>[] pointcutParameterTypes = new Class<?>[0];
 
 	private BeanFactory beanFactory;
@@ -187,6 +190,7 @@ public class AspectJExpressionPointcut extends AbstractExpressionPointcut
 		}
 		if (this.pointcutExpression == null) {
 			this.pointcutClassLoader = determinePointcutClassLoader();
+			// 构建Pointcut表达式对象
 			this.pointcutExpression = buildPointcutExpression(this.pointcutClassLoader);
 		}
 	}
@@ -237,6 +241,7 @@ public class AspectJExpressionPointcut extends AbstractExpressionPointcut
 	 * <p>This method converts back to {@code &&} for the AspectJ pointcut parser.
 	 */
 	private String replaceBooleanOperators(String pcExpr) {
+		// 解析布尔操作符
 		String result = StringUtils.replace(pcExpr, " and ", " && ");
 		result = StringUtils.replace(result, " or ", " || ");
 		result = StringUtils.replace(result, " not ", " ! ");

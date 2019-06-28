@@ -114,6 +114,7 @@ public abstract class AnnotationUtils {
 
 	private static final String REPEATABLE_CLASS_NAME = "java.lang.annotation.Repeatable";
 
+	/** 方法注解缓存 */
 	private static final Map<AnnotationCacheKey, Annotation> findAnnotationCache =
 			new ConcurrentReferenceHashMap<AnnotationCacheKey, Annotation>(256);
 

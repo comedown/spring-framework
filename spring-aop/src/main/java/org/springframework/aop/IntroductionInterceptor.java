@@ -26,6 +26,12 @@ import org.aopalliance.intercept.MethodInterceptor;
  * <p>Introductions are often <b>mixins</b>, enabling the building of composite
  * objects that can achieve many of the goals of multiple inheritance in Java.
  *
+ * <br><br>
+ * AOP联盟MethodInterceptor的子接口，它允许拦截器实现额外的接口，并可以通过使用该拦截器的代理。
+ * 这是一个叫做<b>引入</b>的基本AOP概念。
+ *
+ * <p>介绍通常是<b>混合的</b>混，能够构建复合对象，可以在Java中实现多种继承的许多目标。
+ *
  * @author Rod Johnson
  * @see DynamicIntroductionAdvice
  */

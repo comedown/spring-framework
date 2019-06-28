@@ -48,6 +48,7 @@ import org.springframework.util.Assert;
 @SuppressWarnings("serial")
 public class AnnotationAwareAspectJAutoProxyCreator extends AspectJAwareAdvisorAutoProxyCreator {
 
+	/** <include>元素的值 */
 	private List<Pattern> includePatterns;
 
 	private AspectJAdvisorFactory aspectJAdvisorFactory;
@@ -109,11 +110,18 @@ public class AnnotationAwareAspectJAutoProxyCreator extends AspectJAwareAdvisorA
 	 * <p>If no &lt;aop:include&gt; elements were used then "includePatterns" will be
 	 * {@code null} and all beans are included. If "includePatterns" is non-null,
 	 * then one of the patterns must match.
+	 *
+	 * <br><br>
+	 * 检查给定aspect bean具有auto-proxying资格。
+	 * <p>如果没有配置&lt;aop:include&gt;元素，"includePatterns"是{@code null}，所有bean会被加入。
+	 * 如果"includePatterns"不是null，则必须匹配一个模板。
 	 */
 	protected boolean isEligibleAspectBean(String beanName) {
+		// 如果包含模板是null，则匹配所有bean
 		if (this.includePatterns == null) {
 			return true;
 		}
+		// 否则，检验是否匹配beanName
 		else {
 			for (Pattern pattern : this.includePatterns) {
 				if (pattern.matcher(beanName).matches()) {
@@ -139,6 +147,7 @@ public class AnnotationAwareAspectJAutoProxyCreator extends AspectJAwareAdvisorA
 
 		@Override
 		protected boolean isEligibleBean(String beanName) {
+			// 内部类获取外部类的实例方法：类名.this
 			return AnnotationAwareAspectJAutoProxyCreator.this.isEligibleAspectBean(beanName);
 		}
 	}
