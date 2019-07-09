@@ -739,6 +739,10 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * Instantiate and invoke all registered BeanPostProcessor beans,
 	 * respecting explicit order if given.
 	 * <p>Must be called before any instantiation of application beans.
+	 *
+	 * <br><br>
+	 * 实例化所有注册的BeanPostProcessor bean。必须在实例化应用程序bean之前调用。
+	 * 包括应用程序自己在xml或者Configure中定义的bean。
 	 */
 	protected void registerBeanPostProcessors(ConfigurableListableBeanFactory beanFactory) {
 		PostProcessorRegistrationDelegate.registerBeanPostProcessors(beanFactory, this);

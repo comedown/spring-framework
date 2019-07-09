@@ -792,6 +792,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		for (String beanName : beanNames) {
 			// 合并当前bean和其父bean
 			RootBeanDefinition bd = getMergedLocalBeanDefinition(beanName);
+			// 非抽象bean && 单例bean && 非懒加载
 			if (!bd.isAbstract() && bd.isSingleton() && !bd.isLazyInit()) {
 				// FactoryBean
 				if (isFactoryBean(beanName)) {
@@ -824,6 +825,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		// 启动所有适合bean的初始化后回调
 		for (String beanName : beanNames) {
 			Object singletonInstance = getSingleton(beanName);
+			// 调用实现SmartInitializingSingleton接口的单例bean
 			if (singletonInstance instanceof SmartInitializingSingleton) {
 				final SmartInitializingSingleton smartSingleton = (SmartInitializingSingleton) singletonInstance;
 				if (System.getSecurityManager() != null) {

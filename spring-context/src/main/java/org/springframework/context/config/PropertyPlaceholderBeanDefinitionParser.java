@@ -31,6 +31,11 @@ import org.springframework.util.StringUtils;
  * {@code <context:property-placeholder/>}元素解析器。
  * 解析为{@link PropertyPlaceholderConfigurer}
  *
+ * <p>
+ * <ul>
+ *     <li>第一步：</li>
+ * </ul>
+ *
  * @author Juergen Hoeller
  * @author Dave Syer
  * @author Chris Beams

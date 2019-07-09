@@ -146,7 +146,9 @@ public class AnnotationBeanNameGenerator implements BeanNameGenerator {
 	 * @return the default bean name (never {@code null})
 	 */
 	protected String buildDefaultBeanName(BeanDefinition definition) {
+		// 获取类名，不包括包名和CGlib代理产生的$$后缀
 		String shortClassName = ClassUtils.getShortName(definition.getBeanClassName());
+		// 如果类开头只有一个大写，则返回第一字母小写的类名，否则不做变动
 		return Introspector.decapitalize(shortClassName);
 	}
 

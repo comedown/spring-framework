@@ -88,6 +88,7 @@ public abstract class AbstractBeanDefinitionParser implements BeanDefinitionPars
 					}
 				}
 				BeanDefinitionHolder holder = new BeanDefinitionHolder(definition, id, aliases);
+				// 注册bean定义
 				registerBeanDefinition(holder, parserContext.getRegistry());
 				if (shouldFireEvents()) {
 					BeanComponentDefinition componentDefinition = new BeanComponentDefinition(holder);
@@ -123,6 +124,7 @@ public abstract class AbstractBeanDefinitionParser implements BeanDefinitionPars
 		if (shouldGenerateId()) {
 			return parserContext.getReaderContext().generateBeanName(definition);
 		}
+		// 不自动生成id
 		else {
 			String id = element.getAttribute(ID_ATTRIBUTE);
 			if (!StringUtils.hasText(id) && shouldGenerateIdAsFallback()) {

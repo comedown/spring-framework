@@ -93,6 +93,9 @@ public class BeanDefinitionReaderUtils {
 	/**
 	 * Generate a bean name for the given bean definition, unique within the
 	 * given bean factory.
+	 *
+	 * <br><br>
+	 * 为给定bean定义自动生成bean名称，在给定bean工厂中唯一
 	 * @param definition the bean definition to generate a bean name for
 	 * @param registry the bean factory that the definition is going to be
 	 * registered with (to check for existing bean names)
@@ -143,6 +146,8 @@ public class BeanDefinitionReaderUtils {
 
 	/**
 	 * Register the given bean definition with the given bean factory.
+	 * <br><br>
+	 * 在指定bean工厂中注册给定bean定义
 	 * @param definitionHolder the bean definition including name and aliases
 	 * @param registry the bean factory to register with
 	 * @throws BeanDefinitionStoreException if registration failed
