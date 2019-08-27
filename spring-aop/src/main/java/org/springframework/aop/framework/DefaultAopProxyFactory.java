@@ -36,6 +36,16 @@ import org.springframework.aop.SpringProxy;
  * <p>In general, specify {@code proxyTargetClass} to enforce a CGLIB proxy,
  * or specify one or more interfaces to use a JDK dynamic proxy.
  *
+ * <p>{@link AopProxyFactory}接口的默认实现，创建一个CGLIB代理类或者一个JDK动态代理类。
+ * <p>以下任意一个条件为true，则为给定{@link AdvisedSupport}实例创建一个CGLIB代理类：
+ * <ul>
+ *     <li>{@code optimize}标签设置为true</li>
+ *     <li>{@code proxyTargetClass}标签设置为true</li>
+ *     <li>没有指定代理接口</li>
+ * </ul>
+ * <p>通常，指定{@code proxyTargetClass}为true来强制创建一个CGLIB代理类，
+ * 或者指定一个或多个接口来使用JDK动态代理。
+ *
  * @author Rod Johnson
  * @author Juergen Hoeller
  * @since 12.03.2004

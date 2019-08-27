@@ -32,6 +32,9 @@ import org.springframework.aop.Pointcut;
  */
 public abstract class StaticMethodMatcherPointcut extends StaticMethodMatcher implements Pointcut {
 
+	/**
+	 * 该切点匹配所有类。
+	 */
 	private ClassFilter classFilter = ClassFilter.TRUE;
 
 

@@ -94,6 +94,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 
 	/**
 	 * Convenience constant for subclasses: Return value for "do not proxy".
+	 * <p>如果没有找到Advisor，则返回此对象，代表“不生成代理”
 	 * @see #getAdvicesAndAdvisorsForBean
 	 */
 	protected static final Object[] DO_NOT_PROXY = null;
@@ -121,6 +122,9 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 	/** Default is no common interceptors */
 	private String[] interceptorNames = new String[0];
 
+	/**
+	 * 是否优先应用通用拦截器，默认true
+	 */
 	private boolean applyCommonInterceptorsFirst = true;
 
 	private TargetSourceCreator[] customTargetSourceCreators;
@@ -135,9 +139,12 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 	private final Set<Object> earlyProxyReferences =
 			Collections.newSetFromMap(new ConcurrentHashMap<Object, Boolean>(16));
 
+	/**
+	 * 代理类型缓存：cache key -> 代理类型
+	 */
 	private final Map<Object, Class<?>> proxyTypes = new ConcurrentHashMap<Object, Class<?>>(16);
 
-	/** 切面类缓存：切面key ->  */
+	/** 是否要通知的bean：bean key -> 是否要通知 */
 	private final Map<Object, Boolean> advisedBeans = new ConcurrentHashMap<Object, Boolean>(256);
 
 
@@ -312,6 +319,8 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 	 * a plain bean name, prepended with {@link BeanFactory#FACTORY_BEAN_PREFIX}
 	 * in case of a {@code FactoryBean}; or if no bean name specified, then the
 	 * given bean {@code Class} as-is.
+	 *
+	 * <p>根据bean class和name返回cache key。如果是FactoryBean的实例，则加上&前缀。
 	 * @param beanClass the bean class
 	 * @param beanName the bean name
 	 * @return the cache key for the given class and name
@@ -343,6 +352,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 		if (Boolean.FALSE.equals(this.advisedBeans.get(cacheKey))) {
 			return bean;
 		}
+		// 如果是基础设施类型 或者 应该跳过，直接返回
 		if (isInfrastructureClass(bean.getClass()) || shouldSkip(bean.getClass(), beanName)) {
 			this.advisedBeans.put(cacheKey, Boolean.FALSE);
 			return bean;
@@ -352,6 +362,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 		// 如果存在通知类，创建bean的代理
 		Object[] specificInterceptors = getAdvicesAndAdvisorsForBean(bean.getClass(), beanName, null);
 		if (specificInterceptors != DO_NOT_PROXY) {
+			// 标志该bean需要被通知
 			this.advisedBeans.put(cacheKey, Boolean.TRUE);
 			Object proxy = createProxy(
 					bean.getClass(), beanName, specificInterceptors, new SingletonTargetSource(bean));
@@ -368,6 +379,9 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 	 * that should never be proxied.
 	 * <p>The default implementation considers Advices, Advisors and
 	 * AopInfrastructureBeans as infrastructure classes.
+	 *
+	 * <p>返回给定bean class是否表示一个基础设施类，基础设施类不能产生代理对象。
+	 * <p>默认实现认为Advices, Advisors and AopInfrastructureBeans是基础设施类。
 	 * @param beanClass the class of the bean
 	 * @return whether the bean represents an infrastructure class
 	 * @see org.aopalliance.aop.Advice
@@ -376,6 +390,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 	 * @see #shouldSkip
 	 */
 	protected boolean isInfrastructureClass(Class<?> beanClass) {
+		// bean class的类型：Advice || Pointcut || Advisor || AopInfrastructureBean
 		boolean retVal = Advice.class.isAssignableFrom(beanClass) ||
 				Pointcut.class.isAssignableFrom(beanClass) ||
 				Advisor.class.isAssignableFrom(beanClass) ||
@@ -432,6 +447,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 
 	/**
 	 * Create an AOP proxy for the given bean.
+	 * <p>创建给定bean的AOP代理类。
 	 * @param beanClass the class of the bean
 	 * @param beanName the name of the bean
 	 * @param specificInterceptors the set of interceptors that is
@@ -448,11 +464,14 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 			AutoProxyUtils.exposeTargetClass((ConfigurableListableBeanFactory) this.beanFactory, beanName, beanClass);
 		}
 
+		// 代理工厂
 		ProxyFactory proxyFactory = new ProxyFactory();
+		// 复制代理配置
 		proxyFactory.copyFrom(this);
 
 		// 代理目标不是类
 		if (!proxyFactory.isProxyTargetClass()) {
+			// bean定义中配置了目标类代理
 			if (shouldProxyTargetClass(beanClass, beanName)) {
 				proxyFactory.setProxyTargetClass(true);
 			}
@@ -468,6 +487,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 		customizeProxyFactory(proxyFactory);
 
 		proxyFactory.setFrozen(this.freezeProxy);
+		// 是否预先过滤
 		if (advisorsPreFiltered()) {
 			proxyFactory.setPreFiltered(true);
 		}
@@ -479,6 +499,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 	 * Determine whether the given bean should be proxied with its target class rather than its interfaces.
 	 * <p>Checks the {@link AutoProxyUtils#PRESERVE_TARGET_CLASS_ATTRIBUTE "preserveTargetClass" attribute}
 	 * of the corresponding bean definition.
+	 * <p>检验给定bean是否应该生成目标类代理而不是接口代理。
 	 * @param beanClass the class of the bean
 	 * @param beanName the name of the bean
 	 * @return whether the given bean should be proxied with its target class
@@ -506,6 +527,9 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 	/**
 	 * Determine the advisors for the given bean, including the specific interceptors
 	 * as well as the common interceptor, all adapted to the Advisor interface.
+	 *
+	 * <p>确定给定bean的Advisor，包含指定的拦截器和通用拦截器。都是用于Advisor接口。
+	 *
 	 * @param beanName the name of the bean
 	 * @param specificInterceptors the set of interceptors that is
 	 * specific to this bean (may be empty, but not null)
@@ -513,15 +537,19 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 	 */
 	protected Advisor[] buildAdvisors(String beanName, Object[] specificInterceptors) {
 		// Handle prototypes correctly...
+		// 通用拦截器
 		Advisor[] commonInterceptors = resolveInterceptorNames();
 
 		List<Object> allInterceptors = new ArrayList<Object>();
 		if (specificInterceptors != null) {
 			allInterceptors.addAll(Arrays.asList(specificInterceptors));
+			// 存在通用拦截器
 			if (commonInterceptors.length > 0) {
+				// 优先应用
 				if (this.applyCommonInterceptorsFirst) {
 					allInterceptors.addAll(0, Arrays.asList(commonInterceptors));
 				}
+				// 最后应用
 				else {
 					allInterceptors.addAll(Arrays.asList(commonInterceptors));
 				}
@@ -562,6 +590,8 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 	 * Subclasses may choose to implement this: for example,
 	 * to change the interfaces exposed.
 	 * <p>The default implementation is empty.
+	 *
+	 * <p>子类选择实现的钩子方法：比如要改变要暴露的接口。默认空实现。
 	 * @param proxyFactory a ProxyFactory that is already configured with
 	 * TargetSource and interfaces and will be used to create the proxy
 	 * immediately after this method returns

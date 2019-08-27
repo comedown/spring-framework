@@ -39,6 +39,7 @@ public interface ClassFilter {
 
 	/**
 	 * Canonical instance of a ClassFilter that matches all classes.
+	 * <p>匹配所有类的ClassFilter规范实例。
 	 */
 	ClassFilter TRUE = TrueClassFilter.INSTANCE;
 

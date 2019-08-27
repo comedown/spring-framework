@@ -197,6 +197,7 @@ public class ReaderContext {
 
 	/**
 	 * Call the source extractor for the given source object.
+	 * <p>调用给定源对象的源提取方法。
 	 * @param sourceCandidate the original source object
 	 * @return the source object to store, or {@code null} for none.
 	 * @see #getSourceExtractor()

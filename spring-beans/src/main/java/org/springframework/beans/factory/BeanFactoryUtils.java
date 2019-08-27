@@ -164,6 +164,8 @@ public abstract class BeanFactoryUtils {
 	 * the raw FactoryBean itself will be matched against the type.
 	 * <p>This version of {@code beanNamesForTypeIncludingAncestors} automatically
 	 * includes prototypes and FactoryBeans.
+	 *
+	 * <p>从当前bean工厂和其祖先工厂中获取给定类型的bean名称。
 	 * @param lbf the bean factory
 	 * @param type the type that beans must match (as a {@code Class})
 	 * @return the array of matching bean names, or an empty array if none
@@ -191,6 +193,10 @@ public abstract class BeanFactoryUtils {
 	 * will be matched against the type. If "allowEagerInit" is not set,
 	 * only raw FactoryBeans will be checked (which doesn't require initialization
 	 * of each FactoryBean).
+	 *
+	 * <p>获取给定类型的bean名称，包括定义在父级bean工厂的bean。在覆盖bean定义的情况下，将返回
+	 * 唯一的bean名称。如果"allowEagerInit"标志设置为true，且实例是由FactoryBean创建的，则
+	 * 意味着这些bean将被初始化。
 	 * @param lbf the bean factory
 	 * @param includeNonSingletons whether to include prototype or scoped beans too
 	 * or just singletons (also applies to FactoryBeans)
@@ -206,10 +212,13 @@ public abstract class BeanFactoryUtils {
 			ListableBeanFactory lbf, Class<?> type, boolean includeNonSingletons, boolean allowEagerInit) {
 
 		Assert.notNull(lbf, "ListableBeanFactory must not be null");
+		// 获取所有符合类型的bean名称
 		String[] result = lbf.getBeanNamesForType(type, includeNonSingletons, allowEagerInit);
+		// 查找父级BeanFactory中匹配类型的bean
 		if (lbf instanceof HierarchicalBeanFactory) {
 			HierarchicalBeanFactory hbf = (HierarchicalBeanFactory) lbf;
 			if (hbf.getParentBeanFactory() instanceof ListableBeanFactory) {
+				// 层级递归
 				String[] parentResult = beanNamesForTypeIncludingAncestors(
 						(ListableBeanFactory) hbf.getParentBeanFactory(), type, includeNonSingletons, allowEagerInit);
 				result = mergeNamesWithParent(result, parentResult, hbf);

@@ -32,6 +32,8 @@ import org.springframework.transaction.interceptor.TransactionAttribute;
 /**
  * Strategy implementation for parsing Spring's {@link Transactional} annotation.
  *
+ * <p>策略模式：Spring的事务{@link Transactional}解析器实现。
+ *
  * @author Juergen Hoeller
  * @since 2.5
  */
@@ -54,11 +56,19 @@ public class SpringTransactionAnnotationParser implements TransactionAnnotationP
 		return parseTransactionAnnotation(AnnotationUtils.getAnnotationAttributes(ann, false, false));
 	}
 
+	/**
+	 * 解析事务注解属性，构造事务属性对象实例
+	 * @param attributes
+	 * @return
+	 */
 	protected TransactionAttribute parseTransactionAnnotation(AnnotationAttributes attributes) {
+		// 基于规则的事务属性
 		RuleBasedTransactionAttribute rbta = new RuleBasedTransactionAttribute();
 
+		// 传播属性
 		Propagation propagation = attributes.getEnum("propagation");
 		rbta.setPropagationBehavior(propagation.value());
+		// 隔离级别
 		Isolation isolation = attributes.getEnum("isolation");
 		rbta.setIsolationLevel(isolation.value());
 		rbta.setTimeout(attributes.getNumber("timeout").intValue());
@@ -66,15 +76,19 @@ public class SpringTransactionAnnotationParser implements TransactionAnnotationP
 		rbta.setQualifier(attributes.getString("value"));
 
 		List<RollbackRuleAttribute> rollbackRules = new ArrayList<RollbackRuleAttribute>();
+		// 回滚异常
 		for (Class<?> rbRule : attributes.getClassArray("rollbackFor")) {
 			rollbackRules.add(new RollbackRuleAttribute(rbRule));
 		}
+		// 回滚异常类名称
 		for (String rbRule : attributes.getStringArray("rollbackForClassName")) {
 			rollbackRules.add(new RollbackRuleAttribute(rbRule));
 		}
+		// 不回滚异常类
 		for (Class<?> rbRule : attributes.getClassArray("noRollbackFor")) {
 			rollbackRules.add(new NoRollbackRuleAttribute(rbRule));
 		}
+		// 不回滚异常类名称
 		for (String rbRule : attributes.getStringArray("noRollbackForClassName")) {
 			rollbackRules.add(new NoRollbackRuleAttribute(rbRule));
 		}

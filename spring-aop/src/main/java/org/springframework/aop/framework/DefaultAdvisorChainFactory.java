@@ -54,15 +54,19 @@ public class DefaultAdvisorChainFactory implements AdvisorChainFactory, Serializ
 		// but we need to preserve order in the ultimate list.
 		List<Object> interceptorList = new ArrayList<Object>(config.getAdvisors().length);
 		Class<?> actualClass = (targetClass != null ? targetClass : method.getDeclaringClass());
+		// 是否由引用通知
 		boolean hasIntroductions = hasMatchingIntroductions(config, actualClass);
 		AdvisorAdapterRegistry registry = GlobalAdvisorAdapterRegistry.getInstance();
 
 		for (Advisor advisor : config.getAdvisors()) {
+			// 切点通知
 			if (advisor instanceof PointcutAdvisor) {
 				// Add it conditionally.
 				PointcutAdvisor pointcutAdvisor = (PointcutAdvisor) advisor;
+				// 预先过滤 或者 与切点匹配
 				if (config.isPreFiltered() || pointcutAdvisor.getPointcut().getClassFilter().matches(actualClass)) {
 					MethodMatcher mm = pointcutAdvisor.getPointcut().getMethodMatcher();
+					// 匹配方法
 					if (MethodMatchers.matches(mm, method, actualClass, hasIntroductions)) {
 						MethodInterceptor[] interceptors = registry.getInterceptors(advisor);
 						if (mm.isRuntime()) {
@@ -78,6 +82,7 @@ public class DefaultAdvisorChainFactory implements AdvisorChainFactory, Serializ
 					}
 				}
 			}
+			// 引入通知
 			else if (advisor instanceof IntroductionAdvisor) {
 				IntroductionAdvisor ia = (IntroductionAdvisor) advisor;
 				if (config.isPreFiltered() || ia.getClassFilter().matches(actualClass)) {
@@ -96,6 +101,7 @@ public class DefaultAdvisorChainFactory implements AdvisorChainFactory, Serializ
 
 	/**
 	 * Determine whether the Advisors contain matching introductions.
+	 * <p>判断Advisor是否包含匹配的增强。
 	 */
 	private static boolean hasMatchingIntroductions(Advised config, Class<?> actualClass) {
 		for (Advisor advisor : config.getAdvisors()) {

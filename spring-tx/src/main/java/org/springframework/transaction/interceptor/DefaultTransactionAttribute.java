@@ -30,8 +30,14 @@ import org.springframework.util.StringUtils;
 @SuppressWarnings("serial")
 public class DefaultTransactionAttribute extends DefaultTransactionDefinition implements TransactionAttribute {
 
+	/**
+	 * 事务管理器名称，限定符
+	 */
 	private String qualifier;
 
+	/**
+	 * 方法描述符
+	 */
 	private String descriptor;
 
 

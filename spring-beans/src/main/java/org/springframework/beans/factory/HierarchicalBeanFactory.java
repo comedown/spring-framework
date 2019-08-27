@@ -24,6 +24,9 @@ package org.springframework.beans.factory;
  * factories that allow setting the parent in a configurable
  * fashion can be found in the ConfigurableBeanFactory interface.
  *
+ * <p>BeanFactory接口的子接口，可以作为BeanFactory的一个层级。
+ * <p>
+ *
  * @author Rod Johnson
  * @author Juergen Hoeller
  * @since 07.07.2003

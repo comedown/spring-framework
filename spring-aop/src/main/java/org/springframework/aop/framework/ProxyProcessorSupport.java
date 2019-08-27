@@ -100,6 +100,7 @@ public class ProxyProcessorSupport extends ProxyConfig implements Ordered, BeanC
 	 */
 	protected void evaluateProxyInterfaces(Class<?> beanClass, ProxyFactory proxyFactory) {
 		Class<?>[] targetInterfaces = ClassUtils.getAllInterfacesForClass(beanClass, getProxyClassLoader());
+		// 是否有合理的代理接口
 		boolean hasReasonableProxyInterface = false;
 		for (Class<?> ifc : targetInterfaces) {
 			// 如果不是spring容器回调接口，也不是Groovy、CGLib等内部语言接口，并且接口有方法（非标记接口）
@@ -117,6 +118,7 @@ public class ProxyProcessorSupport extends ProxyConfig implements Ordered, BeanC
 			}
 		}
 		else {
+			// 如果没有合适的接口，设置为目标类代理
 			proxyFactory.setProxyTargetClass(true);
 		}
 	}
@@ -126,6 +128,9 @@ public class ProxyProcessorSupport extends ProxyConfig implements Ordered, BeanC
 	 * therefore not to be considered as a reasonable proxy interface.
 	 * <p>If no reasonable proxy interface is found for a given bean, it will get
 	 * proxied with its full target class, assuming that as the user's intention.
+	 *
+	 * <p>是否内部配置回调接口：InitializingBean、DisposableBean、Closeable
+	 * java.lang.AutoCloseable、Aware
 	 * @param ifc the interface to check
 	 * @return whether the given interface is just a container callback
 	 */
@@ -140,6 +145,8 @@ public class ProxyProcessorSupport extends ProxyConfig implements Ordered, BeanC
 	 * and therefore not to be considered as a reasonable proxy interface.
 	 * <p>If no reasonable proxy interface is found for a given bean, it will get
 	 * proxied with its full target class, assuming that as the user's intention.
+	 *
+	 * <p>是否内部语言接口：groovy.lang.GroovyObject、*.cglib.proxy.Factory、*.bytebuddy.MockAccess
 	 * @param ifc the interface to check
 	 * @return whether the given interface is an internal language interface
 	 */

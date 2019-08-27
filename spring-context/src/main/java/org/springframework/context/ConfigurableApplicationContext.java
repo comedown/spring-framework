@@ -35,6 +35,29 @@ import org.springframework.core.io.ProtocolResolver;
  * making them obvious to ApplicationContext client code. The present
  * methods should only be used by startup and shutdown code.
  *
+ * <br><br>
+ * <ul>
+ *     <li>解析bean定义文件，保存bean定义信息</li>
+ *     <li>调用BeanFactoryPostProcessor</li>
+ *     <li>注册BeanPostProcessor实例</li>
+ *     <li>注册所有单例、非懒加载的bean实例</li>
+ *     <li>调用InstantiationAwareBeanPostProcessor的postProcessBeforeInstantiation</li>
+ *     <li>实例化bean</li>
+ *     <li>调用MergedBeanDefinitionPostProcessor的postProcessMergedBeanDefinition</li>
+ *     <li>调用InstantiationAwareBeanPostProcessor的postProcessAfterInstantiation</li>
+ *     <li>调用InstantiationAwareBeanPostProcessor的postProcessPropertyValues</li>
+ *     <li>应用property属性</li>
+ *     <li>初始化bean</li>
+ *     <li>调用BeanNameAware</li>
+ *     <li>调用BeanClassLoaderAware</li>
+ *     <li>调用BeanFactoryAware</li>
+ *     <li>调用BeanPostProcessor的postProcessBeforeInitialization</li>
+ *     <li>调用InitializingBean的afterPropertiesSet</li>
+ *     <li>调用自定义初始化方法</li>
+ *     <li>调用BeanPostProcessor的postProcessAfterInitialization</li>
+ *     <li></li>
+ * </ul>
+ *
  * @author Juergen Hoeller
  * @author Chris Beams
  * @since 03.11.2003

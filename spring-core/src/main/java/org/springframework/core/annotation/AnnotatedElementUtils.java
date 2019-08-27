@@ -921,6 +921,9 @@ public class AnnotatedElementUtils {
 	 * have already been <em>visited</em>.
 	 * <p>The {@code metaDepth} parameter is explained in the
 	 * {@link Processor#process process()} method of the {@link Processor} API.
+	 *
+	 * <p>{@link #searchWithGetSemantics}方法的搜索算法实现，通过跟踪注解元素已经被
+	 * <em>访问</em>来避免无休止的递归。
 	 * @param element the annotated element
 	 * @param annotationType the annotation type to find
 	 * @param annotationName the fully qualified class name of the annotation

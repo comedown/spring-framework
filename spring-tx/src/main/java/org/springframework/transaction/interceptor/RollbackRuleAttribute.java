@@ -46,6 +46,8 @@ public class RollbackRuleAttribute implements Serializable{
 	 * Could hold exception, resolving class name but would always require FQN.
 	 * This way does multiple string comparisons, but how often do we decide
 	 * whether to roll back a transaction following an exception?
+	 *
+	 * <p>异常类名称。
 	 */
 	private final String exceptionName;
 
@@ -54,6 +56,8 @@ public class RollbackRuleAttribute implements Serializable{
 	 * Create a new instance of the {@code RollbackRuleAttribute} class.
 	 * <p>This is the preferred way to construct a rollback rule that matches
 	 * the supplied {@link Exception} class (and subclasses).
+	 *
+	 * <p>回滚规则属性，异常类必须是Throwable的子类。
 	 * @param clazz throwable class; must be {@link Throwable} or a subclass
 	 * of {@code Throwable}
 	 * @throws IllegalArgumentException if the supplied {@code clazz} is

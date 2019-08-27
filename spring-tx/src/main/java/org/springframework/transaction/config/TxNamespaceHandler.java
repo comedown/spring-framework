@@ -41,9 +41,17 @@ public class TxNamespaceHandler extends NamespaceHandlerSupport {
 
 	static final String TRANSACTION_MANAGER_ATTRIBUTE = "transaction-manager";
 
+	/**
+	 * 默认transaction-manager属性的值
+	 */
 	static final String DEFAULT_TRANSACTION_MANAGER_BEAN_NAME = "transactionManager";
 
 
+	/**
+	 * 获取transactionManagerName属性值，默认为transactionManager
+	 * @param element
+	 * @return
+	 */
 	static String getTransactionManagerName(Element element) {
 		return (element.hasAttribute(TRANSACTION_MANAGER_ATTRIBUTE) ?
 				element.getAttribute(TRANSACTION_MANAGER_ATTRIBUTE) : DEFAULT_TRANSACTION_MANAGER_BEAN_NAME);

@@ -160,6 +160,10 @@ public interface ListableBeanFactory extends BeanFactory {
 	 * by other means than bean definitions.
 	 * <p>Bean names returned by this method should always return bean names <i>in the
 	 * order of definition</i> in the backend configuration, as far as possible.
+	 * <br><br>
+	 * <p>返回和给定类型匹配的所有bean的名称（包括子类），从bean定义或FactoryBean的
+	 * {@code getObjectType}方法的返回值中判断。
+	 *
 	 * @param type the class or interface to match, or {@code null} for all bean names
 	 * @param includeNonSingletons whether to include prototype or scoped beans too
 	 * or just singletons (also applies to FactoryBeans)

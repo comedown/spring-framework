@@ -23,6 +23,10 @@ package org.springframework.aop;
  * Both these basic terms and a Pointcut itself can be combined to build up combinations
  * (e.g. through {@link org.springframework.aop.support.ComposablePointcut}).
  *
+ * <p>Spring核心切点的抽象接口。
+ * <p>切点由{@link ClassFilter}和{@link MethodMatcher}组成。这些基本组件和切点本身可以组合起来构建
+ * 组合（比如：通过{@link org.springframework.aop.support.ComposablePointcut}）。
+ *
  * @author Rod Johnson
  * @see ClassFilter
  * @see MethodMatcher
@@ -34,12 +38,14 @@ public interface Pointcut {
 
 	/**
 	 * Return the ClassFilter for this pointcut.
+	 * <p>用于过滤切入类的实例。
 	 * @return the ClassFilter (never {@code null})
 	 */
 	ClassFilter getClassFilter();
 
 	/**
 	 * Return the MethodMatcher for this pointcut.
+	 * <p>返回匹配方法的实例。
 	 * @return the MethodMatcher (never {@code null})
 	 */
 	MethodMatcher getMethodMatcher();
@@ -47,6 +53,7 @@ public interface Pointcut {
 
 	/**
 	 * Canonical Pointcut instance that always matches.
+	 * <p>总是匹配所有类、方法的PointCut规范实例。
 	 */
 	Pointcut TRUE = TruePointcut.INSTANCE;
 

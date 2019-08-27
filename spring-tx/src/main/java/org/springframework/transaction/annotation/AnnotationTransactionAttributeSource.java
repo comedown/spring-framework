@@ -60,8 +60,14 @@ public class AnnotationTransactionAttributeSource extends AbstractFallbackTransa
 	private static final boolean ejb3Present = ClassUtils.isPresent(
 			"javax.ejb.TransactionAttribute", AnnotationTransactionAttributeSource.class.getClassLoader());
 
+	/**
+	 * 是否只代理public方法。默认为true。
+	 */
 	private final boolean publicMethodsOnly;
 
+	/**
+	 * 事务注解解析器：@Transactional、JTA、EJB
+	 */
 	private final Set<TransactionAnnotationParser> annotationParsers;
 
 
@@ -85,11 +91,15 @@ public class AnnotationTransactionAttributeSource extends AbstractFallbackTransa
 	 */
 	public AnnotationTransactionAttributeSource(boolean publicMethodsOnly) {
 		this.publicMethodsOnly = publicMethodsOnly;
+		// 添加事务注解解析器
 		this.annotationParsers = new LinkedHashSet<TransactionAnnotationParser>(4);
+		// 1、SpringTransactionAnnotationParser
 		this.annotationParsers.add(new SpringTransactionAnnotationParser());
+		// 2、jta
 		if (jta12Present) {
 			this.annotationParsers.add(new JtaTransactionAnnotationParser());
 		}
+		// 3、ejb
 		if (ejb3Present) {
 			this.annotationParsers.add(new Ejb3TransactionAnnotationParser());
 		}
@@ -145,6 +155,8 @@ public class AnnotationTransactionAttributeSource extends AbstractFallbackTransa
 	 * for parsing known annotations into Spring's metadata attribute class.
 	 * Returns {@code null} if it's not transactional.
 	 * <p>Can be overridden to support custom annotations that carry transaction metadata.
+	 *
+	 * <p>确定给定注解是否可以属于事务注解。
 	 * @param element the annotated method or class
 	 * @return the configured transaction attribute, or {@code null} if none was found
 	 */

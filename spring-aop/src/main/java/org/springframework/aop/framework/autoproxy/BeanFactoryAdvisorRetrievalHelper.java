@@ -43,6 +43,9 @@ public class BeanFactoryAdvisorRetrievalHelper {
 
 	private final ConfigurableListableBeanFactory beanFactory;
 
+	/**
+	 * 该类内部的{@code beanFactory}中类型为Advisor的bean。
+	 */
 	private volatile String[] cachedAdvisorBeanNames;
 
 
@@ -68,6 +71,8 @@ public class BeanFactoryAdvisorRetrievalHelper {
 		if (advisorNames == null) {
 			// Do not initialize FactoryBeans here: We need to leave all regular beans
 			// uninitialized to let the auto-proxy creator apply to them!
+			// 这里不要初始化FactoryBean：我们需要将所有常规bean保持未初始化状态，让自动代理生成器
+			// 应用它们。
 			advisorNames = BeanFactoryUtils.beanNamesForTypeIncludingAncestors(
 					this.beanFactory, Advisor.class, true, false);
 			this.cachedAdvisorBeanNames = advisorNames;
@@ -79,6 +84,7 @@ public class BeanFactoryAdvisorRetrievalHelper {
 		List<Advisor> advisors = new ArrayList<Advisor>();
 		for (String name : advisorNames) {
 			if (isEligibleBean(name)) {
+				// 如果bean正在创建，跳过
 				if (this.beanFactory.isCurrentlyInCreation(name)) {
 					if (logger.isDebugEnabled()) {
 						logger.debug("Skipping currently created advisor '" + name + "'");
@@ -86,6 +92,7 @@ public class BeanFactoryAdvisorRetrievalHelper {
 				}
 				else {
 					try {
+						// 获取Advisor bean实例
 						advisors.add(this.beanFactory.getBean(name, Advisor.class));
 					}
 					catch (BeanCreationException ex) {

@@ -39,6 +39,9 @@ public class ProxyConfig implements Serializable {
 
 	private boolean optimize = false;
 
+	/**
+	 * 是否防止代理对象被强制装换成{@link Advised}。
+	 */
 	boolean opaque = false;
 
 	boolean exposeProxy = false;

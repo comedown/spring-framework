@@ -56,6 +56,7 @@ public interface Advised extends TargetClassAware {
 
 	/**
 	 * Determine whether the given interface is proxied.
+	 * <p>目标对象是否实现指定类型接口。
 	 * @param intf the interface to check
 	 */
 	boolean isInterfaceProxied(Class<?> intf);

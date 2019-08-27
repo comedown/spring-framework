@@ -49,7 +49,10 @@ public class SingletonTargetSource implements TargetSource, Serializable {
 	private static final long serialVersionUID = 9031246629662423738L;
 
 
-	/** Target cached and invoked using reflection */
+	/**
+	 * Target cached and invoked using reflection.
+	 * <p>缓存目标对象，并通过反射调用。
+	 */
 	private final Object target;
 
 

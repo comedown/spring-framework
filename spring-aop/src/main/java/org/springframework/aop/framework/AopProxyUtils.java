@@ -105,6 +105,11 @@ public abstract class AopProxyUtils {
 	 * <p>This will always add the {@link Advised} interface unless the AdvisedSupport's
 	 * {@link AdvisedSupport#setOpaque "opaque"} flag is on. Always adds the
 	 * {@link org.springframework.aop.SpringProxy} marker interface.
+	 *
+	 * <p>为指定AOP配置要代理的完整接口集合。这个方法总会增加{@link Advised}接口，除非AdvisedSupport
+	 * 对象的{@link AdvisedSupport#setOpaque "opaque"}设置为true。总会增加
+	 * {@link org.springframework.aop.SpringProxy}标记接口。根据decoratingProxy=true，增加
+	 * {@link DecoratingProxy}接口。
 	 * @param advised the proxy config
 	 * @param decoratingProxy whether to expose the {@link DecoratingProxy} interface
 	 * @return the complete set of interfaces to proxy
@@ -128,8 +133,11 @@ public abstract class AopProxyUtils {
 				specifiedInterfaces = advised.getProxiedInterfaces();
 			}
 		}
+		// 是否实现SpringProxy接口
 		boolean addSpringProxy = !advised.isInterfaceProxied(SpringProxy.class);
+		// 是否实现Advised接口
 		boolean addAdvised = !advised.isOpaque() && !advised.isInterfaceProxied(Advised.class);
+		// 是否实现DecoratingProxy接口
 		boolean addDecoratingProxy = (decoratingProxy && !advised.isInterfaceProxied(DecoratingProxy.class));
 		int nonUserIfcCount = 0;
 		if (addSpringProxy) {

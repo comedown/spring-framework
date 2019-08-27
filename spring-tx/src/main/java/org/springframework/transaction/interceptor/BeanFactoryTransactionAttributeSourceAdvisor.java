@@ -24,6 +24,8 @@ import org.springframework.aop.support.AbstractBeanFactoryPointcutAdvisor;
  * Advisor driven by a {@link TransactionAttributeSource}, used to include
  * a transaction advice bean for methods that are transactional.
  *
+ * <p>由{@link TransactionAttributeSource}驱动的Advisor，用于为标注@Transactional
+ * 注解的方法添加事务通知bean。
  * @author Juergen Hoeller
  * @since 2.5.5
  * @see #setAdviceBeanName
@@ -35,6 +37,9 @@ public class BeanFactoryTransactionAttributeSourceAdvisor extends AbstractBeanFa
 
 	private TransactionAttributeSource transactionAttributeSource;
 
+	/**
+	 * 切点
+	 */
 	private final TransactionAttributeSourcePointcut pointcut = new TransactionAttributeSourcePointcut() {
 		@Override
 		protected TransactionAttributeSource getTransactionAttributeSource() {

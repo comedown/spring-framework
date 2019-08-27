@@ -25,6 +25,9 @@ import org.springframework.core.io.Resource;
  * <p>This is the default implementation and prevents too much metadata from being
  * held in memory during normal (non-tooled) runtime usage.
  *
+ * <p>{@link SourceExtractor}的简单实现类，返回{@code null}作为源数据。
+ * <p>这个是默认实现类，防止在正常（非工具化）运行时内存中保存太多的元数据。
+ *
  * @author Rob Harrop
  * @since 2.0
  */

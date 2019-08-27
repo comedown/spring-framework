@@ -52,12 +52,20 @@ public abstract class AopNamespaceUtils {
 	private static final String EXPOSE_PROXY_ATTRIBUTE = "expose-proxy";
 
 
+	/**
+	 * 注册auto-proxy creator bean定义，如果为空
+	 * @param parserContext
+	 * @param sourceElement
+	 */
 	public static void registerAutoProxyCreatorIfNecessary(
 			ParserContext parserContext, Element sourceElement) {
 
+		// 生成auto-proxy creator bean定义
 		BeanDefinition beanDefinition = AopConfigUtils.registerAutoProxyCreatorIfNecessary(
 				parserContext.getRegistry(), parserContext.extractSource(sourceElement));
+		// 设置是否使用类动态代理属性
 		useClassProxyingIfNecessary(parserContext.getRegistry(), sourceElement);
+		// 注册组件
 		registerComponentIfNecessary(beanDefinition, parserContext);
 	}
 
@@ -75,7 +83,9 @@ public abstract class AopNamespaceUtils {
 
 		BeanDefinition beanDefinition = AopConfigUtils.registerAspectJAnnotationAutoProxyCreatorIfNecessary(
 				parserContext.getRegistry(), parserContext.extractSource(sourceElement));
+		// 设置是否使用类动态代理属性
 		useClassProxyingIfNecessary(parserContext.getRegistry(), sourceElement);
+		//
 		registerComponentIfNecessary(beanDefinition, parserContext);
 	}
 
@@ -85,6 +95,7 @@ public abstract class AopNamespaceUtils {
 			// proxy-target-class，true：使用CGlib类代理，false，使用jdk接口代理，默认false
 			boolean proxyTargetClass = Boolean.parseBoolean(sourceElement.getAttribute(PROXY_TARGET_CLASS_ATTRIBUTE));
 			if (proxyTargetClass) {
+				// 强制使用类动态代理auto-proxy creator
 				AopConfigUtils.forceAutoProxyCreatorToUseClassProxying(registry);
 			}
 			// expose-proxy，true：指示AOP框架应将代理公开为线程本地代理，以便通过AopContext类进行检索。
@@ -96,6 +107,11 @@ public abstract class AopNamespaceUtils {
 		}
 	}
 
+	/**
+	 * 如果bean定义不为null，注册bean组件定义。
+	 * @param beanDefinition
+	 * @param parserContext
+	 */
 	private static void registerComponentIfNecessary(BeanDefinition beanDefinition, ParserContext parserContext) {
 		if (beanDefinition != null) {
 			parserContext.registerComponent(

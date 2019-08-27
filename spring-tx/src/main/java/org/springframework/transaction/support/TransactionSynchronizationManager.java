@@ -128,6 +128,8 @@ public abstract class TransactionSynchronizationManager {
 
 	/**
 	 * Retrieve a resource for the given key that is bound to the current thread.
+	 *
+	 * <p>检索绑定到当前线程的给定key的资源。
 	 * @param key the key to check (usually the resource factory)
 	 * @return a value bound to the current thread (usually the active
 	 * resource object), or {@code null} if none

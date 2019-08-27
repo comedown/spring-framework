@@ -318,6 +318,7 @@ public abstract class ClassUtils {
 
 	/**
 	 * Check whether the given class is visible in the given ClassLoader.
+	 * <p>检查给定class是否多指定类加载器可见，即指定类加载器可以加载这个class。
 	 * @param clazz the class to check (typically an interface)
 	 * @param classLoader the ClassLoader to check against
 	 * (may be {@code null} in which case this method will always return {@code true})
@@ -693,6 +694,9 @@ public abstract class ClassUtils {
 	 * Return all interfaces that the given class implements as a Set,
 	 * including ones implemented by superclasses.
 	 * <p>If the class itself is an interface, it gets returned as sole interface.
+	 *
+	 * <p>返回给定类实现的所有接口集合，包括父类实现的接口。
+	 * <p>如果给定class本身是一个接口，则它作为唯一的接口返回。
 	 * @param clazz the class to analyze for interfaces
 	 * @param classLoader the ClassLoader that the interfaces need to be visible in
 	 * (may be {@code null} when accepting all declared interfaces)
@@ -700,9 +704,11 @@ public abstract class ClassUtils {
 	 */
 	public static Set<Class<?>> getAllInterfacesForClassAsSet(Class<?> clazz, ClassLoader classLoader) {
 		Assert.notNull(clazz, "Class must not be null");
+		// 如果本身是接口，且对类加载器可见，直接返回自身。
 		if (clazz.isInterface() && isVisible(clazz, classLoader)) {
 			return Collections.<Class<?>>singleton(clazz);
 		}
+		// 递归获取class实现的接口，以及父类的接口。
 		Set<Class<?>> interfaces = new LinkedHashSet<Class<?>>();
 		Class<?> current = clazz;
 		while (current != null) {
@@ -804,10 +810,13 @@ public abstract class ClassUtils {
 	/**
 	 * Return the user-defined class for the given class: usually simply the given
 	 * class, but the original class in case of a CGLIB-generated subclass.
+	 * <p>返回给定class的用户定义的类：通常仅仅是给定class本身，但是在CGLIB生成子类的情况下
+	 * 返回原始类。
 	 * @param clazz the class to check
 	 * @return the user-defined class
 	 */
 	public static Class<?> getUserClass(Class<?> clazz) {
+		// 如果是CGLIB生成的子类，返回其父类，即原始类型
 		if (clazz != null && clazz.getName().contains(CGLIB_CLASS_SEPARATOR)) {
 			Class<?> superclass = clazz.getSuperclass();
 			if (superclass != null && Object.class != superclass) {
@@ -984,6 +993,8 @@ public abstract class ClassUtils {
 	/**
 	 * Return the qualified name of the given method, consisting of
 	 * fully qualified interface/class name + "." + method name.
+	 *
+	 * <p>返回给定方法的限定名，由接口/类的完全限定名 + "." + 方法名。
 	 * @param method the method
 	 * @param clazz the clazz that the method is being invoked on
 	 * (may be {@code null} to indicate the method's declaring class)
@@ -1190,6 +1201,8 @@ public abstract class ClassUtils {
 	 * <p><b>NOTE:</b> Since Spring 3.1.1, if Java security settings disallow reflective
 	 * access (e.g. calls to {@code Class#getDeclaredMethods} etc, this implementation
 	 * will fall back to returning the originally provided method.
+	 *
+	 * <p>返回给定方法在给定目标类中的覆盖方法，没找到则返回方法本身。
 	 * @param method the method to be invoked, which may come from an interface
 	 * @param targetClass the target class for the current invocation.
 	 * May be {@code null} or may not even implement the method.
@@ -1243,16 +1256,20 @@ public abstract class ClassUtils {
 
 	/**
 	 * Determine whether the given method is overridable in the given target class.
+	 * <p>确定给定方法在给定目标类中是否可以覆盖的。
 	 * @param method the method to check
 	 * @param targetClass the target class to check against
 	 */
 	private static boolean isOverridable(Method method, Class<?> targetClass) {
+		// 私有方法的直接返回
 		if (Modifier.isPrivate(method.getModifiers())) {
 			return false;
 		}
+		// public、protected
 		if (Modifier.isPublic(method.getModifiers()) || Modifier.isProtected(method.getModifiers())) {
 			return true;
 		}
+		// default时，判断是否在同一个包下
 		return getPackageName(method.getDeclaringClass()).equals(getPackageName(targetClass));
 	}
 

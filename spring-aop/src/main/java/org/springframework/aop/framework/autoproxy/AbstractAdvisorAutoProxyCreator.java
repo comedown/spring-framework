@@ -57,10 +57,12 @@ public abstract class AbstractAdvisorAutoProxyCreator extends AbstractAutoProxyC
 			throw new IllegalArgumentException(
 					"AdvisorAutoProxyCreator requires a ConfigurableListableBeanFactory: " + beanFactory);
 		}
+		// 初始化BeanFactory
 		initBeanFactory((ConfigurableListableBeanFactory) beanFactory);
 	}
 
 	protected void initBeanFactory(ConfigurableListableBeanFactory beanFactory) {
+		// 设置当前BeanFactory到Advisor检索帮助类
 		this.advisorRetrievalHelper = new BeanFactoryAdvisorRetrievalHelperAdapter(beanFactory);
 	}
 
@@ -76,6 +78,7 @@ public abstract class AbstractAdvisorAutoProxyCreator extends AbstractAutoProxyC
 
 	/**
 	 * Find all eligible Advisors for auto-proxying this class.
+	 * <p>查找所有合适的通知类来自动生成bean class的代理类。
 	 * @param beanClass the clazz to find advisors for
 	 * @param beanName the name of the currently proxied bean
 	 * @return the empty List, not {@code null},
@@ -87,9 +90,11 @@ public abstract class AbstractAdvisorAutoProxyCreator extends AbstractAutoProxyC
 	protected List<Advisor> findEligibleAdvisors(Class<?> beanClass, String beanName) {
 		// 获取所有候选切面
 		List<Advisor> candidateAdvisors = findCandidateAdvisors();
-		// 找到匹配当前bean的切面
+		// 提前过滤，找到匹配当前bean的切面
 		List<Advisor> eligibleAdvisors = findAdvisorsThatCanApply(candidateAdvisors, beanClass, beanName);
+		// 子类自定义扩展Advisor
 		extendAdvisors(eligibleAdvisors);
+		// 通知排序
 		if (!eligibleAdvisors.isEmpty()) {
 			eligibleAdvisors = sortAdvisors(eligibleAdvisors);
 		}
@@ -98,6 +103,7 @@ public abstract class AbstractAdvisorAutoProxyCreator extends AbstractAutoProxyC
 
 	/**
 	 * Find all candidate Advisors to use in auto-proxying.
+	 * <p>委托BeanFactoryAdvisorRetrievalHelper检索Advisor。
 	 * @return the List of candidate Advisors
 	 */
 	protected List<Advisor> findCandidateAdvisors() {
@@ -107,6 +113,8 @@ public abstract class AbstractAdvisorAutoProxyCreator extends AbstractAutoProxyC
 	/**
 	 * Search the given candidate Advisors to find all Advisors that
 	 * can apply to the specified bean.
+	 *
+	 * <p>查找给定候选Advisor中能应用在具体bean上的所有Advisor。
 	 * @param candidateAdvisors the candidate Advisors
 	 * @param beanClass the target's bean class
 	 * @param beanName the target's bean name
@@ -155,6 +163,8 @@ public abstract class AbstractAdvisorAutoProxyCreator extends AbstractAutoProxyC
 	 * <p>The default implementation is empty.
 	 * <p>Typically used to add Advisors that expose contextual information
 	 * required by some of the later advisors.
+	 *
+	 * <p>
 	 * @param candidateAdvisors Advisors that have already been identified as
 	 * applying to a given bean
 	 */
@@ -163,6 +173,7 @@ public abstract class AbstractAdvisorAutoProxyCreator extends AbstractAutoProxyC
 
 	/**
 	 * This auto-proxy creator always returns pre-filtered Advisors.
+	 * <p>总是返回预先过滤的Advisor。
 	 */
 	@Override
 	protected boolean advisorsPreFiltered() {

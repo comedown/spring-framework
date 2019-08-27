@@ -89,12 +89,24 @@ public class XmlReaderContext extends ReaderContext {
 	}
 
 
+	/**
+	 * 自动生成bean名称
+	 * @param beanDefinition
+	 * @return
+	 */
 	public String generateBeanName(BeanDefinition beanDefinition) {
 		return this.reader.getBeanNameGenerator().generateBeanName(beanDefinition, getRegistry());
 	}
 
+	/**
+	 * 自动生成bean名称并注册
+	 * @param beanDefinition
+	 * @return bean名称
+	 */
 	public String registerWithGeneratedName(BeanDefinition beanDefinition) {
+		// 自动生成bean名称
 		String generatedName = generateBeanName(beanDefinition);
+		// 注册bean
 		getRegistry().registerBeanDefinition(generatedName, beanDefinition);
 		return generatedName;
 	}

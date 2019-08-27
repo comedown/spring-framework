@@ -1049,6 +1049,11 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	 * <p>Any returned object will be used as the bean instead of actually instantiating
 	 * the target bean. A {@code null} return value from the post-processor will
 	 * result in the target bean being instantiated.
+	 *
+	 * <p>在具体的bean定义上应用所有InstantiationAwareBeanPostProcessor（通过class和name），调用
+	 * 它们的{@code postProcessBeforeInstantiation}方法。
+	 * <p>任何返回的对象都将用作bean，而不是实际实例化目标bean。从后处理器返回的{@code null}值将导致
+	 * 目标bean被实例化。
 	 * @param beanClass the class of the bean to be instantiated
 	 * @param beanName the name of the bean
 	 * @return the bean object to use instead of a default instance of the target bean, or {@code null}

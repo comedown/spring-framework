@@ -30,6 +30,12 @@ import org.springframework.beans.factory.config.BeanDefinition;
  * <p>The parser locates a {@link BeanDefinitionParser} from the associated
  * {@link NamespaceHandler} for the namespace in which the custom tag resides.
  *
+ * <p>用于{@link DefaultBeanDefinitionDocumentReader}处理自定义的顶层（直接位于{@code <beans/>}
+ * 元素下面）的结点接口。
+ * <p>实现可以根据需要自由的将自定义标签中的元数据转换为任意多个{@link BeanDefinition BeanDefinitions}。
+ * <p>这个解析器从自定义标签的命名空间所关联的{@link NamespaceHandler}定位具体的
+ * {@link BeanDefinitionParser}实现。
+ *
  * @author Rob Harrop
  * @since 2.0
  * @see NamespaceHandler

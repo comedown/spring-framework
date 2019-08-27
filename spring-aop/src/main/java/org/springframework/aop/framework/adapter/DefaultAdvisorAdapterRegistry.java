@@ -40,6 +40,9 @@ import org.springframework.aop.support.DefaultPointcutAdvisor;
 @SuppressWarnings("serial")
 public class DefaultAdvisorAdapterRegistry implements AdvisorAdapterRegistry, Serializable {
 
+	/**
+	 * 顾问适配器
+	 */
 	private final List<AdvisorAdapter> adapters = new ArrayList<AdvisorAdapter>(3);
 
 

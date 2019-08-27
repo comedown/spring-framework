@@ -30,6 +30,9 @@ import org.aopalliance.aop.Advice;
  * such as <b>before</b> and <b>after</b> advice, which need not be
  * implemented using interception.
  *
+ * <br><br>
+ * <p>顾问接口，包装了通知器。
+ *
  * @author Rod Johnson
  */
 public interface Advisor {

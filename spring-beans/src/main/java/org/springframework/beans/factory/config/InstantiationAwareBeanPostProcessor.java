@@ -69,6 +69,9 @@ public interface InstantiationAwareBeanPostProcessor extends BeanPostProcessor {
 	 * <p>Post-processors may implement the extended
 	 * {@link SmartInstantiationAwareBeanPostProcessor} interface in order
 	 * to predict the type of the bean object that they are going to return here.
+	 * <br><br>
+	 * <p><i>在目标bean被实例化之前</i>应用该BeanPostProcessor。返回的bean对象可能是要使用
+	 * 的代理对象，而不是目标bean，有效地抑制了目标bean的默认实例化。
 	 * @param beanClass the class of the bean to be instantiated
 	 * @param beanName the name of the bean
 	 * @return the bean object to expose instead of a default instance of the target bean,

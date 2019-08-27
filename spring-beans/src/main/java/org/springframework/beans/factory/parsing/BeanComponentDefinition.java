@@ -29,6 +29,9 @@ import org.springframework.beans.factory.config.BeanReference;
  * ComponentDefinition based on a standard BeanDefinition, exposing the given bean
  * definition as well as inner bean definitions and bean references for the given bean.
  *
+ * <p>基于标准的bean定义的ComponentDefinition，为指定bean暴露指定bean的定义和内部bean定义信息和
+ * bean引用。
+ *
  * @author Rob Harrop
  * @author Juergen Hoeller
  * @since 2.0

@@ -369,6 +369,7 @@ public abstract class ReflectionUtils {
 
 	/**
 	 * Determine whether the given method is an "equals" method.
+	 * <p>判断给定方法是不是"equals"方法。
 	 * @see java.lang.Object#equals(Object)
 	 */
 	public static boolean isEqualsMethod(Method method) {
@@ -381,6 +382,7 @@ public abstract class ReflectionUtils {
 
 	/**
 	 * Determine whether the given method is a "hashCode" method.
+	 * <p>判断给定方法是不是"hashCode"方法。
 	 * @see java.lang.Object#hashCode()
 	 */
 	public static boolean isHashCodeMethod(Method method) {

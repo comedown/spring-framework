@@ -56,10 +56,14 @@ public class AnnotationAttributes extends LinkedHashMap<String, Object> {
 
 	private static final String UNKNOWN = "unknown";
 
-	// 注解类型
+	/**
+	 * 注解类型
+	 */
 	private final Class<? extends Annotation> annotationType;
 
-	// 注解全路径名
+	/**
+	 * 注解全路径名
+ 	 */
 	private final String displayName;
 
 	boolean validated = false;

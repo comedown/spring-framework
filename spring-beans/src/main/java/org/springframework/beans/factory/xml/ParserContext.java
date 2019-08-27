@@ -91,6 +91,11 @@ public final class ParserContext {
 		return BeanDefinitionParserDelegate.TRUE_VALUE.equals(this.delegate.getDefaults().getLazyInit());
 	}
 
+	/**
+	 *
+	 * @param sourceCandidate
+	 * @return
+	 */
 	public Object extractSource(Object sourceCandidate) {
 		return this.readerContext.extractSource(sourceCandidate);
 	}

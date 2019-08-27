@@ -73,30 +73,40 @@ public class AdvisedSupport extends ProxyConfig implements Advised {
 	/** Package-protected to allow direct access for efficiency */
 	TargetSource targetSource = EMPTY_TARGET_SOURCE;
 
-	/** Whether the Advisors are already filtered for the specific target class */
+	/**
+	 * Whether the Advisors are already filtered for the specific target class.
+	 * <p>是否Advisor可以过滤具体的目标类。
+	 */
 	private boolean preFiltered = false;
 
 	/** The AdvisorChainFactory to use */
 	AdvisorChainFactory advisorChainFactory = new DefaultAdvisorChainFactory();
 
-	/** Cache with Method as key and advisor chain List as value */
+	/**
+	 * Cache with Method as key and advisor chain List as value.
+	 * <p>方法通知链缓存：方法cache key -> 通知链列表。
+	 */
 	private transient Map<MethodCacheKey, List<Object>> methodCache;
 
 	/**
 	 * Interfaces to be implemented by the proxy. Held in List to keep the order
 	 * of registration, to create JDK proxy with specified order of interfaces.
+	 * <p>代理类实现的接口。保存在List中，保持其注册的顺序，用于创建JDK动态代理时按照指定的
+	 * 接口顺序。
 	 */
 	private List<Class<?>> interfaces = new ArrayList<Class<?>>();
 
 	/**
 	 * List of Advisors. If an Advice is added, it will be wrapped
 	 * in an Advisor before being added to this List.
+	 * <p>Advisor列表。Advice必须在加入列表之前包装成为Advisor。
 	 */
 	private List<Advisor> advisors = new ArrayList<Advisor>();
 
 	/**
 	 * Array updated on changes to the advisors list, which is easier
 	 * to manipulate internally.
+	 * <p>与Advisor列表同步的Advisor数组，易于内部操作。
 	 */
 	private Advisor[] advisorArray = new Advisor[0];
 
@@ -375,6 +385,7 @@ public class AdvisedSupport extends ProxyConfig implements Advised {
 
 	/**
 	 * Bring the array up to date with the list.
+	 * <p>同步内部Advisor数组。
 	 */
 	protected final void updateAdvisorArray() {
 		this.advisorArray = this.advisors.toArray(new Advisor[this.advisors.size()]);
@@ -477,6 +488,8 @@ public class AdvisedSupport extends ProxyConfig implements Advised {
 	/**
 	 * Determine a list of {@link org.aopalliance.intercept.MethodInterceptor} objects
 	 * for the given method, based on this configuration.
+	 *
+	 * <p>基于该配置，为给定方法查找{@link org.aopalliance.intercept.MethodInterceptor}对象列表。
 	 * @param method the proxied method
 	 * @param targetClass the target class
 	 * @return a List of MethodInterceptors (may also include InterceptorAndDynamicMethodMatchers)

@@ -97,6 +97,8 @@ public class ProxyCreatorSupport extends AdvisedSupport {
 	/**
 	 * Subclasses should call this to get a new AOP proxy. They should <b>not</b>
 	 * create an AOP proxy with {@code this} as an argument.
+	 *
+	 * <p>子类应该调用该方法来获取一个新的AOP代理。不应该用{@code this}作为参数创建AOP代理。
 	 */
 	protected final synchronized AopProxy createAopProxy() {
 		if (!this.active) {
@@ -107,10 +109,12 @@ public class ProxyCreatorSupport extends AdvisedSupport {
 
 	/**
 	 * Activate this proxy configuration.
+	 * <p>激活代理配置。触发激活事件。
 	 * @see AdvisedSupportListener#activated
 	 */
 	private void activate() {
 		this.active = true;
+		// 通知监听器激活事件
 		for (AdvisedSupportListener listener : this.listeners) {
 			listener.activated(this);
 		}
@@ -118,6 +122,7 @@ public class ProxyCreatorSupport extends AdvisedSupport {
 
 	/**
 	 * Propagate advice change event to all AdvisedSupportListeners.
+	 * <p>传播通知变更事件给所有AdvisedSupportListener。
 	 * @see AdvisedSupportListener#adviceChanged
 	 */
 	@Override

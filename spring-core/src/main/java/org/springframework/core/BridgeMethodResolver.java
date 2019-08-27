@@ -51,6 +51,8 @@ public abstract class BridgeMethodResolver {
 	 * <p>It is safe to call this method passing in a non-bridge {@link Method} instance.
 	 * In such a case, the supplied {@link Method} instance is returned directly to the caller.
 	 * Callers are <strong>not</strong> required to check for bridging before calling this method.
+	 *
+	 * <p>如果提供的方法是桥接方法，返回其原始方法。
 	 * @param bridgeMethod the method to introspect
 	 * @return the original method (either the bridged method or the passed-in method
 	 * if no more specific one could be found)

@@ -140,6 +140,7 @@ public abstract class AopUtils {
 
 	/**
 	 * Determine whether the given method is an "equals" method.
+	 * <p>判断给定方法是不是"equals"方法。
 	 * @see java.lang.Object#equals
 	 */
 	public static boolean isEqualsMethod(Method method) {
@@ -148,6 +149,7 @@ public abstract class AopUtils {
 
 	/**
 	 * Determine whether the given method is a "hashCode" method.
+	 * <p>判断给定方法是不是"hashCode"方法。
 	 * @see java.lang.Object#hashCode
 	 */
 	public static boolean isHashCodeMethod(Method method) {
@@ -209,6 +211,7 @@ public abstract class AopUtils {
 	 * Can the given pointcut apply at all on the given class?
 	 * <p>This is an important test as it can be used to optimize
 	 * out a pointcut for a class.
+	 * <p>给定切点是否能够全部应用在给定类。这个方法可以优化类的切入点。
 	 * @param pc the static or dynamic pointcut to check
 	 * @param targetClass the class to test
 	 * @param hasIntroductions whether or not the advisor chain
@@ -233,8 +236,10 @@ public abstract class AopUtils {
 			introductionAwareMethodMatcher = (IntroductionAwareMethodMatcher) methodMatcher;
 		}
 
+		// 目标类的所有接口和目标类本身
 		Set<Class<?>> classes = new LinkedHashSet<Class<?>>(ClassUtils.getAllInterfacesForClassAsSet(targetClass));
 		classes.add(targetClass);
+		// 只要有一个方法匹配上切点，则返回true
 		for (Class<?> clazz : classes) {
 			Method[] methods = ReflectionUtils.getAllDeclaredMethods(clazz);
 			for (Method method : methods) {
@@ -288,6 +293,7 @@ public abstract class AopUtils {
 	/**
 	 * Determine the sublist of the {@code candidateAdvisors} list
 	 * that is applicable to the given class.
+	 * <p>确定候选Advisor列表中适合给定class的子列表。
 	 * @param candidateAdvisors the Advisors to evaluate
 	 * @param clazz the target class
 	 * @return sublist of Advisors that can apply to an object of the given class

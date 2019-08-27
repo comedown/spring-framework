@@ -932,6 +932,7 @@ public abstract class AnnotationUtils {
 	/**
 	 * Determine if the {@link Annotation} with the supplied name is defined
 	 * in the core JDK {@code java.lang.annotation} package.
+	 * <p>确定提供的名称{@link Annotation}注解是否定义在JDK的{@code java.lang.annotation}包中。
 	 * @param annotationType the annotation type to check
 	 * @return {@code true} if the annotation is in the {@code java.lang.annotation} package
 	 * @since 4.3.8
@@ -943,6 +944,7 @@ public abstract class AnnotationUtils {
 	/**
 	 * Determine if the {@link Annotation} with the supplied name is defined
 	 * in the core JDK {@code java.lang.annotation} package.
+	 * <p>确定提供的名称{@link Annotation}注解是否定义在JDK的{@code java.lang.annotation}包中。
 	 * @param annotationType the name of the annotation type to check
 	 * @return {@code true} if the annotation is in the {@code java.lang.annotation} package
 	 * @since 4.2

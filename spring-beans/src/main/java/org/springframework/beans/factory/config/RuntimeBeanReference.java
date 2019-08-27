@@ -22,6 +22,8 @@ import org.springframework.util.Assert;
  * Immutable placeholder class used for a property value object when it's
  * a reference to another bean in the factory, to be resolved at runtime.
  *
+ * <p>该类是一个属性对象的不可变的占位符类，当他是工厂中另一个bean的引用时，会在运行时被解析。
+ *
  * @author Rod Johnson
  * @author Juergen Hoeller
  * @see BeanDefinition#getPropertyValues()
@@ -29,10 +31,16 @@ import org.springframework.util.Assert;
  */
 public class RuntimeBeanReference implements BeanReference {
 
+	/**
+	 * 引用的bean名称
+	 */
 	private final String beanName;
 
 	private final boolean toParent;
 
+	/**
+	 * 源对象
+	 */
 	private Object source;
 
 

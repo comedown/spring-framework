@@ -21,6 +21,8 @@ package org.springframework.aop;
  * This covers nearly all advisors except introduction advisors,
  * for which method-level matching doesn't apply.
  *
+ * <p>
+ *
  * @author Rod Johnson
  */
 public interface PointcutAdvisor extends Advisor {

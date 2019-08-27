@@ -84,6 +84,7 @@ public class ReflectiveMethodInvocation implements ProxyMethodInvocation, Clonea
 	/**
 	 * Index from 0 of the current interceptor we're invoking.
 	 * -1 until we invoke: then the current interceptor.
+	 * <p>当前我们在调用的拦截器下标，从0开始。初始值为-1，直到我们开始调用：之后是当前的拦截器的下标。
 	 */
 	private int currentInterceptorIndex = -1;
 
@@ -153,10 +154,12 @@ public class ReflectiveMethodInvocation implements ProxyMethodInvocation, Clonea
 	@Override
 	public Object proceed() throws Throwable {
 		//	We start with an index of -1 and increment early.
+		// 初始下标从-1开始，判断是否到拦截器链结尾。
 		if (this.currentInterceptorIndex == this.interceptorsAndDynamicMethodMatchers.size() - 1) {
 			return invokeJoinpoint();
 		}
 
+		// 按顺序调用拦截器通知
 		Object interceptorOrInterceptionAdvice =
 				this.interceptorsAndDynamicMethodMatchers.get(++this.currentInterceptorIndex);
 		if (interceptorOrInterceptionAdvice instanceof InterceptorAndDynamicMethodMatcher) {

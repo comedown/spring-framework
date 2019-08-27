@@ -25,6 +25,12 @@ package org.springframework.aop;
  * In this case, the advice is self-describing, providing not only the
  * necessary behavior, but describing the interfaces it introduces.
  *
+ * <p>提供描述引入的必要信息接口。
+ * <p>{@link IntroductionAdvisor IntroductionAdvisors}必须实现此接口。
+ * 如果{@link org.aopalliance.aop.Advice}实现了这个接口，则可以被用于作为一个
+ * 没有{@link IntroductionAdvisor}的引入。这种情况下，通知是自我描述的，不仅提供
+ * 必要行为，而且描述它引入的接口。
+ *
  * @author Rod Johnson
  * @since 1.1.1
  */

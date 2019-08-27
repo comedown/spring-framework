@@ -110,6 +110,9 @@ import org.springframework.transaction.support.TransactionSynchronizationUtils;
 public class DataSourceTransactionManager extends AbstractPlatformTransactionManager
 		implements ResourceTransactionManager, InitializingBean {
 
+	/**
+	 * 数据源
+	 */
 	private DataSource dataSource;
 
 	private boolean enforceReadOnly = false;
