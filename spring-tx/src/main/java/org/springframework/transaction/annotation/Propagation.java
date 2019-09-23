@@ -33,6 +33,9 @@ public enum Propagation {
 	 * Support a current transaction, create a new one if none exists.
 	 * Analogous to EJB transaction attribute of the same name.
 	 * <p>This is the default setting of a transaction annotation.
+	 *
+	 * <p>支持当前事务，如果当前没有事务，就新建一个事务。类似于同名的EJB事务属性。
+	 * <p>事务注解默认传播行为设置。
 	 */
 	REQUIRED(TransactionDefinition.PROPAGATION_REQUIRED),
 
@@ -52,6 +55,7 @@ public enum Propagation {
 	/**
 	 * Support a current transaction, throw an exception if none exists.
 	 * Analogous to EJB transaction attribute of the same name.
+	 * <p>支持当前事务；如果当前不存在事务，抛出异常。类似于同名的EJB事务属性。
 	 */
 	MANDATORY(TransactionDefinition.PROPAGATION_MANDATORY),
 
@@ -64,6 +68,8 @@ public enum Propagation {
 	 * which requires the {@code javax.transaction.TransactionManager} to be
 	 * made available it to it (which is server-specific in standard Java EE).
 	 * @see org.springframework.transaction.jta.JtaTransactionManager#setTransactionManager
+	 *
+	 * <p>创建一个新事务，如果当前存在事务，则挂起当前事务。类似于同名的EJB事务属性。
 	 */
 	REQUIRES_NEW(TransactionDefinition.PROPAGATION_REQUIRES_NEW),
 

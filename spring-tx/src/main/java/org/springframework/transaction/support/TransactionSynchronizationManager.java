@@ -77,21 +77,36 @@ public abstract class TransactionSynchronizationManager {
 
 	private static final Log logger = LogFactory.getLog(TransactionSynchronizationManager.class);
 
+	/**
+	 *
+	 */
 	private static final ThreadLocal<Map<Object, Object>> resources =
 			new NamedThreadLocal<Map<Object, Object>>("Transactional resources");
 
+	/**
+	 * 事务同步器集合，不为空则表示当前事务同步器激活。
+	 */
 	private static final ThreadLocal<Set<TransactionSynchronization>> synchronizations =
 			new NamedThreadLocal<Set<TransactionSynchronization>>("Transaction synchronizations");
 
 	private static final ThreadLocal<String> currentTransactionName =
 			new NamedThreadLocal<String>("Current transaction name");
 
+	/**
+	 * 事务是否只读
+	 */
 	private static final ThreadLocal<Boolean> currentTransactionReadOnly =
 			new NamedThreadLocal<Boolean>("Current transaction read-only status");
 
+	/**
+	 * 当前线程事务隔离级别
+	 */
 	private static final ThreadLocal<Integer> currentTransactionIsolationLevel =
 			new NamedThreadLocal<Integer>("Current transaction isolation level");
 
+	/**
+	 * 实际事务活动状态：
+	 */
 	private static final ThreadLocal<Boolean> actualTransactionActive =
 			new NamedThreadLocal<Boolean>("Actual transaction active");
 
@@ -168,6 +183,7 @@ public abstract class TransactionSynchronizationManager {
 
 	/**
 	 * Bind the given resource for the given key to the current thread.
+	 * <p>绑定给定key的给定资源到当前线程。
 	 * @param key the key to bind the value to (usually the resource factory)
 	 * @param value the value to bind (usually the active resource object)
 	 * @throws IllegalStateException if there is already a value bound to the thread
@@ -265,6 +281,7 @@ public abstract class TransactionSynchronizationManager {
 	/**
 	 * Activate transaction synchronization for the current thread.
 	 * Called by a transaction manager on transaction begin.
+	 * <p>激活当前线程的事务同步。由事务管理器在事务开始时调用。
 	 * @throws IllegalStateException if synchronization is already active
 	 */
 	public static void initSynchronization() throws IllegalStateException {
@@ -281,6 +298,10 @@ public abstract class TransactionSynchronizationManager {
 	 * <p>Note that synchronizations can implement the
 	 * {@link org.springframework.core.Ordered} interface.
 	 * They will be executed in an order according to their order value (if any).
+	 *
+	 * <p>为当前线程注册一个新的事务同步器。通常由资源管理代码调用。
+	 * <p>注意，同步器可以实现{@link org.springframework.core.Ordered}接口。
+	 * 如果存在order值，则会根据它们的order值顺序执行。
 	 * @param synchronization the synchronization object to register
 	 * @throws IllegalStateException if transaction synchronization is not active
 	 * @see org.springframework.core.Ordered
@@ -315,6 +336,7 @@ public abstract class TransactionSynchronizationManager {
 		}
 		else {
 			// Sort lazily here, not in registerSynchronization.
+			// 懒排序，而不是在registerSynchronization的时候排序。
 			List<TransactionSynchronization> sortedSynchs = new ArrayList<TransactionSynchronization>(synchs);
 			AnnotationAwareOrderComparator.sort(sortedSynchs);
 			return Collections.unmodifiableList(sortedSynchs);

@@ -144,7 +144,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 	 */
 	private final Map<Object, Class<?>> proxyTypes = new ConcurrentHashMap<Object, Class<?>>(16);
 
-	/** 是否要通知的bean：bean key -> 是否要通知 */
+	/** bean对象key -> 能否被事务代理 */
 	private final Map<Object, Boolean> advisedBeans = new ConcurrentHashMap<Object, Boolean>(256);
 
 
@@ -469,7 +469,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 		// 复制代理配置
 		proxyFactory.copyFrom(this);
 
-		// 代理目标不是类
+		// 不强制使用类代理
 		if (!proxyFactory.isProxyTargetClass()) {
 			// bean定义中配置了目标类代理
 			if (shouldProxyTargetClass(beanClass, beanName)) {

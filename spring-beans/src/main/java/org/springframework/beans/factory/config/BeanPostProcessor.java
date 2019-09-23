@@ -47,6 +47,7 @@ import org.springframework.beans.BeansException;
  * @see DestructionAwareBeanPostProcessor
  * @see ConfigurableBeanFactory#addBeanPostProcessor
  * @see BeanFactoryPostProcessor
+ * @see ApplicationContextAwareProcessor
  */
 public interface BeanPostProcessor {
 

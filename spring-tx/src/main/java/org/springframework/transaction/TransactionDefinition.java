@@ -77,6 +77,9 @@ public interface TransactionDefinition {
 	 * exists. Analogous to the EJB transaction attribute of the same name.
 	 * <p>Note that transaction synchronization within a {@code PROPAGATION_MANDATORY}
 	 * scope will always be driven by the surrounding transaction.
+	 *
+	 * <p>支持当前事务；如果当前不存在事务，抛出异常。类似于同名的EJB事务属性。
+	 * <p>请注意，{@code PROPAGATION_MANDATORY}范围内的事务同步始终由周围的事务驱动。
 	 */
 	int PROPAGATION_MANDATORY = 2;
 

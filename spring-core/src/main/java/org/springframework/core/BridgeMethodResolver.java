@@ -63,6 +63,7 @@ public abstract class BridgeMethodResolver {
 		}
 
 		// Gather all methods with matching name and parameter size.
+		// 收集所有名称相同和参数个数相同的方法。
 		List<Method> candidateMethods = new ArrayList<Method>();
 		Method[] methods = ReflectionUtils.getAllDeclaredMethods(bridgeMethod.getDeclaringClass());
 		for (Method candidateMethod : methods) {

@@ -156,7 +156,7 @@ public class AnnotationTransactionAttributeSource extends AbstractFallbackTransa
 	 * Returns {@code null} if it's not transactional.
 	 * <p>Can be overridden to support custom annotations that carry transaction metadata.
 	 *
-	 * <p>确定给定注解是否可以属于事务注解。
+	 * <p>确定给定元素是否可以属于事务注解。
 	 * @param element the annotated method or class
 	 * @return the configured transaction attribute, or {@code null} if none was found
 	 */
@@ -174,6 +174,7 @@ public class AnnotationTransactionAttributeSource extends AbstractFallbackTransa
 
 	/**
 	 * By default, only public methods can be made transactional.
+	 * <p>默认情况下，只有public方法会做事务拦截。
 	 */
 	@Override
 	protected boolean allowPublicMethodsOnly() {

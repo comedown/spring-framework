@@ -134,12 +134,15 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	/**
 	 * Dependency types to ignore on dependency check and autowire, as Set of
 	 * Class objects: for example, String. Default is none.
+	 * <p>依赖项检查和自动连接时要忽略的依赖项类型的Class对象集合：例如，String。默认为“无”。
 	 */
 	private final Set<Class<?>> ignoredDependencyTypes = new HashSet<Class<?>>();
 
 	/**
 	 * Dependency interfaces to ignore on dependency check and autowire, as Set of
 	 * Class objects. By default, only the BeanFactory interface is ignored.
+	 * <p>依赖项检查和自动装配时忽略的依赖项接口的Class对象集合。默认情况下，只忽略beanfactory接口。
+	 * <p>在构造时初始化。
 	 */
 	private final Set<Class<?>> ignoredDependencyInterfaces = new HashSet<Class<?>>();
 

@@ -135,6 +135,7 @@ public abstract class DataSourceUtils {
 
 	/**
 	 * Prepare the given Connection with the given transaction semantics.
+	 * <p>准备具有给定事务语义的给定连接。
 	 * @param con the Connection to prepare
 	 * @param definition the transaction definition to apply
 	 * @return the previous isolation level, if any
@@ -147,6 +148,7 @@ public abstract class DataSourceUtils {
 		Assert.notNull(con, "No Connection specified");
 
 		// Set read-only flag.
+		// 设置只读标记
 		if (definition != null && definition.isReadOnly()) {
 			try {
 				if (logger.isDebugEnabled()) {
@@ -181,12 +183,14 @@ public abstract class DataSourceUtils {
 		}
 
 		// Apply specific isolation level, if any.
+		// 如果存在则应用指定隔离级别。
 		Integer previousIsolationLevel = null;
 		if (definition != null && definition.getIsolationLevel() != TransactionDefinition.ISOLATION_DEFAULT) {
 			if (logger.isDebugEnabled()) {
 				logger.debug("Changing isolation level of JDBC Connection [" + con + "] to " +
 						definition.getIsolationLevel());
 			}
+			// 连接当前的隔离级别
 			int currentIsolation = con.getTransactionIsolation();
 			if (currentIsolation != definition.getIsolationLevel()) {
 				previousIsolationLevel = currentIsolation;
@@ -285,6 +289,7 @@ public abstract class DataSourceUtils {
 	/**
 	 * Close the given Connection, obtained from the given DataSource,
 	 * if it is not managed externally (that is, not bound to the thread).
+	 * <p>如果没有被额外管理（即没有绑定到线程），关闭给定数据源的jdbc连接。
 	 * @param con the Connection to close if necessary
 	 * (if this is {@code null}, the call will be ignored)
 	 * @param dataSource the DataSource that the Connection was obtained from
@@ -318,6 +323,7 @@ public abstract class DataSourceUtils {
 		if (con == null) {
 			return;
 		}
+		// 关闭连接持有实例
 		if (dataSource != null) {
 			ConnectionHolder conHolder = (ConnectionHolder) TransactionSynchronizationManager.getResource(dataSource);
 			if (conHolder != null && connectionEquals(conHolder, con)) {
@@ -332,6 +338,7 @@ public abstract class DataSourceUtils {
 
 	/**
 	 * Close the Connection, unless a {@link SmartDataSource} doesn't want us to.
+	 * <p>关闭jdbc连接，除非是{@link SmartDataSource}实例不希望关闭。
 	 * @param con the Connection to close if necessary
 	 * @param dataSource the DataSource that the Connection was obtained from
 	 * @throws SQLException if thrown by JDBC methods

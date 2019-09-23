@@ -44,6 +44,11 @@ class AspectJAutoProxyBeanDefinitionParser implements BeanDefinitionParser {
 		return null;
 	}
 
+	/**
+	 * 扩展creator定义
+	 * @param element
+	 * @param parserContext
+	 */
 	private void extendBeanDefinition(Element element, ParserContext parserContext) {
 		BeanDefinition beanDef =
 				parserContext.getRegistry().getBeanDefinition(AopConfigUtils.AUTO_PROXY_CREATOR_BEAN_NAME);

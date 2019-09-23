@@ -83,6 +83,7 @@ public class ComponentScanBeanDefinitionParser implements BeanDefinitionParser {
 	public BeanDefinition parse(Element element, ParserContext parserContext) {
 		// base-package
 		String basePackage = element.getAttribute(BASE_PACKAGE_ATTRIBUTE);
+		// 解析占位符
 		basePackage = parserContext.getReaderContext().getEnvironment().resolvePlaceholders(basePackage);
 		// 多个包路径以[,; \t\n]中的字符分隔
 		String[] basePackages = StringUtils.tokenizeToStringArray(basePackage,

@@ -164,7 +164,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	 * Whether to allow re-registration of a different definition with the same name
 	 *
 	 * <br><br>
-	 * 是否允许重复注册同名称的不同的定义，即是否允许
+	 * 是否允许允许覆盖同名的bean定义，默认允许覆盖
 	 */
 	private boolean allowBeanDefinitionOverriding = true;
 
@@ -191,7 +191,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	 * Map of bean definition objects, keyed by bean name
 	 *
 	 * <br><br>
-	 * 映射：bean名称 -> bean定义对象
+	 * bean定义信息：bean名称 -> bean定义对象
 	 */
 	private final Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<String, BeanDefinition>(256);
 
@@ -868,8 +868,10 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
 		// 从bean定义缓存获取
 		BeanDefinition existingDefinition = this.beanDefinitionMap.get(beanName);
+		// 如果存在同名的bean定义信息，校验是否允许覆盖
 		if (existingDefinition != null) {
 			if (!isAllowBeanDefinitionOverriding()) {
+				// 不允许覆盖，抛出BeanDefinitionStoreException异常
 				throw new BeanDefinitionStoreException(beanDefinition.getResourceDescription(), beanName,
 						"Cannot register bean definition [" + beanDefinition + "] for bean '" + beanName +
 						"': There is already [" + existingDefinition + "] bound.");
@@ -883,6 +885,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 							existingDefinition + "] with [" + beanDefinition + "]");
 				}
 			}
+			// 不同的bean定义覆盖
 			else if (!beanDefinition.equals(existingDefinition)) {
 				if (logger.isInfoEnabled()) {
 					logger.info("Overriding bean definition for bean '" + beanName +
@@ -890,6 +893,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 							"] with [" + beanDefinition + "]");
 				}
 			}
+			// 相同的bean定义覆盖
 			else {
 				if (logger.isDebugEnabled()) {
 					logger.debug("Overriding bean definition for bean '" + beanName +

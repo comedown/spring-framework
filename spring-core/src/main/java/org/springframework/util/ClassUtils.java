@@ -1213,14 +1213,17 @@ public abstract class ClassUtils {
 		if (method != null && isOverridable(method, targetClass) &&
 				targetClass != null && targetClass != method.getDeclaringClass()) {
 			try {
+				// public
 				if (Modifier.isPublic(method.getModifiers())) {
 					try {
+						// 获取目标类上的指定方法
 						return targetClass.getMethod(method.getName(), method.getParameterTypes());
 					}
 					catch (NoSuchMethodException ex) {
 						return method;
 					}
 				}
+				// protected、default
 				else {
 					Method specificMethod =
 							ReflectionUtils.findMethod(targetClass, method.getName(), method.getParameterTypes());

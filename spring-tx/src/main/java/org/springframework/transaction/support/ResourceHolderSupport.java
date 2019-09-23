@@ -34,10 +34,16 @@ import org.springframework.transaction.TransactionTimedOutException;
  */
 public abstract class ResourceHolderSupport implements ResourceHolder {
 
+	/**
+	 * 是否与事务同步
+	 */
 	private boolean synchronizedWithTransaction = false;
 
 	private boolean rollbackOnly = false;
 
+	/**
+	 * 超时时间
+	 */
 	private Date deadline;
 
 	private int referenceCount = 0;

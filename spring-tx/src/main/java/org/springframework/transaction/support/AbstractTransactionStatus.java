@@ -47,6 +47,9 @@ public abstract class AbstractTransactionStatus implements TransactionStatus {
 
 	private boolean rollbackOnly = false;
 
+	/**
+	 * 事务已经完成，即事务提交或者回滚
+	 */
 	private boolean completed = false;
 
 	private Object savepoint;

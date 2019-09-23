@@ -33,6 +33,10 @@ import org.springframework.util.Assert;
  *
  * <p>Note: This is an SPI class, not intended to be used by applications.
  *
+ * <p>Connection实例的持有者，包装一个JDBC Connection实例。对于一个指定的
+ * DataSource，{@link DataSourceTransactionManager}绑定这个类的实例到当前线程。
+ * <p>
+ *
  * @author Juergen Hoeller
  * @since 06.05.2003
  * @see DataSourceTransactionManager
@@ -45,8 +49,14 @@ public class ConnectionHolder extends ResourceHolderSupport {
 
 	private ConnectionHandle connectionHandle;
 
+	/**
+	 * JDBC 连接实例
+	 */
 	private Connection currentConnection;
 
+	/**
+	 * 事务是否激活
+	 */
 	private boolean transactionActive = false;
 
 	private Boolean savepointsSupported;

@@ -83,6 +83,7 @@ public class BeanFactoryAdvisorRetrievalHelper {
 
 		List<Advisor> advisors = new ArrayList<Advisor>();
 		for (String name : advisorNames) {
+			// 是否有资格
 			if (isEligibleBean(name)) {
 				// 如果bean正在创建，跳过
 				if (this.beanFactory.isCurrentlyInCreation(name)) {

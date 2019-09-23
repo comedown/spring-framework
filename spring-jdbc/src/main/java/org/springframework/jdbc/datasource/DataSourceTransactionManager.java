@@ -115,6 +115,9 @@ public class DataSourceTransactionManager extends AbstractPlatformTransactionMan
 	 */
 	private DataSource dataSource;
 
+	/**
+	 * 强制只读
+	 */
 	private boolean enforceReadOnly = false;
 
 
@@ -223,6 +226,7 @@ public class DataSourceTransactionManager extends AbstractPlatformTransactionMan
 	protected Object doGetTransaction() {
 		DataSourceTransactionObject txObject = new DataSourceTransactionObject();
 		txObject.setSavepointAllowed(isNestedTransactionAllowed());
+		// 如果当前线程存在，则从当前线程获取jdbc连接
 		ConnectionHolder conHolder =
 				(ConnectionHolder) TransactionSynchronizationManager.getResource(this.dataSource);
 		txObject.setConnectionHolder(conHolder, false);
@@ -232,11 +236,13 @@ public class DataSourceTransactionManager extends AbstractPlatformTransactionMan
 	@Override
 	protected boolean isExistingTransaction(Object transaction) {
 		DataSourceTransactionObject txObject = (DataSourceTransactionObject) transaction;
+		// 存在jdbc连接，且连接为激活状态，表示存在事务
 		return (txObject.hasConnectionHolder() && txObject.getConnectionHolder().isTransactionActive());
 	}
 
 	/**
 	 * This implementation sets the isolation level but ignores the timeout.
+	 * <p>该方法实现设置事务隔离级别，但是忽略超时时间。
 	 */
 	@Override
 	protected void doBegin(Object transaction, TransactionDefinition definition) {
@@ -244,24 +250,30 @@ public class DataSourceTransactionManager extends AbstractPlatformTransactionMan
 		Connection con = null;
 
 		try {
+			// 如果事务对象没有连接实例，或者
 			if (!txObject.hasConnectionHolder() ||
 					txObject.getConnectionHolder().isSynchronizedWithTransaction()) {
+				// 创建JDBC连接实例
 				Connection newCon = this.dataSource.getConnection();
 				if (logger.isDebugEnabled()) {
 					logger.debug("Acquired Connection [" + newCon + "] for JDBC transaction");
 				}
+				//新建ConnectionHolder，绑定JDBC连接实例
 				txObject.setConnectionHolder(new ConnectionHolder(newCon), true);
 			}
 
+			// 设置连接实例与事务同步
 			txObject.getConnectionHolder().setSynchronizedWithTransaction(true);
 			con = txObject.getConnectionHolder().getConnection();
 
+			// 设置隔离级别
 			Integer previousIsolationLevel = DataSourceUtils.prepareConnectionForTransaction(con, definition);
 			txObject.setPreviousIsolationLevel(previousIsolationLevel);
 
 			// Switch to manual commit if necessary. This is very expensive in some JDBC drivers,
 			// so we don't want to do it unnecessarily (for example if we've explicitly
 			// configured the connection pool to set it already).
+			// 设置事务不自动提交
 			if (con.getAutoCommit()) {
 				txObject.setMustRestoreAutoCommit(true);
 				if (logger.isDebugEnabled()) {
@@ -269,16 +281,19 @@ public class DataSourceTransactionManager extends AbstractPlatformTransactionMan
 				}
 				con.setAutoCommit(false);
 			}
-
+			// 准备事务连接
 			prepareTransactionalConnection(con, definition);
+			// 激活当前事务
 			txObject.getConnectionHolder().setTransactionActive(true);
 
+			// 获取并设置超时时间
 			int timeout = determineTimeout(definition);
 			if (timeout != TransactionDefinition.TIMEOUT_DEFAULT) {
 				txObject.getConnectionHolder().setTimeoutInSeconds(timeout);
 			}
 
 			// Bind the connection holder to the thread.
+			// 绑定连接持有者实例到当前线程
 			if (txObject.isNewConnectionHolder()) {
 				TransactionSynchronizationManager.bindResource(getDataSource(), txObject.getConnectionHolder());
 			}
@@ -350,11 +365,13 @@ public class DataSourceTransactionManager extends AbstractPlatformTransactionMan
 		DataSourceTransactionObject txObject = (DataSourceTransactionObject) transaction;
 
 		// Remove the connection holder from the thread, if exposed.
+		// 解绑当前线程的jdbc连接
 		if (txObject.isNewConnectionHolder()) {
 			TransactionSynchronizationManager.unbindResource(this.dataSource);
 		}
 
 		// Reset connection.
+		// 重置jdbc连接
 		Connection con = txObject.getConnectionHolder().getConnection();
 		try {
 			if (txObject.isMustRestoreAutoCommit()) {
@@ -385,6 +402,10 @@ public class DataSourceTransactionManager extends AbstractPlatformTransactionMan
 	 * <p>The "SET TRANSACTION READ ONLY" is understood by Oracle, MySQL and Postgres
 	 * and may work with other databases as well. If you'd like to adapt this treatment,
 	 * override this method accordingly.
+	 *
+	 * <p>在事务开始后，立即准备事务{@code Connection}。
+	 * <p>如果{@link #setEnforceReadOnly "enforceReadOnly"}标志被设置为{@code true}并且事务定义
+	 * 表示一个只读事务，则默认实现执行"SET TRANSACTION READ ONLY" SQL语句。
 	 * @param con the transactional JDBC Connection
 	 * @param definition the current transaction definition
 	 * @throws SQLException if thrown by JDBC API
@@ -394,6 +415,7 @@ public class DataSourceTransactionManager extends AbstractPlatformTransactionMan
 	protected void prepareTransactionalConnection(Connection con, TransactionDefinition definition)
 			throws SQLException {
 
+		// 事务管理器被设置为只读，且事务定义也为只读，则执行"SET TRANSACTION READ ONLY"语句
 		if (isEnforceReadOnly() && definition.isReadOnly()) {
 			Statement stmt = con.createStatement();
 			try {
@@ -409,6 +431,8 @@ public class DataSourceTransactionManager extends AbstractPlatformTransactionMan
 	/**
 	 * DataSource transaction object, representing a ConnectionHolder.
 	 * Used as transaction object by DataSourceTransactionManager.
+	 * <p>DataSource事务对象，代表一个ConnectionHolder。
+	 * 用作DataSourceTransactionManager的事务对象。
 	 */
 	private static class DataSourceTransactionObject extends JdbcTransactionObjectSupport {
 

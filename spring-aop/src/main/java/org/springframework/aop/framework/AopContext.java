@@ -44,6 +44,9 @@ public abstract class AopContext {
 	 * ThreadLocal holder for AOP proxy associated with this thread.
 	 * Will contain {@code null} unless the "exposeProxy" property on
 	 * the controlling proxy configuration has been set to "true".
+	 *
+	 * <p>当前线程关联的AOP代理类。如果exposeProxy属性在控制代理配置中设置为true，
+	 * 则包含当前线程的AOP代理对象，否则包含null。
 	 * @see ProxyConfig#setExposeProxy
 	 */
 	private static final ThreadLocal<Object> currentProxy = new NamedThreadLocal<Object>("Current AOP proxy");

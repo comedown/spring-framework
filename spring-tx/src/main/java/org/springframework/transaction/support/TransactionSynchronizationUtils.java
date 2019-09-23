@@ -29,6 +29,7 @@ import org.springframework.util.ClassUtils;
 /**
  * Utility methods for triggering specific {@link TransactionSynchronization}
  * callback methods on all currently registered synchronizations.
+ * <p>用于在所有当前注册的同步上触发特定{@link TransactionSynchronization}回调方法的通用方法。
  *
  * @author Juergen Hoeller
  * @since 2.0
@@ -56,6 +57,7 @@ public abstract class TransactionSynchronizationUtils {
 	/**
 	 * Unwrap the given resource handle if necessary; otherwise return
 	 * the given handle as-is.
+	 * <p>如果有必要就获取包装对象；否则按原样返回给定对象。
 	 * @see org.springframework.core.InfrastructureProxy#getWrappedObject()
 	 */
 	static Object unwrapResourceIfNecessary(Object resource) {

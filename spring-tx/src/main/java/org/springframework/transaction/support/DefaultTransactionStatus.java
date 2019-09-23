@@ -48,16 +48,31 @@ import org.springframework.transaction.SavepointManager;
  */
 public class DefaultTransactionStatus extends AbstractTransactionStatus {
 
+	/**
+	 * 事务对象
+	 */
 	private final Object transaction;
 
+	/**
+	 * 是否新事务
+	 */
 	private final boolean newTransaction;
 
+	/**
+	 * 是否新的事务同步器
+	 */
 	private final boolean newSynchronization;
 
 	private final boolean readOnly;
 
+	/**
+	 * 日志级别是否debug
+	 */
 	private final boolean debug;
 
+	/**
+	 * 挂起的源对象
+	 */
 	private final Object suspendedResources;
 
 

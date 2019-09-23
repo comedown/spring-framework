@@ -225,12 +225,14 @@ public abstract class AopUtils {
 			return false;
 		}
 
+		// 匹配方法
 		MethodMatcher methodMatcher = pc.getMethodMatcher();
 		if (methodMatcher == MethodMatcher.TRUE) {
 			// No need to iterate the methods if we're matching any method anyway...
 			return true;
 		}
 
+		// 引入
 		IntroductionAwareMethodMatcher introductionAwareMethodMatcher = null;
 		if (methodMatcher instanceof IntroductionAwareMethodMatcher) {
 			introductionAwareMethodMatcher = (IntroductionAwareMethodMatcher) methodMatcher;
@@ -270,6 +272,9 @@ public abstract class AopUtils {
 	 * Can the given advisor apply at all on the given class?
 	 * <p>This is an important test as it can be used to optimize out a advisor for a class.
 	 * This version also takes into account introductions (for IntroductionAwareMethodMatchers).
+	 * <br>
+	 * <p>给定的Advisor能否应用在给定的类型上？
+	 * <p>这是一个重要的测试，因为它可以用来优化一个类的顾问。此版本还考虑了引入（用于IntroductionAwareMethodMatchers）。
 	 * @param advisor the advisor to check
 	 * @param targetClass class we're testing
 	 * @param hasIntroductions whether or not the advisor chain for this bean includes
@@ -304,18 +309,20 @@ public abstract class AopUtils {
 			return candidateAdvisors;
 		}
 		List<Advisor> eligibleAdvisors = new LinkedList<Advisor>();
+		// 筛选引用顾问
 		for (Advisor candidate : candidateAdvisors) {
 			if (candidate instanceof IntroductionAdvisor && canApply(candidate, clazz)) {
 				eligibleAdvisors.add(candidate);
 			}
 		}
-		// 已经有匹配的切面通知
+		// 是否匹配到引用通知
 		boolean hasIntroductions = !eligibleAdvisors.isEmpty();
 		for (Advisor candidate : candidateAdvisors) {
 			if (candidate instanceof IntroductionAdvisor) {
 				// already processed
 				continue;
 			}
+			// 判断事务切面是否可以应用到目标类，并缓存事务属性计算结果
 			if (canApply(candidate, clazz, hasIntroductions)) {
 				eligibleAdvisors.add(candidate);
 			}
@@ -325,6 +332,7 @@ public abstract class AopUtils {
 
 	/**
 	 * Invoke the given target via reflection, as part of an AOP method invocation.
+	 * <p>作为AOP方法调用的一部分，通过反射调用给定目标。
 	 * @param target the target object
 	 * @param method the method to invoke
 	 * @param args the arguments for the method
