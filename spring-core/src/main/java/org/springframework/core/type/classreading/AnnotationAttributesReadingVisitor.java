@@ -71,6 +71,7 @@ final class AnnotationAttributesReadingVisitor extends RecursiveAnnotationAttrib
 			else {
 				attributeList.add(0, this.attributes);
 			}
+			// 注解类型是否是jdk包下得
 			if (!AnnotationUtils.isInJavaLangAnnotationPackage(annotationClass.getName())) {
 				Set<Annotation> visited = new LinkedHashSet<Annotation>();
 				Annotation[] metaAnnotations = AnnotationUtils.getAnnotations(annotationClass);
@@ -90,6 +91,11 @@ final class AnnotationAttributesReadingVisitor extends RecursiveAnnotationAttrib
 		}
 	}
 
+	/**
+	 * 递归搜集元注解
+	 * @param visited
+	 * @param annotation
+	 */
 	private void recursivelyCollectMetaAnnotations(Set<Annotation> visited, Annotation annotation) {
 		Class<? extends Annotation> annotationType = annotation.annotationType();
 		String annotationName = annotationType.getName();

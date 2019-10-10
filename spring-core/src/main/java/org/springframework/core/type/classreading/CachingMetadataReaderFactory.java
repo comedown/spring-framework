@@ -38,7 +38,10 @@ import org.springframework.core.io.ResourceLoader;
  */
 public class CachingMetadataReaderFactory extends SimpleMetadataReaderFactory {
 
-	/** Default maximum number of entries for the MetadataReader cache: 256 */
+	/**
+	 * Default maximum number of entries for the MetadataReader cache: 256.
+	 * <p>MetadataReader缓存的默认最大条目数为256。
+	 */
 	public static final int DEFAULT_CACHE_LIMIT = 256;
 
 
@@ -97,7 +100,7 @@ public class CachingMetadataReaderFactory extends SimpleMetadataReaderFactory {
 
 	@Override
 	public MetadataReader getMetadataReader(Resource resource) throws IOException {
-		// 缓存数量限制
+		// 没有设置缓存限制，则不走缓存
 		if (getCacheLimit() <= 0) {
 			return super.getMetadataReader(resource);
 		}

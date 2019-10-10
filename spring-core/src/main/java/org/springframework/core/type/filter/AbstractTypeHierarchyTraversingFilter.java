@@ -41,8 +41,14 @@ public abstract class AbstractTypeHierarchyTraversingFilter implements TypeFilte
 
 	protected final Log logger = LogFactory.getLog(getClass());
 
+	/**
+	 * 是否考虑继承，即有@Inherited注解
+	 */
 	private final boolean considerInherited;
 
+	/**
+	 * 是否匹配接口
+	 */
 	private final boolean considerInterfaces;
 
 
@@ -58,6 +64,7 @@ public abstract class AbstractTypeHierarchyTraversingFilter implements TypeFilte
 
 		// This method optimizes avoiding unnecessary creation of ClassReaders
 		// as well as visiting over those readers.
+		// 这个校验优化了避免不必要地创建类读取器以及访问这些读取器。
 		if (matchSelf(metadataReader)) {
 			return true;
 		}

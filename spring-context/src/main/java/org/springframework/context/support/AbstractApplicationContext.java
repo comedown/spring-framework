@@ -179,7 +179,10 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	/** System time in milliseconds when this context started */
 	private long startupDate;
 
-	/** Flag that indicates whether this context is currently active */
+	/**
+	 * Flag that indicates whether this context is currently active.
+	 * <p>表明该上下文当前是否激活。
+	 */
 	private final AtomicBoolean active = new AtomicBoolean();
 
 	/** Flag that indicates whether this context has been closed already */
@@ -527,10 +530,12 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
 
 			// Prepare the bean factory for use in this context.
+			// 准备该上下文实例要用的bean工厂。
 			prepareBeanFactory(beanFactory);
 
 			try {
 				// Allows post-processing of the bean factory in context subclasses.
+				// 允许上下文子类对bean工厂进行后处理，比如添加后处理器等
 				postProcessBeanFactory(beanFactory);
 
 				// Invoke factory processors registered as beans in the context.
@@ -601,7 +606,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		this.startupDate = System.currentTimeMillis();
 		// 是否关闭
 		this.closed.set(false);
-		// 是否活动
+		// 设置应用程序上下文活动状态
 		this.active.set(true);
 
 		if (logger.isInfoEnabled()) {
@@ -633,6 +638,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 	/**
 	 * Tell the subclass to refresh the internal bean factory.
+	 * <p>让子类刷新内部bean工厂。
 	 * @return the fresh BeanFactory instance
 	 * @see #refreshBeanFactory()
 	 * @see #getBeanFactory()

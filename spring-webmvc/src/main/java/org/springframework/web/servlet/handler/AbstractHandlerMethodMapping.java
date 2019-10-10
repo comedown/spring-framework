@@ -225,6 +225,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	protected void detectHandlerMethods(final Object handler) {
 		Class<?> handlerType = (handler instanceof String ?
 				getApplicationContext().getType((String) handler) : handler.getClass());
+		// 获取原始类型
 		final Class<?> userType = ClassUtils.getUserClass(handlerType);
 
 		Map<Method, T> methods = MethodIntrospector.selectMethods(userType,

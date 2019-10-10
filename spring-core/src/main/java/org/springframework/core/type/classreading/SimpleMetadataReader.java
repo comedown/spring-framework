@@ -41,8 +41,14 @@ final class SimpleMetadataReader implements MetadataReader {
 
 	private final Resource resource;
 
+	/**
+	 * 类元数据
+	 */
 	private final ClassMetadata classMetadata;
 
+	/**
+	 * 注解元数据
+	 */
 	private final AnnotationMetadata annotationMetadata;
 
 

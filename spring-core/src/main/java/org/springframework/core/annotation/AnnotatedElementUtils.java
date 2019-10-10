@@ -706,6 +706,14 @@ public class AnnotatedElementUtils {
 	 * within a single annotation and within the annotation hierarchy.
 	 * <p>This method follows <em>find semantics</em> as described in the
 	 * {@linkplain AnnotatedElementUtils class-level javadoc}.
+	 *
+	 * <br><br>
+	 * 在提供的{@code element}上的注解层次结构中查找指定的{@code annotationType}类型
+	 * 的第一个注解，将该注解的属性与注解层次结构较低级别的注解中的<em>匹配的<em>属性合并，
+	 * 并将结果合成为指定{@code annotationType}类型的注解。
+	 * <P>{@link AliasFor @AliasFor}语义在单个注解和注解层次结构中都完全受支持。
+	 * <p>此方法遵循{@linkplain AnnotatedElementUtils class-level javadoc}中描述
+	 * 的<em>查找语义</em>。
 	 * @param element the annotated element
 	 * @param annotationType the annotation type to find
 	 * @return the merged, synthesized {@code Annotation}, or {@code null} if not found

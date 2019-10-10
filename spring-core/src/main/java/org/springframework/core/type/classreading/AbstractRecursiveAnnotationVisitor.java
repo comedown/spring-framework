@@ -39,6 +39,9 @@ abstract class AbstractRecursiveAnnotationVisitor extends AnnotationVisitor {
 
 	protected final Log logger = LogFactory.getLog(getClass());
 
+	/**
+	 * 注解属性map
+	 */
 	protected final AnnotationAttributes attributes;
 
 	protected final ClassLoader classLoader;

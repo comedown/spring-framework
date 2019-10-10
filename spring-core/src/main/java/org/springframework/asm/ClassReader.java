@@ -39,7 +39,7 @@ import java.io.InputStream;
  * method and bytecode instruction encountered.
  *
  * <br><br>
- * Java 类解析器，用于产生一个访问现有类的{@link ClassVisitor}实例。这个类解析一个遵循Java类
+ * Java class文件解析器，用于产生一个访问现有类的{@link ClassVisitor}实例。这个类解析一个遵循Java类
  * 文件格式的字节数组，并且调用遇到的给定类的每个字段、方法和字节码指令合适的访问方法。
  * 
  * @author Eric Bruneton
@@ -127,12 +127,16 @@ public class ClassReader {
      * The class to be parsed. <i>The content of this array must not be
      * modified. This field is intended for {@link Attribute} sub classes, and
      * is normally not needed by class generators or adapters.</i>
+     * <p>将要被解析的class文件字节数组。<i>这个字节数组的内容不能被修改。
+     * 此字段用于{@link Attribute}的子类，类生成器或适配器通常不需要此字段。</i>
      */
     public final byte[] b;
 
     /**
      * The start index of each constant pool item in {@link #b b}, plus one. The
      * one byte offset skips the constant pool item tag that indicates its type.
+     * <p>{@link #b b}中每个常量池项的开始下标，加一。单字节偏移量跳过指示其类型的常量池项标记。
+     * 其大小等于常量池大小。
      */
     private final int[] items;
 
@@ -143,12 +147,16 @@ public class ClassReader {
      * strategy could be extended to all constant pool items, but its benefit
      * would not be so great for these items (because they are much less
      * expensive to parse than CONSTANT_Utf8 items).
+     * <p>与CONSTANT_Utf8项对应的字符串对象。此缓存避免了对给定常量池项的多次解析，从而大大提高了性能
+     * （提高了2到3倍）。这种缓存策略可以扩展到所有的常量池项，但是它的好处对这些项来说并不是
+     * 很好（因为它们的解析成本比常量项要低得多）。
      */
     private final String[] strings;
 
     /**
      * Maximum length of the strings contained in the constant pool of the
      * class.
+     * <p>类的常量池中包含的字符串的最大长度。
      */
     private final int maxStringLength;
 
@@ -157,8 +165,7 @@ public class ClassReader {
      * {@link #b b}.
      *
      * <br><br>
-     * class文件信息的头偏移量在 {@link #b b}。
-     *
+     * {@link #b b}中class文件信息的头偏移量。位于常量池后。
      */
     public final int header;
 
@@ -202,9 +209,11 @@ public class ClassReader {
         strings = new String[n];
         int max = 0;
         int index = off + 10;
+        // 常量池下标从1开始，第0项常量为空
         for (int i = 1; i < n; ++i) {
             items[i] = index + 1;
             int size;
+            // 常量项第一个字节为类型标记
             switch (b[index]) {
             case ClassWriter.FIELD:
             case ClassWriter.METH:
@@ -569,10 +578,15 @@ public class ClassReader {
         context.buffer = c;
 
         // reads the class declaration
+        // 读取class的访问标志声明
         int access = readUnsignedShort(u);
+        // 读取类全限定名
         String name = readClass(u + 2, c);
+        // 读取父类全限定名
         String superClass = readClass(u + 4, c);
+        // 读取类的接口数量
         String[] interfaces = new String[readUnsignedShort(u + 6)];
+        // 读取接口全限定名
         u += 8;
         for (int i = 0; i < interfaces.length; ++i) {
             interfaces[i] = readClass(u, c);
@@ -580,6 +594,7 @@ public class ClassReader {
         }
 
         // reads the class attributes
+        // 读取类属性
         String signature = null;
         String sourceFile = null;
         String sourceDebug = null;
@@ -596,7 +611,9 @@ public class ClassReader {
         int packages = 0;
         Attribute attributes = null;
 
+        // 获取属性表索引
         u = getAttributes();
+        // 属性表大小
         for (int i = readUnsignedShort(u); i > 0; --i) {
             String attrName = readUTF8(u + 2, c);
             // tests are sorted in decreasing frequency order
@@ -663,6 +680,7 @@ public class ClassReader {
                 superClass, interfaces);
 
         // visits the source and debug info
+        // 设置source和debug信息
         if ((flags & SKIP_DEBUG) == 0
                 && (sourceFile != null || sourceDebug != null)) {
             classVisitor.visitSource(sourceFile, sourceDebug);
@@ -2425,13 +2443,16 @@ public class ClassReader {
 
     /**
      * Returns the start index of the attribute_info structure of this class.
+     * <p>返回该类的attribute_info结构的开始索引。
      * 
      * @return the start index of the attribute_info structure of this class.
      */
     private int getAttributes() {
         // skips the header
+        // 跳过access、class、super_class、interfaces
         int u = header + 8 + readUnsignedShort(header + 6) * 2;
         // skips fields and methods
+        // 跳过field和method
         for (int i = readUnsignedShort(u); i > 0; --i) {
             for (int j = readUnsignedShort(u + 8); j > 0; --j) {
                 u += 6 + readInt(u + 12);
@@ -2616,7 +2637,9 @@ public class ClassReader {
      * @return the String corresponding to the specified UTF8 item.
      */
     public String readUTF8(int index, final char[] buf) {
+        // 读取CONSTANT_Utf8_info的索引值
         int item = readUnsignedShort(index);
+        // 索引为0，返回null
         if (index == 0 || item == 0) {
             return null;
         }
@@ -2624,40 +2647,56 @@ public class ClassReader {
         if (s != null) {
             return s;
         }
+        // 读取CONSTANT_Utf8_info的下标
         index = items[item];
+        // 读取UTF8字符串，参数：字符串开始下标，长度
         return strings[item] = readUTF(index + 2, readUnsignedShort(index), buf);
     }
 
     /**
      * Reads UTF8 string in {@link #b b}.
+     * <p>从{@link #b b}中读取UTF8字符串。
      * 
      * @param index
      *            start offset of the UTF8 string to be read.
+     *            要读取的字符串起始偏移量。
      * @param utfLen
      *            length of the UTF8 string to be read.
+     *            要读取的字符串长度。
      * @param buf
      *            buffer to be used to read the string. This buffer must be
      *            sufficiently large. It is not automatically resized.
      * @return the String corresponding to the specified UTF8 string.
      */
     private String readUTF(int index, final int utfLen, final char[] buf) {
+        // 结束索引
         int endIndex = index + utfLen;
         byte[] b = this.b;
         int strLen = 0;
         int c;
         int st = 0;
         char cc = 0;
+        // 字节转UTF8字符
         while (index < endIndex) {
             c = b[index++];
             switch (st) {
             case 0:
                 c = c & 0xFF;
+                // 0000-007F -> 0xxxxxxx
+                // 如果字符对应编码值小于0x7F，则转换该为1个byte，最高位为0
                 if (c < 0x80) { // 0xxxxxxx
                     buf[strLen++] = (char) c;
-                } else if (c < 0xE0 && c > 0xBF) { // 110x xxxx 10xx xxxx
+                }
+                // 0080-07FF -> 110xxxxx 10xxxxxx
+                // 编码值在0080到07FF字符，会转换为2个字节，并且第一个字节以110开头，第二个字节以10开头
+                else if (c < 0xE0 && c > 0xBF) { // 110x xxxx 10xx xxxx
                     cc = (char) (c & 0x1F);
                     st = 1;
-                } else { // 1110 xxxx 10xx xxxx 10xx xxxx
+                }
+                // 0800-FFFF -> 1110xxxx 10xxxxxx 10xxxxxx
+                // 编码值在0800到FFFF字符，会转换为3个字节，并且第一个字节以1110开头，
+                // 后面字节以10开头，字符对应的编码值转换为2进制后的数据，填充X。不足位数的高位加0
+                else { // 1110 xxxx 10xx xxxx 10xx xxxx
                     cc = (char) (c & 0x0F);
                     st = 2;
                 }
@@ -2688,6 +2727,7 @@ public class ClassReader {
         // computes the start index of the item in b
         // and reads the CONSTANT_Utf8 item designated by
         // the first two bytes of this item
+        // 计算b中的常量项下标，读取由常量项的前两个字节指定的CONSTANT_Utf8项。
         return readUTF8(items[readUnsignedShort(index)], buf);
     }
 
@@ -2695,6 +2735,8 @@ public class ClassReader {
      * Reads a class constant pool item in {@link #b b}. <i>This method is
      * intended for {@link Attribute} sub classes, and is normally not needed by
      * class generators or adapters.</i>
+     * <p>从{@link #b b}中读取CONSTANT_Class_info常量池项。CONSTANT_Class_info中保存的
+     * 是CONSTANT_Utf8_info常量项的索引值。
      * 
      * @param index
      *            the start index of an unsigned short value in {@link #b b},

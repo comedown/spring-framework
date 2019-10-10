@@ -44,8 +44,14 @@ import org.springframework.util.StringUtils;
  */
 class ClassMetadataReadingVisitor extends ClassVisitor implements ClassMetadata {
 
+	/**
+	 * 类全限定名
+	 */
 	private String className;
 
+	/**
+	 * 是否是接口
+	 */
 	private boolean isInterface;
 
 	private boolean isAnnotation;

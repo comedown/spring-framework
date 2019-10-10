@@ -44,6 +44,9 @@ public abstract class MethodIntrospector {
 	 * Select methods on the given target type based on the lookup of associated metadata.
 	 * <p>Callers define methods of interest through the {@link MetadataLookup} parameter,
 	 * allowing to collect the associated metadata into the result map.
+	 *
+	 * <br><br>
+	 * 根据关联元数据的查找，选择给定目标类型上的方法。
 	 * @param targetType the target type to search methods on
 	 * @param metadataLookup a {@link MetadataLookup} callback to inspect methods of interest,
 	 * returning non-null metadata to be associated with a given method if there is a match,
@@ -56,6 +59,7 @@ public abstract class MethodIntrospector {
 		Set<Class<?>> handlerTypes = new LinkedHashSet<Class<?>>();
 		Class<?> specificHandlerType = null;
 
+		// 不是jdk动态代理类
 		if (!Proxy.isProxyClass(targetType)) {
 			handlerTypes.add(targetType);
 			specificHandlerType = targetType;

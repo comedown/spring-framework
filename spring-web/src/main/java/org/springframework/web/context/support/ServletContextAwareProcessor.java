@@ -32,6 +32,10 @@ import org.springframework.web.context.ServletContextAware;
  * <p>Web application contexts will automatically register this with their
  * underlying bean factory. Applications do not use this directly.
  *
+ * <br><br>
+ * 用于处理{@link ServletContextAware}、{@link ServletConfigAware}接口实例的
+ * bean，设置ServletContext、ServletConfig。
+ *
  * @author Juergen Hoeller
  * @author Phillip Webb
  * @since 12.03.2004

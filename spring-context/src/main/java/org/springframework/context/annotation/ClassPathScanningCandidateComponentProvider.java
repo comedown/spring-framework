@@ -81,6 +81,7 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 	/** 类型过滤器 */
 	private final List<TypeFilter> includeFilters = new LinkedList<TypeFilter>();
 
+	/** 不包含的类型 */
 	private final List<TypeFilter> excludeFilters = new LinkedList<TypeFilter>();
 
 	private Environment environment;
@@ -178,6 +179,14 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 	 * {@link Controller @Controller} stereotype annotations.
 	 * <p>Also supports Java EE 6's {@link javax.annotation.ManagedBean} and
 	 * JSR-330's {@link javax.inject.Named} annotations, if available.
+	 *
+	 * <br><br>
+	 * 注册{@link Component @Component}的默认注解过滤器。
+	 * <p>该方法将隐式的注册所有具有{@link Component @Component}元注解的注解，包括
+	 * {@link Repository @Repository}、{@link Service @Service}、以及
+	 * {@link Controller @Controller}模式注解.
+	 * <p>同时支持Java EE 6的{@link javax.annotation.ManagedBean}，和
+	 * JSR-330的{@link javax.inject.Named}注解。
 	 *
 	 */
 	@SuppressWarnings("unchecked")
@@ -289,7 +298,9 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 				}
 				if (resource.isReadable()) {
 					try {
+						// class的元数据读取器
 						MetadataReader metadataReader = this.metadataReaderFactory.getMetadataReader(resource);
+						// 如果是@Component标注的基础组件
 						if (isCandidateComponent(metadataReader)) {
 							ScannedGenericBeanDefinition sbd = new ScannedGenericBeanDefinition(metadataReader);
 							sbd.setResource(resource);
@@ -350,11 +361,13 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 	 * @return whether the class qualifies as a candidate component
 	 */
 	protected boolean isCandidateComponent(MetadataReader metadataReader) throws IOException {
+		// 校验是否需要剔除的类型
 		for (TypeFilter tf : this.excludeFilters) {
 			if (tf.match(metadataReader, this.metadataReaderFactory)) {
 				return false;
 			}
 		}
+		// 过滤需要的类型
 		for (TypeFilter tf : this.includeFilters) {
 			if (tf.match(metadataReader, this.metadataReaderFactory)) {
 				return isConditionMatch(metadataReader);

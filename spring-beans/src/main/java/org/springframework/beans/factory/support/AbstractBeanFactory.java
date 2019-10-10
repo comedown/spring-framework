@@ -161,7 +161,10 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	 */
 	private boolean hasDestructionAwareBeanPostProcessors;
 
-	/** Map from scope identifier String to corresponding Scope */
+	/**
+	 * Map from scope identifier String to corresponding Scope.
+	 * <p>映射：scope名称 -> scope实例
+	 */
 	private final Map<String, Scope> scopes = new LinkedHashMap<String, Scope>(8);
 
 	/** Security context used when running with a SecurityManager */

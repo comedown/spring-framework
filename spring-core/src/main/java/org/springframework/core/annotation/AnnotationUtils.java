@@ -225,6 +225,10 @@ public abstract class AnnotationUtils {
 	 * Get all {@link Annotation Annotations} that are <em>present</em> on the
 	 * supplied {@link AnnotatedElement}.
 	 * <p>Meta-annotations will <em>not</em> be searched.
+	 *
+	 * <br><br>
+	 * 获取<em>当前</em>提供的{@link AnnotatedElement}上所有的{@link Annotation Annotations}。
+	 * <p><em>不会</em>查找元注解类型。
 	 * @param annotatedElement the Method, Constructor or Field to retrieve annotations from
 	 * @return the annotations found, an empty array, or {@code null} if not
 	 * resolvable (e.g. because nested Class values in annotation attributes
@@ -1214,6 +1218,7 @@ public abstract class AnnotationUtils {
 	/**
 	 * Register the annotation-declared default values for the given attributes,
 	 * if available.
+	 * <p>如果存在，则注册给定属性的注解声明的默认值。
 	 * @param attributes the annotation attributes to process
 	 * @since 4.3.2
 	 */

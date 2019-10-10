@@ -47,6 +47,10 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMappi
  * {@link RequestMapping @RequestMapping} annotations in
  * {@link Controller @Controller} classes.
  *
+ * <br><br>
+ * 从{@link Controller @Controller}注解的类中读取类型和方法级别的
+ * {@link RequestMapping @RequestMapping}注解，创建{@link RequestMappingInfo}实例，
+ *
  * @author Arjen Poutsma
  * @author Rossen Stoyanchev
  * @author Sam Brannen
@@ -168,6 +172,9 @@ public class RequestMappingHandlerMapping extends RequestMappingInfoHandlerMappi
 	 * {@inheritDoc}
 	 * <p>Expects a handler to have either a type-level @{@link Controller}
 	 * annotation or a type-level @{@link RequestMapping} annotation.
+	 *
+	 * <br><br>
+	 * 判断给定类型是否具有类型级别的@{@link Controller}或@{@link RequestMapping}注解。
 	 */
 	@Override
 	protected boolean isHandler(Class<?> beanType) {
@@ -199,6 +206,8 @@ public class RequestMappingHandlerMapping extends RequestMappingInfoHandlerMappi
 	 * Delegates to {@link #createRequestMappingInfo(RequestMapping, RequestCondition)},
 	 * supplying the appropriate custom {@link RequestCondition} depending on whether
 	 * the supplied {@code annotatedElement} is a class or method.
+	 * <p>委派给{@link #createRequestMappingInfo(RequestMapping, RequestCondition)}方法，
+	 * 提供适当的自定义{@link RequestCondition}，具体取决于提供的{@code annotatedElement}是类还是方法。
 	 * @see #getCustomTypeCondition(Class)
 	 * @see #getCustomMethodCondition(Method)
 	 */

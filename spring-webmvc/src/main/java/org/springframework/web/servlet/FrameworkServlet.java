@@ -145,6 +145,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 
 	/**
 	 * Default context class for FrameworkServlet.
+	 * <p>FrameworkServlet的默认Spring上下文类型。
 	 * @see org.springframework.web.context.support.XmlWebApplicationContext
 	 */
 	public static final Class<?> DEFAULT_CONTEXT_CLASS = XmlWebApplicationContext.class;
@@ -152,6 +153,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	/**
 	 * Prefix for the ServletContext attribute for the WebApplicationContext.
 	 * The completion is the servlet name.
+	 * <p>WebApplicationContext在ServletContext属性中的名称前缀。完整的名称为前缀 + Servlet名称。
 	 */
 	public static final String SERVLET_CONTEXT_PREFIX = FrameworkServlet.class.getName() + ".CONTEXT.";
 
@@ -170,7 +172,10 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	/** ServletContext attribute to find the WebApplicationContext in */
 	private String contextAttribute;
 
-	/** WebApplicationContext implementation class to create */
+	/**
+	 * WebApplicationContext implementation class to create
+	 * WebApplicationContext实现类。
+	 */
 	private Class<?> contextClass = DEFAULT_CONTEXT_CLASS;
 
 	/** WebApplicationContext id to assign */
@@ -204,7 +209,10 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	/** Should we dispatch an HTTP TRACE request to {@link #doService}? */
 	private boolean dispatchTraceRequest = false;
 
-	/** WebApplicationContext for this servlet */
+	/**
+	 * WebApplicationContext for this servlet.
+	 * <p>该Servlet的WebApplicationContext实例。
+	 */
 	private WebApplicationContext webApplicationContext;
 
 	/** If the WebApplicationContext was injected via {@link #setApplicationContext} */
@@ -481,6 +489,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	/**
 	 * Overridden method of {@link HttpServletBean}, invoked after any bean properties
 	 * have been set. Creates this servlet's WebApplicationContext.
+	 * <p>覆盖{@link HttpServletBean}的方法，在bean属性都设置完之后调用。创建Servlet的上下文对象。
 	 */
 	@Override
 	protected final void initServletBean() throws ServletException {
@@ -514,12 +523,18 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	 * Initialize and publish the WebApplicationContext for this servlet.
 	 * <p>Delegates to {@link #createWebApplicationContext} for actual creation
 	 * of the context. Can be overridden in subclasses.
+	 *
+	 * <br><br>
+	 * 初始化并发布该Servlet的WebApplicationContext。
+	 * <P>具体的创建上下文操作委派给{@link #createWebApplicationContext}方法。
+	 * 可以被子类覆盖。
 	 * @return the WebApplicationContext instance
 	 * @see #FrameworkServlet(WebApplicationContext)
 	 * @see #setContextClass
 	 * @see #setContextConfigLocation
 	 */
 	protected WebApplicationContext initWebApplicationContext() {
+		// web应用根上下文
 		WebApplicationContext rootContext =
 				WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 		WebApplicationContext wac = null;
@@ -550,6 +565,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 		}
 		if (wac == null) {
 			// No context instance is defined for this servlet -> create a local one
+			// 该Servlet没有定义上下文实例，则创建一个本地上下文实例。
 			wac = createWebApplicationContext(rootContext);
 		}
 
@@ -557,11 +573,13 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 			// Either the context is not a ConfigurableApplicationContext with refresh
 			// support or the context injected at construction time had already been
 			// refreshed -> trigger initial onRefresh manually here.
+			// 初始化spring mvc组件
 			onRefresh(wac);
 		}
 
 		if (this.publishContext) {
 			// Publish the context as a servlet context attribute.
+			// 将上下文实例放入ServletContext属性中。
 			String attrName = getServletContextAttributeName();
 			getServletContext().setAttribute(attrName, wac);
 			if (this.logger.isDebugEnabled()) {
