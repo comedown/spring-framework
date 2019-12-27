@@ -93,6 +93,8 @@ public class DefaultAnnotationHandlerMapping extends AbstractMapBasedHandlerMapp
 	/**
 	 * Calls the {@code registerHandlers} method in addition
 	 * to the superclass's initialization.
+	 * <br><br>
+	 * 除了初始化父类之外，调用{@code registerHandlers}方法
 	 * @see #detectHandlers
 	 */
 	@Override
@@ -107,12 +109,17 @@ public class DefaultAnnotationHandlerMapping extends AbstractMapBasedHandlerMapp
 	 */
 	protected void detectHandlers() throws BeansException {
 		ApplicationContext context = getApplicationContext();
+		// 获取所有bean
 		String[] beanNames = context.getBeanNamesForType(Object.class);
 		for (String beanName : beanNames) {
+			// 获取bean类型
 			Class<?> handlerType = context.getType(beanName);
+			// 查找bean类和父类、接口的@RequestMapping注解
+			// 如果类级别有@RequestMapping注解，则直接解析，否则继续找@Controller注解
 			RequestMapping mapping = context.findAnnotationOnBean(beanName, RequestMapping.class);
 			if (mapping != null) {
 				// @RequestMapping found at type level
+				// 类级别注解
 				String[] modeKeys = mapping.value();
 				String[] params = mapping.params();
 				boolean registerHandlerType = true;
@@ -127,6 +134,7 @@ public class DefaultAnnotationHandlerMapping extends AbstractMapBasedHandlerMapp
 					}
 				}
 			}
+			// 查找bean是否有@Controller注解
 			else if (AnnotationUtils.findAnnotation(handlerType, Controller.class) != null) {
 				detectHandlerMethods(handlerType, beanName, mapping);
 			}
@@ -147,6 +155,7 @@ public class DefaultAnnotationHandlerMapping extends AbstractMapBasedHandlerMapp
 		handlerTypes.add(handlerType);
 		handlerTypes.addAll(Arrays.asList(handlerType.getInterfaces()));
 		for (Class<?> currentHandlerType : handlerTypes) {
+			// 查找并匹配方法
 			ReflectionUtils.doWithMethods(currentHandlerType, new ReflectionUtils.MethodCallback() {
 				@Override
 				public void doWith(Method method) {
@@ -198,6 +207,7 @@ public class DefaultAnnotationHandlerMapping extends AbstractMapBasedHandlerMapp
 										"No portlet mode mappings specified - neither at type nor at method level");
 							}
 						}
+						// 注册处理器mapping
 						for (String modeKey : modeKeys) {
 							registerHandler(new PortletMode(modeKey), beanName, predicate);
 							handlersRegistered.add(Boolean.TRUE);

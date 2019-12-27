@@ -109,6 +109,8 @@ class AnnotationDrivenBeanDefinitionParser implements BeanDefinitionParser {
 
 	/**
 	 * Inner class to just introduce an AOP framework dependency when actually in proxy mode.
+	 *
+	 * <p>用于在实际处于代理模式时引入AOP框架依赖项的Spring内部类。
 	 */
 	private static class AopAutoProxyConfigurer {
 

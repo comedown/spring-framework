@@ -82,6 +82,7 @@ public class MethodParameter {
 
 	private volatile Type genericParameterType;
 
+	/** 注解缓存 */
 	private volatile Annotation[] parameterAnnotations;
 
 	private volatile ParameterNameDiscoverer parameterNameDiscoverer;
@@ -492,6 +493,8 @@ public class MethodParameter {
 
 	/**
 	 * Return the annotations associated with the specific method/constructor parameter.
+	 * <br><br>
+	 * 返回指定方法/构造函数指定参数上关联的注解
 	 */
 	public Annotation[] getParameterAnnotations() {
 		Annotation[] paramAnns = this.parameterAnnotations;

@@ -114,7 +114,7 @@ public abstract class AnnotationUtils {
 
 	private static final String REPEATABLE_CLASS_NAME = "java.lang.annotation.Repeatable";
 
-	/** 方法注解缓存 */
+	/** 注解缓存 */
 	private static final Map<AnnotationCacheKey, Annotation> findAnnotationCache =
 			new ConcurrentReferenceHashMap<AnnotationCacheKey, Annotation>(256);
 
@@ -668,6 +668,10 @@ public abstract class AnnotationUtils {
 	 * <p>Note: in this context, the term <em>recursively</em> means that the search
 	 * process continues by returning to step #1 with the current interface,
 	 * annotation, or superclass as the class to look for annotations on.
+	 *
+	 * <br><br>
+	 * 在类级别上查找指定注解，包括父类和接口
+	 *
 	 * @param clazz the class to look for annotations on
 	 * @param annotationType the type of annotation to look for
 	 * @return the first matching annotation, or {@code null} if not found

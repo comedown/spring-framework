@@ -671,6 +671,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 		wac.setServletContext(getServletContext());
 		wac.setServletConfig(getServletConfig());
 		wac.setNamespace(getNamespace());
+		// 注册应用上下文刷新监听器，防止重复刷新
 		wac.addApplicationListener(new SourceFilteringListener(wac, new ContextRefreshListener()));
 
 		// The wac environment's #initPropertySources will be called in any case when the context
@@ -779,6 +780,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	 * @see #getServletName
 	 */
 	public String getServletContextAttributeName() {
+		// ServletContext中的属性名称
 		return SERVLET_CONTEXT_PREFIX + getServletName();
 	}
 
@@ -982,6 +984,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 		WebAsyncManager asyncManager = WebAsyncUtils.getAsyncManager(request);
 		asyncManager.registerCallableInterceptor(FrameworkServlet.class.getName(), new RequestBindingInterceptor());
 
+		// 设置web应用上下文域对象到当前线程，用autowired
 		initContextHolders(request, localeContext, requestAttributes);
 
 		try {

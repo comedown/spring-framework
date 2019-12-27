@@ -261,6 +261,8 @@ public class DispatcherServlet extends FrameworkServlet {
 	/**
 	 * Name of the class path resource (relative to the DispatcherServlet class)
 	 * that defines DispatcherServlet's default strategy names.
+	 * <br><br>
+	 * classpath下定义DispatcherServlet默认策略类名称的文件名。
 	 */
 	private static final String DEFAULT_STRATEGIES_PATH = "DispatcherServlet.properties";
 
@@ -535,6 +537,9 @@ public class DispatcherServlet extends FrameworkServlet {
 	 * Initialize the LocaleResolver used by this class.
 	 * <p>If no bean is defined with the given name in the BeanFactory for this namespace,
 	 * we default to AcceptHeaderLocaleResolver.
+	 * <br><br>
+	 * 初始化LocaleResolver。
+	 * <p>如果BeanFactory中没有找到指定名称的bean定义，则默认使用AcceptHeaderLocaleResolver。
 	 */
 	private void initLocaleResolver(ApplicationContext context) {
 		try {
@@ -545,6 +550,7 @@ public class DispatcherServlet extends FrameworkServlet {
 		}
 		catch (NoSuchBeanDefinitionException ex) {
 			// We need to use the default.
+			// 没找到使用默认的LocaleResolver。
 			this.localeResolver = getDefaultStrategy(context, LocaleResolver.class);
 			if (logger.isDebugEnabled()) {
 				logger.debug("Unable to locate LocaleResolver with name '" + LOCALE_RESOLVER_BEAN_NAME +
@@ -825,6 +831,11 @@ public class DispatcherServlet extends FrameworkServlet {
 	 * <p>The default implementation uses the "DispatcherServlet.properties" file (in the same
 	 * package as the DispatcherServlet class) to determine the class names. It instantiates
 	 * the strategy objects through the context's BeanFactory.
+	 *
+	 * <br><br>
+	 * 为给定的策略接口创建默认策略对象的列表。
+	 * <p>默认策略实现类使用"DispatcherServlet.properties"文件（在DispatcherServlet同名包中）中指定的类名称。
+	 * 它通过上下文的BeanFactory实例化策略对象。
 	 * @param context the current WebApplicationContext
 	 * @param strategyInterface the strategy interface
 	 * @return the List of corresponding strategy objects
@@ -839,7 +850,7 @@ public class DispatcherServlet extends FrameworkServlet {
 			for (String className : classNames) {
 				try {
 					Class<?> clazz = ClassUtils.forName(className, DispatcherServlet.class.getClassLoader());
-					// 创建策略类
+					// 创建并注册策略类
 					Object strategy = createDefaultStrategy(context, clazz);
 					strategies.add((T) strategy);
 				}
@@ -952,6 +963,7 @@ public class DispatcherServlet extends FrameworkServlet {
 
 			try {
 				processedRequest = checkMultipart(request);
+				// 是否是multipart/form-data请求
 				multipartRequestParsed = (processedRequest != request);
 
 				// Determine handler for the current request.
@@ -962,6 +974,7 @@ public class DispatcherServlet extends FrameworkServlet {
 				}
 
 				// Determine handler adapter for the current request.
+				// 获取当前请求的HandlerAdapter
 				HandlerAdapter ha = getHandlerAdapter(mappedHandler.getHandler());
 
 				// Process last-modified header, if supported by the handler.
@@ -982,6 +995,7 @@ public class DispatcherServlet extends FrameworkServlet {
 				}
 
 				// Actually invoke the handler.
+				// 实际调用handler
 				mv = ha.handle(processedRequest, response, mappedHandler.getHandler());
 
 				if (asyncManager.isConcurrentHandlingStarted()) {

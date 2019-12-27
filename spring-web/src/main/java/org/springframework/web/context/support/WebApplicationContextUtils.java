@@ -189,6 +189,7 @@ public abstract class WebApplicationContextUtils {
 			sc.setAttribute(ServletContextScope.class.getName(), appScope);
 		}
 
+		// 注册Request、Response、Session等工厂bean，用于自动注入
 		beanFactory.registerResolvableDependency(ServletRequest.class, new RequestObjectFactory());
 		beanFactory.registerResolvableDependency(ServletResponse.class, new ResponseObjectFactory());
 		beanFactory.registerResolvableDependency(HttpSession.class, new SessionObjectFactory());
@@ -319,6 +320,8 @@ public abstract class WebApplicationContextUtils {
 
 	/**
 	 * Factory that exposes the current request object on demand.
+	 * <br><br>
+	 * 按需求要暴露当前请求对象的工厂类。
 	 */
 	@SuppressWarnings("serial")
 	private static class RequestObjectFactory implements ObjectFactory<ServletRequest>, Serializable {

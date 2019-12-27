@@ -184,7 +184,11 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	 */
 	private AutowireCandidateResolver autowireCandidateResolver = new SimpleAutowireCandidateResolver();
 
-	/** Map from dependency type to corresponding autowired value */
+	/**
+	 * Map from dependency type to corresponding autowired value
+	 * <br><br>
+	 * 从依赖项类型映射到相应的自动装配值。
+	 */
 	private final Map<Class<?>, Object> resolvableDependencies = new ConcurrentHashMap<Class<?>, Object>(16);
 
 	/**

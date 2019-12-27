@@ -34,6 +34,18 @@ import org.springframework.core.NamedThreadLocal;
  * a reasonable alternative, as it makes application code dependent on usage under AOP and
  * the Spring AOP framework in particular.
  *
+ * <br><br>
+ * 该类包含用于获取关于当前AOP调用信息的静态方法。
+ *
+ * <p>{@code currentProxy()}方法在AOP框架配置为公开当前代理（不是默认代理）时可用，即expose-proxy设置为ture。
+ * 它返回正在使用的AOP代理类。目标对象或通知可以使用它进行建议调用，{@code getEJBObject()}方法与前者类似，
+ * 可以用在EJB中。他们还可以使用它来查找建议配置。
+ *
+ * <p>Spring的AOP框架在默认情况下不会公开代理，因为这样做会降低性能。
+ *
+ * <p>此类中的功能可能由需要在调用时访问资源的目标对象使用。但是，当有合理的替代方案时，不应该使用这种方法，
+ * 因为它使应用程序代码需要在依赖于AOP下的使用，特别是需要在Spring AOP框架下的使用。
+ *
  * @author Rod Johnson
  * @author Juergen Hoeller
  * @since 13.03.2003

@@ -146,7 +146,7 @@ import org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolv
  * </ul>
  *
  * <p><strong>注意:</strong> 额外的HandlerMapping将会在使用MVC命名空间的
- * {@code <view-controller>}或{@code <resources>}元素是注册。
+ * {@code <view-controller>}或{@code <resources>}元素时注册。
  *
  * <p>这个类将会注册如下{@link HandlerAdapter}:
  * <ul>
@@ -168,8 +168,8 @@ import org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolv
  * 和一个{@link org.springframework.web.util.UrlPathHelper} bean，被如下类使用：
  * <ul>
  * <li>{@link RequestMappingHandlerMapping},
- * <li>{@link HandlerMapping}，用于视图控制器
- * <li>{@link HandlerMapping}，用于服务器资源
+ * <li>用于视图控制器的{@link HandlerMapping}
+ * <li>用于服务器资源的{@link HandlerMapping}
  * </ul>
  * 注意，可以使用MVC命名空间中的{@code path-matching}元素配置这些bean。
  *
@@ -389,6 +389,7 @@ class AnnotationDrivenBeanDefinitionParser implements BeanDefinitionParser {
 		context.registerComponent(new BeanComponentDefinition(defaultExceptionResolver, defaultExResolverName));
 
 		// Ensure BeanNameUrlHandlerMapping (SPR-8289) and default HandlerAdapters are not "turned off"
+		// 注册默认的mvc组件
 		MvcNamespaceUtils.registerDefaultComponents(context, source);
 
 		context.popAndRegisterContainingComponent();

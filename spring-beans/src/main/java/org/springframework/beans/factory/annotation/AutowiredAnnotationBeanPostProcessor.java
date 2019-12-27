@@ -491,12 +491,14 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 					}
 					AnnotationAttributes ann = findAutowiredAnnotation(bridgedMethod);
 					if (ann != null && method.equals(ClassUtils.getMostSpecificMethod(method, clazz))) {
+						// Autowired注解不支持静态方法
 						if (Modifier.isStatic(method.getModifiers())) {
 							if (logger.isWarnEnabled()) {
 								logger.warn("Autowired annotation is not supported on static methods: " + method);
 							}
 							return;
 						}
+						// Autowired注解的方法参数个数大于0
 						if (method.getParameterTypes().length == 0) {
 							if (logger.isWarnEnabled()) {
 								logger.warn("Autowired annotation should only be used on methods with parameters: " +

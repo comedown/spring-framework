@@ -50,6 +50,13 @@ public class ClassPathBeanDefinitionScannerTests {
 
 	private static final String BASE_PACKAGE = "example.scannable";
 
+	@Test
+	public void simpleTest() {
+		GenericApplicationContext context = new GenericApplicationContext();
+		ClassPathBeanDefinitionScanner scanner = new ClassPathBeanDefinitionScanner(context, false);
+		int beanCount = scanner.scan(BASE_PACKAGE);
+		System.out.println(beanCount);
+	}
 
 	@Test
 	public void testSimpleScanWithDefaultFiltersAndPostProcessors() {

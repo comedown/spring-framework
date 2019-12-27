@@ -248,17 +248,25 @@ public class HandlerMethodInvoker {
 			MethodParameter methodParam = new SynthesizingMethodParameter(handlerMethod, i);
 			methodParam.initParameterNameDiscovery(this.parameterNameDiscoverer);
 			GenericTypeResolver.resolveParameterType(methodParam, handler.getClass());
+			// @RequestParam指定的name
 			String paramName = null;
+			// @RequestHeader指定的name
 			String headerName = null;
+			// 是否有@RequestBody
 			boolean requestBodyFound = false;
+			// @CookieValue指定的name
 			String cookieName = null;
+			// @PathVariable指定的name
 			String pathVarName = null;
+			// @ModelAttribute指定的name
 			String attrName = null;
+			// 指定参数是否必须
 			boolean required = false;
 			String defaultValue = null;
 			boolean validate = false;
 			Object[] validationHints = null;
 			int annotationsFound = 0;
+			// 获取方法参数上的注解
 			Annotation[] paramAnns = methodParam.getParameterAnnotations();
 
 			for (Annotation paramAnn : paramAnns) {
@@ -310,11 +318,13 @@ public class HandlerMethodInvoker {
 				}
 			}
 
+			// 同时存在多个注解指定（@RequestParam，@RequestHeader，@RequestBody，@CookieValue，@PathVariable，@ModelAttribute）
 			if (annotationsFound > 1) {
 				throw new IllegalStateException("Handler parameter annotations are exclusive choices - " +
 						"do not specify more than one such annotation on the same parameter: " + handlerMethod);
 			}
 
+			// 没有注解
 			if (annotationsFound == 0) {
 				Object argValue = resolveCommonArgument(methodParam, webRequest);
 				if (argValue != WebArgumentResolver.UNRESOLVED) {

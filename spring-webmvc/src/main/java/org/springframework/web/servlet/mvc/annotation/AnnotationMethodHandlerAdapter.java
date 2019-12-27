@@ -437,6 +437,7 @@ public class AnnotationMethodHandlerAdapter extends WebContentGenerator
 		ServletWebRequest webRequest = new ServletWebRequest(request, response);
 		ExtendedModelMap implicitModel = new BindingAwareModelMap();
 
+		// 调用handlerMethod
 		Object result = methodInvoker.invokeHandlerMethod(handlerMethod, handler, webRequest, implicitModel);
 		ModelAndView mav =
 				methodInvoker.getModelAndView(handlerMethod, handler.getClass(), result, implicitModel, webRequest);

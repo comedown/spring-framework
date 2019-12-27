@@ -41,8 +41,10 @@ import org.springframework.util.Assert;
  */
 public abstract class AbstractMapBasedHandlerMapping<K> extends AbstractHandlerMapping {
 
+	/** 是否懒加载handler，默认false */
 	private boolean lazyInitHandlers = false;
 
+	/** handler缓存 */
 	private final Map<K, Object> handlerMap = new HashMap<K, Object>();
 
 
@@ -145,14 +147,17 @@ public abstract class AbstractMapBasedHandlerMapping<K> extends AbstractHandlerM
 		Object resolvedHandler = handler;
 
 		// Eagerly resolve handler if referencing singleton via name.
+		// 如果bean名称对应的引用是单例，则立刻解析handler
 		if (!this.lazyInitHandlers && handler instanceof String) {
 			String handlerName = (String) handler;
+			// 如果是单例bean，则获取bean实例
 			if (getApplicationContext().isSingleton(handlerName)) {
 				resolvedHandler = getApplicationContext().getBean(handlerName);
 			}
 		}
 
 		// Check for duplicate mapping.
+		// 校验重复mapping
 		Object mappedHandler = this.handlerMap.get(lookupKey);
 		if (mappedHandler != null && !(mappedHandler instanceof Map)) {
 			if (mappedHandler != resolvedHandler) {

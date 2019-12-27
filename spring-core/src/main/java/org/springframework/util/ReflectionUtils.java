@@ -59,6 +59,9 @@ public abstract class ReflectionUtils {
 	/**
 	 * Cache for {@link Class#getDeclaredMethods()} plus equivalent default methods
 	 * from Java 8 based interfaces, allowing for fast iteration.
+	 * <br><br>
+	 * {@link Class#getDeclaredMethods()}的结果缓存，加上来自Java8中接口的相同的默认方法，
+	 * 允许快速迭代。
 	 */
 	private static final Map<Class<?>, Method[]> declaredMethodsCache =
 			new ConcurrentReferenceHashMap<Class<?>, Method[]>(256);
@@ -831,6 +834,9 @@ public abstract class ReflectionUtils {
 	/**
 	 * Pre-built MethodFilter that matches all non-bridge methods
 	 * which are not declared on {@code java.lang.Object}.
+	 *
+	 * <br><br>
+	 * 预构建的MethodFilter，用于匹配所有非桥接方法和非声明在{@code java.lang.Object}中的方法。
 	 * @since 3.0.5
 	 */
 	public static final MethodFilter USER_DECLARED_METHODS = new MethodFilter() {

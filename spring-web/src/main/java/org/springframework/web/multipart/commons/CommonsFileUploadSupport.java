@@ -245,6 +245,9 @@ public abstract class CommonsFileUploadSupport {
 	/**
 	 * Parse the given List of Commons FileItems into a Spring MultipartParsingResult,
 	 * containing Spring MultipartFile instances and a Map of multipart parameter.
+	 *
+	 * <br><br>
+	 * 将给定的Common FileItem列表解析为Spring MultipartParsingResult，其中包含Spring MultipartFile实例和multipart参数映射。
 	 * @param fileItems the Commons FileIterms to parse
 	 * @param encoding the encoding to use for form fields
 	 * @return the Spring MultipartParsingResult
