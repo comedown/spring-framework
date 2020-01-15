@@ -51,6 +51,18 @@ import org.springframework.web.util.WebUtils;
  * Needs to be initialized <i>either</i> by an application context <i>or</i>
  * via the constructor that takes a ServletContext (for standalone usage).
  *
+ * <br><br>
+ * {@link MultipartResolver}实现类，基于Servlet
+ * <a href="http://commons.apache.org/proper/commons-fileupload">Apache Commons FileUpload</a>
+ * 1.2或以上版本。
+ *
+ * <p>提供"maxUploadSize", "maxInMemorySize" 和 "defaultEncoding"的bean属性设置
+ * （继承自{@link CommonsFileUploadSupport}）。详情见ServletFileUpload 和 DiskFileItemFactory相关
+ * 属性（"sizeMax", "sizeThreshold", "headerEncoding"）。
+ *
+ * <p>保存临时文件到servlet容器的临时目录中。需要通过spring应用上下文或通过接受ServletContext（独立使用）的构造函数
+ * 初始化。
+ *
  * @author Trevor D. Cook
  * @author Juergen Hoeller
  * @since 29.09.2003
