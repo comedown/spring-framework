@@ -31,6 +31,9 @@ import org.springframework.stereotype.Component;
  * may be processed by the Spring container to generate bean definitions and
  * service requests for those beans at runtime, for example:
  *
+ * 表明一个类声明了一个或多个{@link Bean @Bean}标注的方法，并可由Spring容器处理，以便
+ * 在运行时为这些bean生成bean定义信息和服务请求，例如：
+ *
  * <pre class="code">
  * &#064;Configuration
  * public class AppConfig {
@@ -49,6 +52,14 @@ import org.springframework.stereotype.Component;
  * {@link AnnotationConfigApplicationContext} or its web-capable variant,
  * {@link org.springframework.web.context.support.AnnotationConfigWebApplicationContext
  * AnnotationConfigWebApplicationContext}. A simple example with the former follows:
+ *
+ * <h2>启动{@code @Configuration}标注的类</h2>
+ *
+ * <h3>通过{@code AnnotationConfigApplicationContext}</h3>
+ * {@code @Configuration}标注大的类通常使用{@link AnnotationConfigApplicationContext}或者它的
+ * web功能{@link org.springframework.web.context.support.AnnotationConfigWebApplicationContext
+ * AnnotationConfigWebApplicationContext}的变体来启动，一个这种形式的简单示例如下：
+ *
  *
  * <pre class="code">
  * AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();

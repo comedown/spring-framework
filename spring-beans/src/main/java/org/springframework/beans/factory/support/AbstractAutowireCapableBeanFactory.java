@@ -466,6 +466,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 
 		// Prepare method overrides.
+		// 准备方法覆盖
 		try {
 			mbdToUse.prepareMethodOverrides();
 		}

@@ -37,6 +37,17 @@ import org.springframework.util.Assert;
  *
  * <p>See @{@link Configuration}'s javadoc for usage examples.
  *
+ * 独立的Spring应用上下文，接收注解标注的类参数 - 尤其是{@link Configuration @Configuration}标注的类，
+ * 但是也注解支持{@link org.springframework.stereotype.Component @Component}类型注解和使用
+ * {@code javax.inject}注解符合JSR-330的类。运行使用{@link #register(Class...)}来注册一个又一个的类，
+ * 也可以使用{@link #scan(String...)}来扫描类路径下的类。
+ *
+ * <P>在有多个{@code @Configuration}标注的类时，在后面的类中定义的@{@link Bean}标注的方法会覆盖之前类中
+ * 定义的方法。这可以用来通过额外的{@code @Configuration}类故意重写某些bean定义。
+ *
+ * <P>使用示例查看{@link Configuration}的javadoc文档。
+ *
+ *
  * @author Juergen Hoeller
  * @author Chris Beams
  * @since 3.0

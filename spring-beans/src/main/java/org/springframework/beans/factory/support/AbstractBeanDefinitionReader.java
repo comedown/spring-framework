@@ -56,6 +56,9 @@ public abstract class AbstractBeanDefinitionReader implements EnvironmentCapable
 
 	private final BeanDefinitionRegistry registry;
 
+	/**
+	 * 资源加载器
+	 */
 	private ResourceLoader resourceLoader;
 
 	private ClassLoader beanClassLoader;
@@ -197,6 +200,9 @@ public abstract class AbstractBeanDefinitionReader implements EnvironmentCapable
 	 * Load bean definitions from the specified resource location.
 	 * <p>The location can also be a location pattern, provided that the
 	 * ResourceLoader of this bean definition reader is a ResourcePatternResolver.
+	 *
+	 * 从特定的资源路径加载bean定义。
+	 * <p>路径也可以是一个路径模板，前提是这个BeanDefinitionReader的ResourceLoader是一个resourcepatternsolver。
 	 * @param location the resource location, to be loaded with the ResourceLoader
 	 * (or ResourcePatternResolver) of this bean definition reader
 	 * @param actualResources a Set to be filled with the actual Resource objects
@@ -215,10 +221,13 @@ public abstract class AbstractBeanDefinitionReader implements EnvironmentCapable
 					"Cannot import bean definitions from location [" + location + "]: no ResourceLoader available");
 		}
 
+		// 如果资源加载器是支持模板的，
 		if (resourceLoader instanceof ResourcePatternResolver) {
 			// Resource pattern matching available.
 			try {
+				// 解析资源路径
 				Resource[] resources = ((ResourcePatternResolver) resourceLoader).getResources(location);
+				// 加载资源文件中的bean
 				int loadCount = loadBeanDefinitions(resources);
 				if (actualResources != null) {
 					for (Resource resource : resources) {
@@ -235,6 +244,7 @@ public abstract class AbstractBeanDefinitionReader implements EnvironmentCapable
 						"Could not resolve bean definition resource pattern [" + location + "]", ex);
 			}
 		}
+		// 否则只通过绝对路径加载资源
 		else {
 			// Can only load single resources by absolute URL.
 			Resource resource = resourceLoader.getResource(location);

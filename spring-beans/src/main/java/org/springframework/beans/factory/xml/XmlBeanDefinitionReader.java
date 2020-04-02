@@ -314,6 +314,8 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 
 	/**
 	 * Load bean definitions from the specified XML file.
+	 *
+	 * 从特定XML文件中加载bean定义信息。
 	 * @param encodedResource the resource descriptor for the XML file,
 	 * allowing to specify an encoding to use for parsing the file
 	 * @return the number of bean definitions found
@@ -520,6 +522,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 	public int registerBeanDefinitions(Document doc, Resource resource) throws BeanDefinitionStoreException {
 		BeanDefinitionDocumentReader documentReader = createBeanDefinitionDocumentReader();
 		int countBefore = getRegistry().getBeanDefinitionCount();
+		// 解析bean定义信息，并注册
 		documentReader.registerBeanDefinitions(doc, createReaderContext(resource));
 		// 返回解析的bean定义数量，当前总的 - 之前总的
 		return getRegistry().getBeanDefinitionCount() - countBefore;

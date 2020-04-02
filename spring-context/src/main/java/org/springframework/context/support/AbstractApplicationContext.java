@@ -160,7 +160,10 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	/** Logger used by this class. Available to subclasses. */
 	protected final Log logger = LogFactory.getLog(getClass());
 
-	/** Unique id for this context, if any */
+	/**
+	 * Unique id for this context, if any.
+	 * 如果存在，表示该上下文的唯一id。
+	 */
 	private String id = ObjectUtils.identityToString(this);
 
 	/** Display name */
@@ -194,7 +197,10 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	/** Reference to the JVM shutdown hook, if registered */
 	private Thread shutdownHook;
 
-	/** ResourcePatternResolver used by this context */
+	/**
+	 * ResourcePatternResolver used by this context.
+	 * 这个上下文使用的ResourcePatternResolver。装饰模式。
+	 */
 	private ResourcePatternResolver resourcePatternResolver;
 
 	/** LifecycleProcessor for managing the lifecycle of beans within this context */
@@ -669,7 +675,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		beanFactory.addPropertyEditorRegistrar(new ResourceEditorRegistrar(this, getEnvironment()));
 
 		// Configure the bean factory with context callbacks.
-		// 配置bean工厂回调需要的后处理器
+		// 配置bean工厂回调需要的ApplicationContextAware后处理器，传入当前应用上下文对象。
 		beanFactory.addBeanPostProcessor(new ApplicationContextAwareProcessor(this));
 		// 增加自动装配时忽略的类型
 		beanFactory.ignoreDependencyInterface(EnvironmentAware.class);

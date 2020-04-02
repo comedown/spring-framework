@@ -67,7 +67,10 @@ public abstract class AbstractRefreshableApplicationContext extends AbstractAppl
 
 	private Boolean allowCircularReferences;
 
-	/** Bean factory for this context */
+	/**
+	 * Bean factory for this context.
+	 * 该上下文对象内部修饰的Bean工厂。装饰模式的核心属性。
+	 */
 	private DefaultListableBeanFactory beanFactory;
 
 	/** Synchronization monitor for the internal BeanFactory.

@@ -456,6 +456,9 @@ public class BeanDefinitionParserDelegate {
 	 * Parses the supplied {@code <bean>} element. May return {@code null}
 	 * if there were errors during parse. Errors are reported to the
 	 * {@link org.springframework.beans.factory.parsing.ProblemReporter}.
+	 *
+	 * 解析提供的{@code <bean>}元素。如果在解析期间发生错误，可能返回 {@code null}。
+	 * 错误会被报告给{@link org.springframework.beans.factory.parsing.ProblemReporter}。
 	 */
 	public BeanDefinitionHolder parseBeanDefinitionElement(Element ele, BeanDefinition containingBean) {
 		// id

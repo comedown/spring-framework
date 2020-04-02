@@ -93,7 +93,9 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	/** Cache of singleton factories: bean name --> ObjectFactory */
 	private final Map<String, ObjectFactory<?>> singletonFactories = new HashMap<String, ObjectFactory<?>>(16);
 
-	/** Cache of early singleton objects: bean name --> bean instance */
+	/**
+	 * Cache of early singleton objects: bean name --> bean instance.
+	 */
 	private final Map<String, Object> earlySingletonObjects = new HashMap<String, Object>(16);
 
 	/**
@@ -219,10 +221,11 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 			synchronized (this.singletonObjects) {
 				// 则从提前暴露的单例bean缓存中获取
 				singletonObject = this.earlySingletonObjects.get(beanName);
-				// 如果为空，且允许提前依赖
+				// 如果提前暴露的实例为空，且允许提前依赖
 				if (singletonObject == null && allowEarlyReference) {
 					// 从单例bean工厂缓存中获取
 					ObjectFactory<?> singletonFactory = this.singletonFactories.get(beanName);
+					// 如果不为空，则把提前暴露的实例放进去，然后删除掉单例工厂缓存
 					if (singletonFactory != null) {
 						singletonObject = singletonFactory.getObject();
 						// 放入提前暴露的bean实例缓存中

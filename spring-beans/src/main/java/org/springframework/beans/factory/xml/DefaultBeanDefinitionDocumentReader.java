@@ -93,6 +93,9 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 	 * (or DTD, historically).
 	 * <p>Opens a DOM Document; then initializes the default settings
 	 * specified at the {@code <beans/>} level; then parses the contained bean definitions.
+	 *
+	 * 该实现类通过“spring-beans” XSD（或者老的DTD）解析bean定义信息。
+	 * <p>
 	 */
 	@Override
 	public void registerBeanDefinitions(Document doc, XmlReaderContext readerContext) {
@@ -128,6 +131,10 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 		// the new (child) delegate with a reference to the parent for fallback purposes,
 		// then ultimately reset this.delegate back to its original (parent) reference.
 		// this behavior emulates a stack of delegates without actually necessitating one.
+
+		// 任何嵌套的<beans>元素都将导致此方法中的递归。为了正确地传播和保留<beans>default-*属性，
+		// 请跟踪当前（父）委托，该委托可能为空。使用对父级的引用创建新的（子）委托以进行回退，然后
+		// 最终将this.delegate重置回其原始（父）引用。此行为模拟一个委托堆栈，而不实际需要一个委托。
 		BeanDefinitionParserDelegate parent = this.delegate;
 		this.delegate = createDelegate(getReaderContext(), root, parent);
 
